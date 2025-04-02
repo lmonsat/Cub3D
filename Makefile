@@ -11,7 +11,7 @@ LDFLAGS = -L./include/mlx_linux -lmlx_Linux
 LDLIBS = -I./include/mlx_linux -lXext -lX11 -lm -lz
 
 # SRC and OBJ files
-SRC = main.c parsing.c utils.c raycasting.c gameplay.c get_next_line.c get_next_line_utils.c
+SRC = main.c parsing.c utils.c raycasting.c gameplay.c get_next_line.c get_next_line_utils.c backtracking.c mlx_functions.c
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC))
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -26,7 +26,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
 	@echo "\n$(B_BLUE)Compiling $(NAME)...$(B_WHITE)\n"
-	$(CC) $(CFLAGS) -I $(INCLUDE) $(LDFLAGS) $(LDLIBS) -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS) -I $(INCLUDE) -o $(NAME) $(LIBFT)
 	@echo "\n$(B_GREEN)$(NAME) compiled successfully!$(B_WHITE)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)

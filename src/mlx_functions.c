@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/01 20:00:50 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/02 18:23:17 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,19 @@ int	key_handler(int keycode, struct s_vars *vars)
 {
 	if (keycode == KEY_ARROW_UP || keycode == KEY_Z)
 	{
-		requested_player_position_up(vars);
+		//requested_player_position_up(vars);
 	}
 	else if (keycode == KEY_ARROW_DOWN || keycode == KEY_S)
 	{
-		requested_player_position_down(vars);
+		//requested_player_position_down(vars);
 	}
 	else if (keycode == KEY_ARROW_RIGHT || keycode == KEY_D)
 	{
-		requested_player_position_right(vars);
+		//requested_player_position_right(vars);
 	}
 	else if (keycode == KEY_ARROW_LEFT || keycode == KEY_Q)
 	{
-		requested_player_position_left(vars);
+		//requested_player_position_left(vars);
 	}
 	else if (keycode == ESC)
 	{

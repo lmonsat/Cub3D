@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/02 15:45:38 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/02 18:20:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,6 @@ void	free_tabs(struct s_vars *vars);
 
 /* --- Backtracking --- */
 void	backtracking(struct s_array *array, struct s_vars *vars);
+int	can_reach(struct s_array *array, int row, int col);
 
 #endif
