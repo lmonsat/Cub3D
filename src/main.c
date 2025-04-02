@@ -12,24 +12,6 @@
 
 #include "../include/cube3d.h"
 
-void	parse_map(struct s_vars *vars, struct s_array *array,
-    struct s_game_stats *value, char *argv[])
-{
-    int	fd;
-
-    fd = open_map_file(argv);
-    check_first_line(fd, array);
-    check_in_lines(fd, array);
-    check_exit_player_collect(array, value);
-    close(fd);
-    check_characters_in_map(array);
-    array->stats.nb_collectibles = value->nb_collectibles;
-    array->backtracking = copy_array(array->line, array);
-    backtracking(array, vars);
-    vars->player.collected = 0;
-    vars->array = array;
-}
-
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
     vars->mlx = mlx_init();
@@ -38,7 +20,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
         return ;
     }
     vars->win = mlx_new_window(vars->mlx, array->elmt.cols * 40,
-            array->elmt.rows * 40, "Steal and sleep");
+            array->elmt.rows * 40, "Cube3D");
     if (vars->win == NULL)
     {
         return ;
@@ -73,10 +55,10 @@ void	check_arguments(int argc, char *argv[])
     {
         while (argv[1][i] != '\0')
             i++;
-        if (argv[1][i - 4] != '.' && argv[1][i - 3] != 'b' && argv[1][i
-            - 2] != 'e' && argv[1][i - 1] != 'r')
+        if (argv[1][i - 4] != '.' && argv[1][i - 3] != 'c' && argv[1][i
+            - 2] != 'u' && argv[1][i - 1] != 'b')
         {
-            perror("Error\n Not a .ber format\n");
+            perror("Error\n Not a .cub format\n");
             exit(EXIT_FAILURE);
         }
     }

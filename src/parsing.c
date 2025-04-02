@@ -149,3 +149,21 @@ void	check_in_lines(int fd, struct s_array *array)
 	is_rectangular(array, array->elmt.rows,
 		array->elmt.first_line_nb_char, line_nb_char);
 }
+
+void	parse_map(struct s_vars *vars, struct s_array *array,
+    struct s_game_stats *value, char *argv[])
+{
+    int	fd;
+
+    fd = open_map_file(argv);
+    check_first_line(fd, array);
+    check_in_lines(fd, array);
+    check_exit_player_collect(array, value);
+    close(fd);
+    check_characters_in_map(array);
+    array->stats.nb_collectibles = value->nb_collectibles;
+    array->backtracking = copy_array(array->line, array);
+    backtracking(array, vars);
+    vars->player.collected = 0;
+    vars->array = array;
+}

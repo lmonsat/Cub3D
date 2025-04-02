@@ -147,3 +147,23 @@ char	**copy_array(char **source, struct s_array *array)
 	copy[size] = NULL;
 	return (copy);
 }
+
+int	ft_strchr_count(const char *s, int c)
+{
+	int	i;
+	int	nb_char;
+
+	nb_char = 0;
+	i = 0;
+	if (s == NULL)
+		return (0);
+	while (s[i] != '\0')
+	{
+		if ((char)c == s[i])
+			nb_char++;
+		i++;
+	}
+	if ((char)c == '\0')
+		return (0);
+	return (nb_char);
+}

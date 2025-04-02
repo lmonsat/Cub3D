@@ -95,9 +95,27 @@ enum					e_keycode
 	ESC = 65307
 };
 
+/* --- MLX --- */
 void    esc_close(int keycode, struct s_vars *vars);
 int default_close(struct s_vars *vars);
 int key_handler(int keycode, struct s_vars *vars);
 
+/* --- Parsing --- */
+void	parse_map(struct s_vars *vars, struct s_array *array, struct s_game_stats *value, char *argv[]);
+
+/* --- Utils ---*/
+char	**copy_array(char **source, struct s_array *array);
+void	handle_error_mem(struct s_array *array, char **copy);
+int	open_map_file(char *argv[]);
+int	ft_strchr_count(const char *s, int c);
+void	free_visited(struct s_array *array);
+void	free_visited_vars(struct s_vars *vars);
+void	free_in_lines(struct s_array *array);
+void	free_1_array(struct s_array *array);
+void	free_arrays(struct s_array *array);
+void	free_tabs(struct s_vars *vars);
+
+/* --- Backtracking --- */
+void	backtracking(struct s_array *array, struct s_vars *vars);
 
 #endif
