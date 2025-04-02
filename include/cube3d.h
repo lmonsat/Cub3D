@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/01 20:03:41 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/02 15:45:38 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUBE3D_H
 
 # include "Libft_plus/include/libft.h"
+# include "get_next_line.h"
 # include "mlx_linux/mlx.h"
 # include "mlx_linux/mlx_int.h"
 # include <fcntl.h> // open, O_CREAT, O_RDONLY
