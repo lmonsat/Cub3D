@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/02 18:19:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/04 21:07:13 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_valid_char(char c)
 {
-	return (ft_strchr("10ECP\n", c) != NULL);
+	return (ft_strchr("10WSEN\n", c) != NULL);
 }
 
 void	check_characters_in_map(struct s_array *array)
@@ -60,63 +60,27 @@ void	check_first_line(int fd, struct s_array *array)
 	array->elmt.first_line_nb_char = ft_strchr_count(array->line[0], '1');
 }
 
-void	handle_check_error_epc(struct s_game_stats *value,
-		struct s_array *array)
-{
-	if (value->nb_exit > 1 || value->nb_exit < 1)
-	{
-		free_1_array(array);
-		perror("Error\n More or less than 1 exit");
-		exit(EXIT_FAILURE);
-	}
-	else if (value->nb_player > 1 || value->nb_player < 1)
-	{
-		free_1_array(array);
-		perror("Error\n More or less than 1 player");
-		exit(EXIT_FAILURE);
-	}
-	else if (value->nb_collectibles < 1)
-	{
-		free_1_array(array);
-		perror("Error\n Not enough collectibles");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	check_exit_player_collect(struct s_array *array,
+void	check_player_start_pos(struct s_array *array,
 		struct s_game_stats *value)
 {
 	int	i;
 
-	value->nb_exit = 0;
-	value->nb_player = 0;
-	value->nb_collectibles = 0;
+	value->nb_start_pos = 0;
 	i = 0;
 	while (1)
 	{
-		value->nb_exit += ft_strchr_count(array->line[i], 'E');
-		value->nb_player += ft_strchr_count(array->line[i], 'P');
-		value->nb_collectibles += ft_strchr_count(array->line[i], 'C');
+		value->nb_start_pos += ft_strchr_count(array->line[i], 'W');
+		value->nb_start_pos += ft_strchr_count(array->line[i], 'N');
+		value->nb_start_pos += ft_strchr_count(array->line[i], 'S');
+		value->nb_start_pos += ft_strchr_count(array->line[i], 'E');
 		i++;
 		if (array->line[i] == NULL)
 			break ;
 	}
-	handle_check_error_epc(value, array);
-}
-
-void	is_rectangular(struct s_array *array, int rows, int first_line_nb_char,
-		int line_nb_char)
-{
-	if (array->line_len == rows)
+	if (value->nb_start_pos != 1)
 	{
 		free_1_array(array);
-		perror("Error\n Map is not rectangular");
-		exit(EXIT_FAILURE);
-	}
-	else if (first_line_nb_char != line_nb_char)
-	{
-		free_1_array(array);
-		perror("Error\n First or last line incomplete");
+		perror("Error\n More or less than 1 player start position");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -146,8 +110,43 @@ void	check_in_lines(int fd, struct s_array *array)
 	array->line[array->elmt.rows + 1] = NULL;
 	if (is_incomplete)
 		free_in_lines(array);
-	is_rectangular(array, array->elmt.rows,
-		array->elmt.first_line_nb_char, line_nb_char);
+}
+		        
+int alloc_data_array(int fd, struct s_array *array, char *argv[])
+{
+	char *line;
+	unsigned int len;
+	int i;
+
+	i = 0;
+	len = 0;
+	line = "value";
+	while (line != NULL)
+	{
+		line = get_next_line(fd);
+		if (!line)
+    		break;
+		len++;
+		free(line);
+	}
+	printf("test len: %d\n", len);
+	close(fd);
+	fd = open_map_file(argv);
+	array->line = calloc(0, sizeof(char *) * len);
+	line = "value";
+	while (array->line != NULL)
+	{
+		array->line[i] = get_next_line(fd);
+		if (array->line[i] == NULL)
+			break ;
+		i++;
+	}
+	i = 0;
+	while (i < len)
+	{
+		printf("%s", array->line[i++]);
+	}
+	return (fd);
 }
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
@@ -156,14 +155,15 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     int	fd;
 
     fd = open_map_file(argv);
-    check_first_line(fd, array);
-    check_in_lines(fd, array);
-    check_exit_player_collect(array, value);
+    //check_first_line(fd, array);
+    //check_in_lines(fd, array);
+    //check_player_start_pos(array, value);
+	alloc_data_array(fd, array, argv);
     close(fd);
-    check_characters_in_map(array);
-    array->stats.nb_collectibles = value->nb_collectibles;
-    array->backtracking = copy_array(array->line, array);
-    backtracking(array, vars);
-    vars->player.collected = 0;
+	exit(0);
+    //check_characters_in_map(array);
+    //array->backtracking = copy_array(array->line, array);
+    //backtracking(array, vars);
+    //vars->player.collected = 0;
     vars->array = array;
 }

@@ -6,12 +6,12 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:05:24 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/01 20:09:23 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/04 17:52:12 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
-
+/*
 void	visited_mem_free(int **visited, int i)
 {
 	int	k;
@@ -169,3 +169,4 @@ void	backtracking(struct s_array *array, struct s_vars *vars)
 	}
 	handle_can_reach(array, vars->player.pos.y, vars->player.pos.x);
 }
+*/

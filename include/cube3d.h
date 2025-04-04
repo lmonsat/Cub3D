@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/02 18:20:41 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/04 17:52:53 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ struct					s_move
 
 struct					s_game_stats
 {
-	int					nb_exit;
-	int					nb_player;
-	int					nb_collectibles;
-	int					collected;
+	int					nb_start_pos;
 	int					mov_count;
 };
 
@@ -57,7 +54,6 @@ struct					s_position
 struct					s_player
 {
 	struct s_position	pos;
-	int					collected;
 };
 
 struct					s_array
