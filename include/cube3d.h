@@ -20,7 +20,8 @@
 # include <fcntl.h> // open, O_CREAT, O_RDONLY
 # include <limits.h>
 # include <stdio.h>
-# include <stdlib.h> 
+# include <stdlib.h>
+# include <string.h> 
 # define B_BLUE "\033[1;36m"
 # define RESET "\033[0m"
 
@@ -120,4 +121,21 @@ void	free_tabs(struct s_vars *vars);
 void	backtracking(struct s_array *array, struct s_vars *vars);
 int	can_reach(struct s_array *array, int row, int col);
 
+/* --- mapping --- */
+void	mapping(struct s_array *array, struct s_vars *vars);
+void	mapping_ground(struct s_array *array, struct s_vars *vars);
+void	ground(struct s_vars *vars, int x, int y);
+void	loading_player(struct s_vars *vars);
+
+/* --- player_move --- */
+void	move_up(struct s_vars *vars, int x, int y);
+void	move_down(struct s_vars *vars, int x, int y);
+void	move_right(struct s_vars *vars, int x, int y);
+void	move_left(struct s_vars *vars, int x, int y);
+
+/* --- requested_player_move --- */
+void	requested_player_position_up(struct s_vars *vars);
+void	requested_player_position_down(struct s_vars *vars);
+void	requested_player_position_right(struct s_vars *vars);
+void	requested_player_position_left(struct s_vars *vars);
 #endif

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cube3d.h"
+#include "get_next_line.h"
 
 size_t	cut_buffer(char *buffer)
 {

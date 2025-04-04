@@ -21,8 +21,10 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
+unsigned int	ft_strlen(const char *str);
 char			*ft_strdup(const char *s);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
+char			*ft_strjoin(char *s1, char *s2);
 size_t			cut_buffer(char *buffer);
 size_t			check_buffer(char *buffer);
 char			*get_line(int fd);

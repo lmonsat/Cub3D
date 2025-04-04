@@ -26,8 +26,8 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
         return ;
     }
     vars->stats.mov_count = 0;
-    //mapping_ground(array, vars);
-    //mapping(array, vars);
+    mapping_ground(array, vars);
+    mapping(array, vars);
     mlx_key_hook(vars->win, key_handler, vars);
     mlx_hook(vars->win, 17, 1L << 0, default_close, vars);
     mlx_loop(vars->mlx);
