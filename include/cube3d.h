@@ -24,6 +24,26 @@
 # include <string.h> 
 # define B_BLUE "\033[1;36m"
 # define RESET "\033[0m"
+# define BLACK 0x000000
+# define WHITE 0xFFFFFF
+# define RED 0xFF0000
+# define GREEN 0x00FF00
+# define BLUE 0x0000FF
+# define YELLOW 0xFFFF00
+# define CYAN 0x00FFFF
+# define MAGENTA 0xFF00FF
+# define ORANGE 0xFFA500
+# define PINK 0xFFC0CB
+# define PURPLE 0x800080
+
+//structure utile pour la fonction put_pixel
+struct					s_draw
+{
+	void	*img_ptr;
+	char	*addr;
+	int		bpp;
+	int		endian;
+};
 
 struct					s_first
 {
@@ -63,6 +83,7 @@ struct					s_player
 
 struct					s_array
 {
+	struct s_draw		draw;
 	struct s_game_stats	stats;
 	struct s_first		elmt;
 	struct s_move		move;
@@ -81,6 +102,7 @@ struct					s_vars
 	struct s_game_stats	stats;
 	void				*mlx;
 	void				*win;
+
 };
 
 enum					e_keycode
@@ -138,4 +160,8 @@ void	requested_player_position_up(struct s_vars *vars);
 void	requested_player_position_down(struct s_vars *vars);
 void	requested_player_position_right(struct s_vars *vars);
 void	requested_player_position_left(struct s_vars *vars);
+
+/* --- draw_lines --- */
+void ft_put_pixel(int x, int y, struct s_array *array, int color);
+void ft_draw_grid(struct s_array *array, struct s_vars *vars);
 #endif
