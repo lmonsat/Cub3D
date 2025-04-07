@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/03 20:52:50 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/07 16:15:06 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	main(int argc, char *argv[])
     check_arguments(argc, argv);
     parse_map(&vars, &array, &value, argv);
     vars.stats = value;
-    ft_game_loop(&vars, &array);
-    free_tabs(&vars);
-    free_visited(&array);
+    //ft_game_loop(&vars, &array);
+    free_1_array(&array);
+    //free_visited(&array);
     return (0);
 }

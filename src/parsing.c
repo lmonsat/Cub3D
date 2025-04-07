@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/04 21:07:13 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:10:29 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	check_in_lines(int fd, struct s_array *array)
 		free_in_lines(array);
 }
 		        
-int alloc_data_array(int fd, struct s_array *array, char *argv[])
+void alloc_data_array(int fd, struct s_array *array, char *argv[])
 {
 	char *line;
 	unsigned int len;
@@ -132,7 +132,7 @@ int alloc_data_array(int fd, struct s_array *array, char *argv[])
 	printf("test len: %d\n", len);
 	close(fd);
 	fd = open_map_file(argv);
-	array->line = calloc(0, sizeof(char *) * len);
+	array->line = calloc(len + 1, sizeof(char *));
 	line = "value";
 	while (array->line != NULL)
 	{
@@ -146,7 +146,44 @@ int alloc_data_array(int fd, struct s_array *array, char *argv[])
 	{
 		printf("%s", array->line[i++]);
 	}
-	return (fd);
+	close(fd);
+}
+
+void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
+{
+	char *line;
+	char *path;
+	int i;
+
+	i = 0;
+	line = get_next_line(fd);
+	if (line[0] != pos_1 || line[1] != pos_2)
+	{
+		//perror("NO format not respected");
+		printf("%c%c format incorrect: %s\n", pos_1, pos_2, strerror(errno));
+		free_1_array(array);
+		close(fd);
+		exit(1);
+	}
+	while (line[i] != '.')
+		i++;
+	//printf("line[%d]: %c\n", i, line[i]);
+	if (line[i] == '\n')
+	{
+		printf("path format incorrect: %s\n", strerror(errno));
+		free_1_array(array);
+		close(fd);
+		exit(1);
+	}
+	if (line[i + 1] != '/')
+	{
+		printf("path format incorrect: %s\n", strerror(errno));
+		free_1_array(array);
+		close(fd);
+		exit(1);
+	}
+	ft_strncpy(array->path, array->line, )
+	close(fd);
 }
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
@@ -159,8 +196,11 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     //check_in_lines(fd, array);
     //check_player_start_pos(array, value);
 	alloc_data_array(fd, array, argv);
-    close(fd);
-	exit(0);
+	fd = open_map_file(argv);
+	check_position(fd, array, 'N', 'O');
+	check_position(fd, array, 'S', 'O');
+	check_position(fd, array, 'W', 'E');
+	check_position(fd, array, 'E', 'A');
     //check_characters_in_map(array);
     //array->backtracking = copy_array(array->line, array);
     //backtracking(array, vars);

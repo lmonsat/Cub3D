@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/04 17:52:53 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:53:46 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "get_next_line.h"
 # include "mlx_linux/mlx.h"
 # include "mlx_linux/mlx_int.h"
+# include <errno.h>
 # include <fcntl.h> // open, O_CREAT, O_RDONLY
 # include <limits.h>
 # include <stdio.h>
@@ -61,6 +62,7 @@ struct					s_array
 	struct s_game_stats	stats;
 	struct s_first		elmt;
 	struct s_move		move;
+	char				*path;
 	int					**visited;
 	char				**line;
 	char				**backtracking;
