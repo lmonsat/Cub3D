@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:10:29 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:38:04 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 		close(fd);
 		exit(1);
 	}
-	ft_strncpy(array->path, array->line, )
+	//ft_strncpy(array->path, array->line, )
 	close(fd);
 }
 
