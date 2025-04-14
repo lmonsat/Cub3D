@@ -22,11 +22,16 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     if (vars->win == NULL)
         return ;
     array->draw.img_ptr = mlx_new_image(vars->mlx, array->elmt.cols * 40, array->elmt.rows * 40);
-    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &array->line_len, &array->draw.endian); 
+    if (array->draw.img_ptr == NULL)
+        return ;
+    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &array->line_len, &array->draw.endian);
+    if (array->draw.addr == NULL)
+        return ;
     vars->stats.mov_count = 0;
-    mapping_ground(array, vars);
-    mapping(array, vars);
+    //mapping_ground(array, vars);
     ft_draw_grid(array, vars);
+    mapping(array, vars);
+    //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
     mlx_key_hook(vars->win, key_handler, vars);
     mlx_hook(vars->win, 17, 1L << 0, default_close, vars);
     mlx_loop(vars->mlx);

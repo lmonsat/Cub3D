@@ -37,7 +37,7 @@ void	requested_player_position_up(struct s_vars *vars)
 		}
 		return ;
 	}
-	ground(vars, x * 40, (y + 1) * 40);
+	//ground(vars, x * 40, (y + 1) * 40);
 }
 
 void	requested_player_position_down(struct s_vars *vars)
@@ -65,7 +65,7 @@ void	requested_player_position_down(struct s_vars *vars)
 		}
 		return ;
 	}
-	ground(vars, x * 40, (y - 1) * 40);
+	//ground(vars, x * 40, (y - 1) * 40);
 }
 
 void	requested_player_position_right(struct s_vars *vars)
@@ -93,7 +93,7 @@ void	requested_player_position_right(struct s_vars *vars)
 		}
 		return ;
 	}
-	ground(vars, (x - 1) * 40, y * 40);
+	//ground(vars, (x - 1) * 40, y * 40);
 }
 
 void	requested_player_position_left(struct s_vars *vars)
@@ -121,5 +121,5 @@ void	requested_player_position_left(struct s_vars *vars)
 		}
 		return ;
 	}
-	ground(vars, (x + 1) * 40, y * 40);
+	//ground(vars, (x + 1) * 40, y * 40);
 }

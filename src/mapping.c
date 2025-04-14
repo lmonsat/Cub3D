@@ -70,7 +70,9 @@ void	ground(struct s_vars *vars, int x, int y)
 void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
 {
     if(array->line[i][j] == '1')
+	{
         rock(vars, j * 40, i * 40);
+	}
     else if (array->line[i][j] == 'P')
     {
         vars->player.pos.x_pixel = j * 40;

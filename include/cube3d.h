@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/02 18:20:41 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:21:08 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 # include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h> 
+# include <string.h>
+# include <math.h>
+# define PI 3.141592653589
 # define B_BLUE "\033[1;36m"
 # define RESET "\033[0m"
 # define BLACK 0x000000
@@ -36,6 +38,11 @@
 # define PINK 0xFFC0CB
 # define PURPLE 0x800080
 
+# define FOV 60.0f         // Champ de vision en degrés
+# define NUM_RAYS 120      // Nombre de rayons à lancer
+# define STEP (FOV / NUM_RAYS)
+# define DEG2RAD(x) ((x) * PI / 180.0f)
+
 //structure utile pour la fonction put_pixel
 struct					s_draw
 {
@@ -43,6 +50,22 @@ struct					s_draw
 	char	*addr;
 	int		bpp;
 	int		endian;
+};
+
+struct	s_trace_line
+{
+	int x_start; //depart x (joueur)
+	int y_start; //depart y (joueur)
+	int x_end;   //fin du ray (mur)
+	int y_end;	// fin du ray (mur)
+	int dx; //x_end - x_start
+	int dy; //y_end - y_start
+	int width; //array->elmt.cols * 40
+	int height; //array->elmt.rows
+	int xfov_s; //depart fov x
+	int yfov_s; //depart fov y
+	int xfov_e; //fin fov x
+	int yfov_e; //fin fov y
 };
 
 struct					s_first
@@ -73,6 +96,7 @@ struct					s_position
 	int					y;
 	int					x_pixel;
 	int					y_pixel;
+	float				angle;
 };
 
 struct					s_player
@@ -87,6 +111,8 @@ struct					s_array
 	struct s_game_stats	stats;
 	struct s_first		elmt;
 	struct s_move		move;
+	struct s_position   position;
+	struct s_trace_line ray;
 	int					**visited;
 	char				**line;
 	char				**backtracking;
@@ -164,4 +190,9 @@ void	requested_player_position_left(struct s_vars *vars);
 /* --- draw_lines --- */
 void ft_put_pixel(int x, int y, struct s_array *array, int color);
 void ft_draw_grid(struct s_array *array, struct s_vars *vars);
+void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player);
+//void ft_draw_ray(struct s_trace_line *pos, struct s_array *array, struct s_position *player, float angle);
+//void ft_draw_all_rays(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player);
+void ft_draw_multiple_rays(struct s_array *array, struct s_vars *vars);
+void ft_draw_cone(struct s_array *array, struct s_vars *vars, struct s_position *player);
 #endif
