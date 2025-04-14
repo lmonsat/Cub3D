@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/14 15:24:43 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:18:31 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ void ft_draw_grid(struct s_array *array, struct s_vars *vars)
     {
         for (y = 0; y < height; y++)
         {
-            ft_put_pixel(x, y, array, WHITE); // Blanc
+            if (array->line[(int)y / 40][(int)x / 40] == '1')
+                ft_put_pixel(x, y, array, BLUE); // Blanc
+            else
+                ft_put_pixel(x, y, array, WHITE);
         }
     }
 
@@ -50,7 +53,10 @@ void ft_draw_grid(struct s_array *array, struct s_vars *vars)
     {
         for (x = 0; x < width; x++)
         {
-            ft_put_pixel(x, y, array, WHITE); // Blanc
+            if (array->line[(int)y / 40][(int)x / 40] == '1')
+                ft_put_pixel(x, y, array, BLUE); // Blanc
+            else
+                ft_put_pixel(x, y, array, WHITE);
         }
     }
     // Envoyer l'image mise à jour dans la fenêtre

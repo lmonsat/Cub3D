@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/14 15:21:08 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:56:26 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ struct					s_position
 	int					y;
 	int					x_pixel;
 	int					y_pixel;
-	float				angle;
 };
 
 struct					s_player
