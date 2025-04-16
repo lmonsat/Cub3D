@@ -30,7 +30,7 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 	}
 }
 
-void ft_draw_grid(struct s_array *array, struct s_vars *vars)
+void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
 {
     int x, y;
     int width = array->elmt.cols * 40;
@@ -60,7 +60,7 @@ void ft_draw_grid(struct s_array *array, struct s_vars *vars)
         }
     }
     // Envoyer l'image mise à jour dans la fenêtre
-    mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
+    //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
 }
 //algo DDA moins performant que bresenham car calcule de float
 void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
@@ -121,7 +121,7 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
 // algo de bresenham inspirer de la version c++ https://www.youtube.com/watch?v=Frl1cLwfs1U
 //todo: cree une fonction swap
 //todo: mettre les variables dans une structure et ajouter une fonction data init
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
+/*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
 {
     int dx;
     int dy;
@@ -133,13 +133,15 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars
     int x;
     int width;
     int height;
+    //int angle;
 
     width = array->elmt.cols * 40;
     height = array->elmt.rows * 40;
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
-    pos->x_end = width - 1;
-    pos->y_end = player->y_pixel;
+    pos->x_end = width - 1 + cos(60);
+    pos->y_end = player->y_pixel + sin(80);
+    printf("------------\nx start:%d\n y start:%d\n x end:%d\n y end:%d\n -----------\n", pos->x_start, pos->y_start, pos->x_end, pos->y_end);
     dx = pos->x_end - pos->x_start;
     dy = pos->y_end - pos->y_start;
 
@@ -234,4 +236,167 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars
         }
     }
     mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
+}*/
+
+//#define DEG2RAD(x) ((x) * M_PI / 180.0f)
+
+/*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
+{
+    int dx, dy, swap, x_inc, y_inc, d, x, y;
+    int width = array->elmt.cols * 40;
+    int height = array->elmt.rows * 40;
+
+    float angle_deg = 45.0f;                   // <- change ça pour tester différents angles
+    float angle_rad = DEG2RAD(angle_deg);      // conversion en radians
+    float ray_length = 1000.0f;                // distance max du rayon
+
+    // Point de départ = joueur
+    pos->x_start = player->x_pixel;
+    pos->y_start = player->y_pixel;
+
+    // Point d’arrivée selon un angle et une distance
+    pos->x_end = pos->x_start + cosf(angle_rad) * ray_length;
+    pos->y_end = pos->y_start + sinf(angle_rad) * ray_length;
+
+    // (le reste est inchangé — ton algo de Bresenham)
+    dx = pos->x_end - pos->x_start;
+    dy = pos->y_end - pos->y_start;
+
+    if(abs(dx) > abs(dy))
+    {
+        if (pos->x_start > pos->x_end)
+        {
+            swap = pos->x_start; pos->x_start = pos->x_end; pos->x_end = swap;
+            swap = pos->y_start; pos->y_start = pos->y_end; pos->y_end = swap;
+            dx = -dx;
+            dy = -dy;
+        }
+        y_inc = (dy < 0) ? -1 : 1;
+        if (dy < 0) dy = -dy;
+        y = pos->y_start;
+        d = 2 * dy - dx;
+        x = pos->x_start;
+        while(x <= pos->x_end)
+        {
+            if (x >= 0 && x < width && y >= 0 && y < height)
+            {
+                if (array->line[y / 40][x / 40] == '1')
+                    break;
+                ft_put_pixel(x, y, array, GREEN);
+            }
+            if (d < 0) d += 2 * dy;
+            else { d += 2 * (dy - dx); y += y_inc; }
+            x++;
+        }
+    }
+    else
+    {
+        if (pos->y_start > pos->y_end)
+        {
+            swap = pos->x_start; pos->x_start = pos->x_end; pos->x_end = swap;
+            swap = pos->y_start; pos->y_start = pos->y_end; pos->y_end = swap;
+            dx = -dx;
+            dy = -dy;
+        }
+        x_inc = (dx < 0) ? -1 : 1;
+        if (dx < 0) dx = -dx;
+        x = pos->x_start;
+        d = 2 * dx - dy;
+        y = pos->y_start;
+        while(y <= pos->y_end)
+        {
+            if (x >= 0 && x < width && y >= 0 && y < height)
+            {
+                if (array->line[y / 40][x / 40] == '1')
+                    break;
+                ft_put_pixel(x, y, array, RED);
+            }
+            if (d < 0) d += 2 * dx;
+            else { d += 2 * (dx - dy); x += x_inc; }
+            y++;
+        }
+    }
+    mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
+}*/
+
+void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_vars *vars,*/ struct s_position *player)
+{
+    int dx, dy, swap, x_inc, y_inc, y, d, x;
+    int width = array->elmt.cols * 40;
+    int height = array->elmt.rows * 40;
+
+    // Image temporaire pour le rayon
+    //void *line_img = mlx_new_image(vars->mlx, width, height);
+    //int *data = (int *)mlx_get_data_addr(line_img, &(int){0}, &(int){0}, &(int){0});
+    float angle_deg = 45.0f;                   // <- change ça pour tester différents angles
+    float angle_rad = DEG2RAD(angle_deg);      // conversion en radians
+    float ray_length = 1000.0f;                // distance max du rayon
+
+    pos->x_start = player->x_pixel;
+    pos->y_start = player->y_pixel;
+    pos->x_end = player->x_pixel + cos(angle_rad) * ray_length;
+    pos->y_end = player->y_pixel + sin(angle_rad) * ray_length;
+
+    dx = pos->x_end - pos->x_start;
+    dy = pos->y_end - pos->y_start;
+
+    if (abs(dx) > abs(dy))
+    {
+        if (pos->x_start > pos->x_end)
+        {
+            swap = pos->x_start; pos->x_start = pos->x_end; pos->x_end = swap;
+            swap = pos->y_start; pos->y_start = pos->y_end; pos->y_end = swap;
+            dx = -dx; dy = -dy;
+        }
+        y_inc = (dy < 0) ? -1 : 1;
+        dy = abs(dy);
+        y = pos->y_start;
+        d = 2 * dy - dx;
+        x = pos->x_start;
+
+        while (x <= pos->x_end)
+        {
+            if (x >= 0 && x < width && y >= 0 && y < height)
+            {
+                if (array->line[y / 40][x / 40] == '1')
+                    break;
+                //data[y * width + x] = 0x00FF00; // GREEN pixel (format RGB)
+                ft_put_pixel(x, y, array, RED);
+            }
+            if (d < 0) d += 2 * dy;
+            else { d += 2 * (dy - dx); y += y_inc; }
+            x++;
+        }
+    }
+    else
+    {
+        if (pos->y_start > pos->y_end)
+        {
+            swap = pos->x_start; pos->x_start = pos->x_end; pos->x_end = swap;
+            swap = pos->y_start; pos->y_start = pos->y_end; pos->y_end = swap;
+            dx = -dx; dy = -dy;
+        }
+        x_inc = (dx < 0) ? -1 : 1;
+        dx = abs(dx);
+        x = pos->x_start;
+        d = 2 * dx - dy;
+        y = pos->y_start;
+
+        while (y <= pos->y_end)
+        {
+            if (x >= 0 && x < width && y >= 0 && y < height)
+            {
+                if (array->line[y / 40][x / 40] == '1')
+                    break;
+                //data[y * width + x] = 0xFF0000; // RED pixel
+                ft_put_pixel(x, y, array, RED);
+            }
+            if (d < 0) d += 2 * dx;
+            else { d += 2 * (dx - dy); x += x_inc; }
+            y++;
+        }
+    }
 }
+
+
+

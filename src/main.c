@@ -28,8 +28,8 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     if (array->draw.addr == NULL)
         return ;
     vars->stats.mov_count = 0;
-    //mapping_ground(array, vars);
-    ft_draw_grid(array, vars);
+    mapping_ground(array, vars);
+    //ft_draw_grid(array/*, vars*/);
     mapping(array, vars);
     //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
     mlx_key_hook(vars->win, key_handler, vars);

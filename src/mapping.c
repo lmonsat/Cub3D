@@ -62,6 +62,8 @@ void	ground(struct s_vars *vars, int x, int y)
 		perror("Error\n Error while loading image.\n");
 		mlx_destroy_image(vars->mlx, img);
 		default_close(vars);
+		printf("fonction jamais atteinte");
+		mlx_put_image_to_window(vars->mlx, vars->win, img, x, y);
 	}
 	mlx_put_image_to_window(vars->mlx, vars->win, img, x, y);
 	mlx_destroy_image(vars->mlx, img);
@@ -77,7 +79,7 @@ void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
     {
         vars->player.pos.x_pixel = j * 40;
         vars->player.pos.y_pixel = i * 40;
-        loading_player(vars);
+        //loading_player(vars);
     }
 }
 
