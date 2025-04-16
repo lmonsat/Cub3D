@@ -39,7 +39,8 @@ void	render_frame(struct s_vars *vars)
 	clear_image(vars->array, width, height); // Efface tout avant de redessiner
 
 	ft_draw_grid(vars->array);
-	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
+	//ft_draw_line(&vars->array->ray, vars->array, 0, &vars->player.pos);
+	draw_fov(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 

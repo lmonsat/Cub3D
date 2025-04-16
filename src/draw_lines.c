@@ -319,7 +319,7 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
     mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
 }*/
 
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_vars *vars,*/ struct s_position *player)
+void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
 {
     int dx, dy, swap, x_inc, y_inc, y, d, x;
     int width = array->elmt.cols * 40;
@@ -328,7 +328,7 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_va
     // Image temporaire pour le rayon
     //void *line_img = mlx_new_image(vars->mlx, width, height);
     //int *data = (int *)mlx_get_data_addr(line_img, &(int){0}, &(int){0}, &(int){0});
-    float angle_deg = 45.0f;                   // <- change ça pour tester différents angles
+    //float angle_deg = 45.0f;                   // <- change ça pour tester différents angles
     float angle_rad = DEG2RAD(angle_deg);      // conversion en radians
     float ray_length = 1000.0f;                // distance max du rayon
 
@@ -396,6 +396,22 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_va
             y++;
         }
     }
+}
+
+void draw_fov(struct s_vars *vars)
+{
+    float first_line;
+    float last_line;
+
+    first_line = (FOV / 2) * -1;
+    last_line = (FOV / 2);
+
+    while (first_line <= last_line)
+    {
+        ft_draw_line(&vars->array->ray, vars->array, first_line, &vars->player.pos);
+        first_line++;
+    }
+    return;
 }
 
 
