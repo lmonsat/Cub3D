@@ -28,6 +28,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     if (array->draw.addr == NULL)
         return ;
     vars->stats.mov_count = 0;
+    array->ray.rotation = 0;
     mapping_ground(array, vars);
     //ft_draw_grid(array/*, vars*/);
     mapping(array, vars);

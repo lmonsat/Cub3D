@@ -319,7 +319,7 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
     mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
 }*/
 
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
+/*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
 {
     int dx, dy, swap, x_inc, y_inc, y, d, x;
     int width = array->elmt.cols * 40;
@@ -396,23 +396,93 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_d
             y++;
         }
     }
+}*/
+
+void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
+{
+    float angle_rad = DEG2RAD(angle_deg);
+    float ray_length = 1000.0f;
+
+    float x = player->x_pixel;
+    float y = player->y_pixel;
+
+    float dx = cos(angle_rad);
+    float dy = sin(angle_rad);
+
+    float step_size = 0.5f; // plus petit = plus précis
+    float max_steps = ray_length / step_size;
+
+    int width = array->elmt.cols * 40;
+    int height = array->elmt.rows * 40;
+
+    pos->x_start = (int)x;
+    pos->y_start = (int)y;
+
+    for (int i = 0; i < max_steps; i++)
+    {
+        int xi = (int)x;
+        int yi = (int)y;
+
+        if (xi < 0 || xi >= width || yi < 0 || yi >= height)
+            break;
+
+        if (array->line[yi / 40][xi / 40] == '1')
+            break;
+
+        ft_put_pixel(xi, yi, array, RED);
+
+        x += dx * step_size;
+        y += dy * step_size;
+    }
+
+    pos->x_end = (int)x;
+    pos->y_end = (int)y;
 }
 
 void draw_fov(struct s_vars *vars)
 {
     float first_line;
     float last_line;
+    float current_angle;
+    float rotation_offset;
 
-    first_line = (FOV / 2) * -1;
-    last_line = (FOV / 2);
+    rotation_offset = vars->array->ray.rotation;
+    first_line = -FOV / 2.0f;
+    last_line = FOV / 2.0f;
 
     while (first_line <= last_line)
     {
-        ft_draw_line(&vars->array->ray, vars->array, first_line, &vars->player.pos);
+        // On ajoute la rotation ici :
+        current_angle = first_line + rotation_offset;
+
+        // On garde l'angle entre 0 et 360
+        if (current_angle < 0)
+            current_angle += 360;
+        if (current_angle >= 360)
+            current_angle -= 360;
+
+        ft_draw_line(&vars->array->ray, vars->array, current_angle, &vars->player.pos);
         first_line++;
     }
-    return;
 }
+
+
+void draw_fov_360(struct s_vars *vars)
+{
+    float angle = 0.0f;
+
+    // Tu peux changer ça pour + de rayons (ex: 0.5 pour plus de densité)
+    float angle_step = 1.0f;
+
+    while (angle < 60.0f)
+    {
+        ft_draw_line(&vars->array->ray, vars->array, angle, &vars->player.pos);
+        angle += angle_step;
+    }
+}
+
+
+
 
 
 

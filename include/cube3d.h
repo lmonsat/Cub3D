@@ -62,6 +62,7 @@ struct	s_trace_line
 	int dy; //y_end - y_start
 	int width; //array->elmt.cols * 40
 	int height; //array->elmt.rows
+	float rotation; //for rotation of fov
 	int xfov_s; //depart fov x
 	int yfov_s; //depart fov y
 	int xfov_e; //fin fov x
@@ -179,6 +180,7 @@ void	move_up(struct s_vars *vars, int x, int y);
 void	move_down(struct s_vars *vars, int x, int y);
 void	move_right(struct s_vars *vars, int x, int y);
 void	move_left(struct s_vars *vars, int x, int y);
+void	clear_image(struct s_array *array, int width, int height);
 
 /* --- requested_player_move --- */
 void	requested_player_position_up(struct s_vars *vars);
@@ -192,6 +194,7 @@ void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/);
 //void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_vars *vars,*/ struct s_position *player);
 void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player);
 void draw_fov(struct s_vars *vars);
+void draw_fov_360(struct s_vars *vars);
 //void ft_draw_ray(struct s_trace_line *pos, struct s_array *array, struct s_position *player, float angle);
 //void ft_draw_all_rays(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player);
 //void ft_draw_multiple_rays(struct s_array *array, struct s_vars *vars);
