@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/17 17:56:58 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 18:59:19 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ void	check_in_lines(int fd, struct s_array *array)
 	if (is_incomplete)
 		free_in_lines(array);
 }
-		        
+
+/* Allocation dynamique a zéro de l'entièreté du fichier map */
 void alloc_data_array(int fd, struct s_array *array, char *argv[])
 {
 	char *line;
@@ -147,7 +148,8 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 		printf("%s", array->line[i++]);
 	}
 }
-
+/* Extrait le chemin des textures en fonction de la position donnée, 
+	les assigne aux variables de la structure */
 void copy_path(struct s_array *array, char *line, char pos[2], int start)
 {
 	int len;
@@ -179,7 +181,7 @@ void copy_path(struct s_array *array, char *line, char pos[2], int start)
 	}
 }
 
-void print_error(int fd, struct s_array *array, char *line, char pos[2])
+void error_parse_textures(int fd, struct s_array *array, char *line, char pos[2])
 {
 	printf("%s: path format incorrect: %s\n", pos, strerror(errno));
 	free_1_array(array);
@@ -188,6 +190,8 @@ void print_error(int fd, struct s_array *array, char *line, char pos[2])
 	exit(1);
 }
 
+/* get_next_line les 4 première lignes afin de parser les textures,
+	parse également les position pour vérifier leurs cohérance */
 void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 {
 	char *line;
@@ -200,21 +204,26 @@ void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 	line = get_next_line(fd);
 	if (line && (line[0] != pos[0] || line[1] != pos[1]))
 	{
-		print_error(fd, array, line, pos);
+		error_parse_textures(fd, array, line, pos);
 	}
 	while ((line && line[i]) && line[i] != '.')
 		i++;
 	//printf("line[%d]: %c\n", i, line[i]);
 	if (line && line[i] == '\n')
 	{
-		print_error(fd, array, line, pos);
+		error_parse_textures(fd, array, line, pos);
 	}
 	if ((line && line[i] && line[i + 1]) && line[i + 1] != '/')
 	{
-		print_error(fd, array, line, pos);
+		error_parse_textures(fd, array, line, pos);
 	}
 	copy_path(array, line, pos, i);
 	free(line);
+}
+
+void check_floor_and_ceilling(int fd, struct s_array *array, char type)
+{
+
 }
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
@@ -226,7 +235,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     //check_first_line(fd, array);
     //check_in_lines(fd, array);
     //check_player_start_pos(array, value);
-	//alloc_data_array(fd, array, argv);
+	alloc_data_array(fd, array, argv);
 	close(fd);
 	fd = open_map_file(argv);
 	check_position(fd, array, 'N', 'O');
