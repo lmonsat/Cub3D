@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/17 17:11:31 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 21:19:37 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ struct					s_array
 	char				*SO_path;
 	char				*EA_path;
 	char				*WE_path;
+	char				**floor;
+	char				**ceiling;
 	int					**visited;
 	char				**line;
 	char				**backtracking;
@@ -157,6 +159,7 @@ int	ft_strchr_count(const char *s, int c);
 void	free_visited(struct s_array *array);
 void	free_visited_vars(struct s_vars *vars);
 void	free_in_lines(struct s_array *array);
+void	free_array(char **array);
 void	free_1_array(struct s_array *array);
 void	free_arrays(struct s_array *array);
 void	free_tabs(struct s_vars *vars);

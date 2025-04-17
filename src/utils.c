@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/17 17:11:35 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 21:25:05 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,21 @@ void	free_tabs(struct s_vars *vars)
 		i++;
 	}
 	free(vars->array->backtracking);*/
+}
+
+void free_array(char **array)
+{
+	int i;
+
+	i = 0;
+	if(!array)
+		return ;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }
 
 void	free_arrays(struct s_array *array)
