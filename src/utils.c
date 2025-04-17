@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/07 17:43:52 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 17:11:35 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ void	free_arrays(struct s_array *array)
 		i++;
 	}
 	free(array->backtracking);
+}
+
+void free_path(struct s_array *array)
+{
+	free(array->NO_path);
+	free(array->SO_path);
+	free(array->WE_path);
+	free(array->EA_path);
 }
 
 void	free_1_array(struct s_array *array)

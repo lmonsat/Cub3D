@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/14 17:06:06 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 17:11:31 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,10 @@ struct					s_array
 	struct s_game_stats	stats;
 	struct s_first		elmt;
 	struct s_move		move;
-	char				*path;
+	char				*NO_path;
+	char				*SO_path;
+	char				*EA_path;
+	char				*WE_path;
 	int					**visited;
 	char				**line;
 	char				**backtracking;
@@ -157,6 +160,7 @@ void	free_in_lines(struct s_array *array);
 void	free_1_array(struct s_array *array);
 void	free_arrays(struct s_array *array);
 void	free_tabs(struct s_vars *vars);
+void free_path(struct s_array *array);
 
 /* --- Backtracking --- */
 void	backtracking(struct s_array *array, struct s_vars *vars);

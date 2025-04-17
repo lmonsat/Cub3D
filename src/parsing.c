@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/14 16:38:04 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 17:56:58 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,44 +146,75 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	{
 		printf("%s", array->line[i++]);
 	}
+}
+
+void copy_path(struct s_array *array, char *line, char pos[2], int start)
+{
+	int len;
+
+	len = 0;
+	if (pos[0] == 'N' && pos[1] == 'O')
+	{
+		len = ft_strlen(line);
+		array->NO_path = ft_substr(line, start, len);
+		printf("path: %s\n", array->NO_path);
+	}
+	else if (pos[0] == 'S' && pos[1] == 'O')
+	{
+		len = ft_strlen(line);
+		array->SO_path = ft_substr(line, start, len);
+		printf("path: %s\n", array->SO_path);
+	}
+	else if (pos[0] == 'W' && pos[1] == 'E')
+	{
+		len = ft_strlen(line);
+		array->WE_path = ft_substr(line, start, len);
+		printf("path: %s\n", array->WE_path);
+	}
+	else if (pos[0] == 'E' && pos[1] == 'A')
+	{
+		len = ft_strlen(line);
+		array->EA_path = ft_substr(line, start, len);
+		printf("path: %s\n", array->EA_path);
+	}
+}
+
+void print_error(int fd, struct s_array *array, char *line, char pos[2])
+{
+	printf("%s: path format incorrect: %s\n", pos, strerror(errno));
+	free_1_array(array);
+	free(line);
 	close(fd);
+	exit(1);
 }
 
 void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 {
 	char *line;
-	char *path;
+	char pos[2];
 	int i;
 
 	i = 0;
+	pos[0] = pos_1;
+	pos[1] = pos_2;
 	line = get_next_line(fd);
-	if (line[0] != pos_1 || line[1] != pos_2)
+	if (line && (line[0] != pos[0] || line[1] != pos[1]))
 	{
-		//perror("NO format not respected");
-		printf("%c%c format incorrect: %s\n", pos_1, pos_2, strerror(errno));
-		free_1_array(array);
-		close(fd);
-		exit(1);
+		print_error(fd, array, line, pos);
 	}
-	while (line[i] != '.')
+	while ((line && line[i]) && line[i] != '.')
 		i++;
 	//printf("line[%d]: %c\n", i, line[i]);
-	if (line[i] == '\n')
+	if (line && line[i] == '\n')
 	{
-		printf("path format incorrect: %s\n", strerror(errno));
-		free_1_array(array);
-		close(fd);
-		exit(1);
+		print_error(fd, array, line, pos);
 	}
-	if (line[i + 1] != '/')
+	if ((line && line[i] && line[i + 1]) && line[i + 1] != '/')
 	{
-		printf("path format incorrect: %s\n", strerror(errno));
-		free_1_array(array);
-		close(fd);
-		exit(1);
+		print_error(fd, array, line, pos);
 	}
-	//ft_strncpy(array->path, array->line, )
-	close(fd);
+	copy_path(array, line, pos, i);
+	free(line);
 }
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
@@ -195,7 +226,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     //check_first_line(fd, array);
     //check_in_lines(fd, array);
     //check_player_start_pos(array, value);
-	alloc_data_array(fd, array, argv);
+	//alloc_data_array(fd, array, argv);
+	close(fd);
 	fd = open_map_file(argv);
 	check_position(fd, array, 'N', 'O');
 	check_position(fd, array, 'S', 'O');
@@ -205,5 +237,5 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     //array->backtracking = copy_array(array->line, array);
     //backtracking(array, vars);
     //vars->player.collected = 0;
-    vars->array = array;
+    //vars->array = array;
 }

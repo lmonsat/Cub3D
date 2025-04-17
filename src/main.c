@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/14 17:05:07 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/17 17:50:08 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,12 @@ int	main(int argc, char *argv[])
     struct s_array		array;
     struct s_game_stats	value;
 
-    //check_arguments(argc, argv);
-    //parse_map(&vars, &array, &value, argv);
+	check_arguments(argc, argv);
+    parse_map(&vars, &array, &value, argv);
     //vars.stats = value;
-    ft_game_loop(&vars, &array);
+    //ft_game_loop(&vars, &array);
     //free_1_array(&array);
+	free_path(&array);
     //free_visited(&array);
     return (0);
 }
