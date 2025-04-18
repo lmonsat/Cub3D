@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/17 21:31:40 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/18 18:10:22 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,32 @@ void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 	free(line);
 }
 
+static char *fc_get_line(char *line, int fd)
+{
+	line = get_next_line(fd);
+	while (1)
+	{
+		if (!ft_strcmp(line, "\n"))
+		{
+			free(line);
+			line = get_next_line(fd);
+		}
+		else
+			break;
+	}
+	return (line);
+}
+
+static void fc_split_rgb(struct s_array *array, char *new_line, char *line, char type)
+{
+	if (type == 'F')
+		array->floor = ft_split(new_line, ',');
+	else if (type == 'C')
+		array->ceiling = ft_split(new_line, ',');
+	free(line);
+	free(new_line);
+}
+
 /* Parse les lignes floor et ceiling, et extrait les valeurs RGB en allouant,
 	un char ** pour ces valeurs */
 void check_floor_and_ceilling(int fd, struct s_array *array, char type)
@@ -239,23 +265,12 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 	int i;
 
 	i = 0;
-	line = get_next_line(fd);
-	while (1)
-	{
-		if (!ft_strcmp(line, "\n"))
-			line = get_next_line(fd);
-		else
-			break;
-	}
+	line = fc_get_line(line, fd);
 	printf("line[%d]: %c\n", i, line[i]);
 	if (line[i] != type)
-	{
 		error_parse_fc(fd, array, line, type);
-	}
 	if (ft_strchr_count(line, ',') != 2)
-	{
 		error_parse_fc(fd, array, line, type);
-	}
 	while (line[++i] == ' ')
 		continue ;
 	new_line = ft_substr(line, i, ft_strlen(line));
@@ -274,12 +289,7 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 		}
 		i++;
 	}
-	if (type == 'F')
-		array->floor = ft_split(new_line, ',');
-	else if (type == 'C')
-		array->ceiling = ft_split(new_line, ',');
-	free(line);
-	free(new_line);
+	fc_split_rgb(array, new_line, line, type);
 }
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
