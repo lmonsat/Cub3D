@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/20 17:51:44 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/20 18:05:49 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,24 @@ void	check_in_lines(int fd, struct s_array *array)
 		free_in_lines(array);
 }
 
-char *find_first_line(int fd)
+static unsigned int dynamic_map_lenght(int fd, char *line)
+{
+	unsigned int len;
+
+	len = 0;
+	line = "value";
+	while (line != NULL)
+	{
+		line = get_next_line(fd);
+		if (!line)
+    		break;
+		len++;
+		free(line);
+	}
+	return (len);
+}
+
+static char *find_first_line(int fd)
 {
 	char *line;
 	char *cmp_line;
@@ -139,16 +156,7 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	int i;
 
 	i = 0;
-	len = 0;
-	line = "value";
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		if (!line)
-    		break;
-		len++;
-		free(line);
-	}
+	len = dynamic_map_lenght(fd, line);
 	//printf("test len: %d\n", len);
 	close(fd);
 	fd = open_map_file(argv);
@@ -215,6 +223,15 @@ void error_parse_fc(int fd, struct s_array *array, char *line, char type)
 	printf("%c: format incorrect: %s\n", type, strerror(errno));
 	free_1_array(array);
 	free(line);
+	close(fd);
+	exit(1);
+}
+
+void error_parse_fc_2(int fd, struct s_array *array, char *line, char *new_line)
+{
+	free_1_array(array);
+	free(line);
+	free(new_line);
 	close(fd);
 	exit(1);
 }
@@ -301,11 +318,7 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 		if (!ft_isdigit(line[i]))
 		{
 			printf("%c: format incorrect: %s\n", type, strerror(errno));
-			free_1_array(array);
-			free(line);
-			free(new_line);
-			close(fd);
-			exit(1);
+			error_parse_fc_2(fd, array, line, new_line);
 		}
 		i++;
 	}
