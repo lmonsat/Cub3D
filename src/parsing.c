@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/18 18:10:22 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/20 17:51:44 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,25 @@ void	check_in_lines(int fd, struct s_array *array)
 		free_in_lines(array);
 }
 
+char *find_first_line(int fd)
+{
+	char *line;
+	char *cmp_line;
+	int len;
+
+	line = "value";
+	while (line != NULL)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+			break ;
+		if ((line[0] == '1' || line[0] == ' ' || line[0] == '\t')/* || !ft_strcmp(line, "\n")*/)
+			break ;
+		free(line);
+	}
+	return(line);
+}
+
 /* Allocation dynamique a zéro de l'entièreté du fichier map */
 void alloc_data_array(int fd, struct s_array *array, char *argv[])
 {
@@ -130,11 +149,12 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 		len++;
 		free(line);
 	}
-	printf("test len: %d\n", len);
+	//printf("test len: %d\n", len);
 	close(fd);
 	fd = open_map_file(argv);
 	array->line = calloc(len + 1, sizeof(char *));
-	line = "value";
+	line = find_first_line(fd);
+	array->line[i++] = line; 
 	while (array->line != NULL)
 	{
 		array->line[i] = get_next_line(fd);
@@ -159,25 +179,25 @@ void copy_path(struct s_array *array, char *line, char pos[2], int start)
 	{
 		len = ft_strlen(line);
 		array->NO_path = ft_substr(line, start, len);
-		printf("path: %s\n", array->NO_path);
+		//printf("path: %s\n", array->NO_path);
 	}
 	else if (pos[0] == 'S' && pos[1] == 'O')
 	{
 		len = ft_strlen(line);
 		array->SO_path = ft_substr(line, start, len);
-		printf("path: %s\n", array->SO_path);
+		//printf("path: %s\n", array->SO_path);
 	}
 	else if (pos[0] == 'W' && pos[1] == 'E')
 	{
 		len = ft_strlen(line);
 		array->WE_path = ft_substr(line, start, len);
-		printf("path: %s\n", array->WE_path);
+		//printf("path: %s\n", array->WE_path);
 	}
 	else if (pos[0] == 'E' && pos[1] == 'A')
 	{
 		len = ft_strlen(line);
 		array->EA_path = ft_substr(line, start, len);
-		printf("path: %s\n", array->EA_path);
+		//printf("path: %s\n", array->EA_path);
 	}
 }
 
@@ -241,7 +261,7 @@ static char *fc_get_line(char *line, int fd)
 			line = get_next_line(fd);
 		}
 		else
-			break;
+			break ;
 	}
 	return (line);
 }
@@ -266,7 +286,7 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 
 	i = 0;
 	line = fc_get_line(line, fd);
-	printf("line[%d]: %c\n", i, line[i]);
+	//printf("line[%d]: %c\n", i, line[i]);
 	if (line[i] != type)
 		error_parse_fc(fd, array, line, type);
 	if (ft_strchr_count(line, ',') != 2)
@@ -298,9 +318,6 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     int	fd;
 
     fd = open_map_file(argv);
-    //check_first_line(fd, array);
-    //check_in_lines(fd, array);
-    //check_player_start_pos(array, value);
 	alloc_data_array(fd, array, argv);
 	close(fd);
 	fd = open_map_file(argv);
@@ -310,6 +327,9 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	check_position(fd, array, 'E', 'A');
 	check_floor_and_ceilling(fd, array, 'F');
 	check_floor_and_ceilling(fd, array, 'C');
+	//check_first_line(fd, array);
+    //check_in_lines(fd, array);
+    //check_player_start_pos(array, value);
     //check_characters_in_map(array);
     //array->backtracking = copy_array(array->line, array);
     //backtracking(array, vars);
