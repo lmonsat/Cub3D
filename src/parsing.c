@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/20 18:05:49 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/20 20:16:04 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_valid_char(char c)
 {
-	return (ft_strchr("10WSEN\n", c) != NULL);
+	return (ft_strchr("10WSEN \n\t", c) != NULL);
 }
 
 void	check_characters_in_map(struct s_array *array)
@@ -112,6 +112,8 @@ void	check_in_lines(int fd, struct s_array *array)
 		free_in_lines(array);
 }
 
+/* Définis la taille max pour array->line 
+	(prend en compte les textures et F C dans sa taille)*/
 static unsigned int dynamic_map_lenght(int fd, char *line)
 {
 	unsigned int len;
@@ -129,6 +131,8 @@ static unsigned int dynamic_map_lenght(int fd, char *line)
 	return (len);
 }
 
+/* Trouve la première ligne de la map pour copier uniquement la map, 
+	dans le tableau*/
 static char *find_first_line(int fd)
 {
 	char *line;
@@ -325,6 +329,28 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 	fc_split_rgb(array, new_line, line, type);
 }
 
+void fill(char **tab, t_point size, char target, int row, int col)
+{
+    if (row < 0 || col < 0 || row >= size.y || col >= size.x)
+        return ;
+
+    if (tab[row][col] == 'F' || tab[row][col] != target)
+        return ;
+
+    tab[row][col] = 'F';
+
+    fill(tab, size, target, row - 1, col);
+    fill(tab, size, target, row + 1, col);
+    fill(tab, size, target, row, col - 1);
+    fill(tab, size, target, row, col + 1);
+}
+
+void flood_fill(char **tab, t_point size, t_point begin)
+{
+    char target = tab[begin.y][begin.x];
+    fill(tab, size, target, begin.y, begin.x);
+}
+
 void	parse_map(struct s_vars *vars, struct s_array *array,
     struct s_game_stats *value, char *argv[])
 {
@@ -343,7 +369,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	//check_first_line(fd, array);
     //check_in_lines(fd, array);
     //check_player_start_pos(array, value);
-    //check_characters_in_map(array);
+    check_characters_in_map(array);
+	check_player_start_pos(array, value);
     //array->backtracking = copy_array(array->line, array);
     //backtracking(array, vars);
     //vars->player.collected = 0;

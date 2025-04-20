@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/17 21:19:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/20 20:16:11 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,12 @@ struct					s_vars
 	void				*mlx;
 	void				*win;
 };
+
+typedef struct  s_point
+{
+int           x;
+int           y;
+}               t_point;
 
 enum					e_keycode
 {
