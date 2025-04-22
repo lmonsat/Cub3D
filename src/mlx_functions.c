@@ -38,25 +38,26 @@ int	default_close(struct s_vars *vars)
 
 void rotation_l(struct s_vars *vars)
 {
-	int	width = vars->array->elmt.cols * 40;
-	int	height = vars->array->elmt.rows * 40;
+	//int	width = vars->array->elmt.cols * 40;
+	//int	height = vars->array->elmt.rows * 40;
 	
-	clear_image(vars->array, width, height); // Efface tout avant de redessiner
-	ft_draw_grid(vars->array);
+	//clear_image(vars->array, width, height); // Efface tout avant de redessiner
+	//ft_draw_grid(vars->array);
 	vars->array->ray.rotation += 5;
-	draw_fov(vars);
+	//draw_fov(vars);
+	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void rotation_r(struct s_vars *vars)
 {
-	int	width = vars->array->elmt.cols * 40;
-	int	height = vars->array->elmt.rows * 40;
+	//int	width = vars->array->elmt.cols * 40;
+	//int	height = vars->array->elmt.rows * 40;
 	
-	clear_image(vars->array, width, height); // Efface tout avant de redessiner
-	ft_draw_grid(vars->array);
+	//clear_image(vars->array, width, height); // Efface tout avant de redessiner
+	//ft_draw_grid(vars->array);
 	vars->array->ray.rotation -= 5;
-	draw_fov(vars);
+	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 

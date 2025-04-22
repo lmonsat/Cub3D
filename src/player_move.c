@@ -31,16 +31,36 @@ void	clear_image(struct s_array *array, int width, int height)
 	}
 }
 
+void debug_fov(float *ray_distances, int count)
+{
+    printf("=== DEBUG RAY DISTANCES ===\n");
+    for (int i = 0; i < count; i++)
+    {
+        printf("Ray %2d: %.2f\n", i, ray_distances[i]);
+    }
+    printf("===========================\n");
+}
+
+
 void	render_frame(struct s_vars *vars)
 {
 	int	width = vars->array->elmt.cols * 40;
 	int	height = vars->array->elmt.rows * 40;
 
 	clear_image(vars->array, width, height); // Efface tout avant de redessiner
-
+	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
-	//ft_draw_line(&vars->array->ray, vars->array, 0, &vars->player.pos);
-	draw_fov(vars);
+	ft_draw_line(&vars->array->ray, vars->array/*, &vars->player.pos*/);
+	//ft_perpendiculare(&vars->array->ray, vars->array, &vars->player.pos);
+	//fov_half(&vars->array->ray, vars->array, &vars->player.pos);
+	//fov(&vars->array->ray, vars->array, &vars->player.pos);
+	fov(&vars->array->ray, vars->array, &vars->player.pos);
+	//debug_fov(rays, 40);
+	for (float angle = -30; angle <= 30; angle += 1.5)
+	{
+    	float rad = angle * (PI / 180.0f);
+    	ft_dda_draw_ray(&vars->player.pos, cosf(rad), sinf(rad), vars->array);
+	}
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
