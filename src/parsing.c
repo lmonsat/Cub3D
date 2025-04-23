@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/20 20:16:04 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/23 20:37:51 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,33 +329,57 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 	fc_split_rgb(array, new_line, line, type);
 }
 
-void fill(char **tab, t_point size, char target, int row, int col)
+int fill(char **tab, t_point size, char target, int row, int col)
 {
     if (row < 0 || col < 0 || row >= size.y || col >= size.x)
-        return ;
+        return (1);
 
-    if (tab[row][col] == 'F' || tab[row][col] != target)
-        return ;
+	if (tab[row][col] == ' ' || tab[row][col] == '\0' || tab[row][col] == '\n')
+	{
+		printf("test\n");
+		return (1);
+	}
+    if (tab[row][col] == 'F' || tab[row][col] != target || tab[row][col] == 'N')
+        return (0);
 
     tab[row][col] = 'F';
-
-    fill(tab, size, target, row - 1, col);
-    fill(tab, size, target, row + 1, col);
-    fill(tab, size, target, row, col - 1);
-    fill(tab, size, target, row, col + 1);
+	
+	return (fill(tab, size, target, row - 1, col) || fill(tab, size, target, row + 1, col) || fill(tab, size, target, row, col - 1) || fill(tab, size, target, row, col + 1));
 }
 
-void flood_fill(char **tab, t_point size, t_point begin)
+void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 {
-    char target = tab[begin.y][begin.x];
-    fill(tab, size, target, begin.y, begin.x);
+    char target;
+	int i = 0;
+
+	target = tab[begin.y][begin.x];
+	if (fill(tab, size, target, begin.y, begin.x))
+	{
+		while (i < 15)
+		{
+			printf("%s", array->line[i++]);
+		}
+		printf("Map building incorrect\n");
+		free_1_array(array);
+		exit(1);
+	}
+	while (i < 15)
+	{
+		printf("%s", array->line[i++]);
+	}
 }
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
     struct s_game_stats *value, char *argv[])
 {
     int	fd;
+	t_point begin;
+	t_point size;
 
+	size.x = 34;
+	size.y = 13;
+	begin.x = 27;
+	begin.y = 11;
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
 	close(fd);
@@ -368,9 +392,9 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	check_floor_and_ceilling(fd, array, 'C');
 	//check_first_line(fd, array);
     //check_in_lines(fd, array);
-    //check_player_start_pos(array, value);
     check_characters_in_map(array);
 	check_player_start_pos(array, value);
+	flood_fill(array, array->line, size, begin);
     //array->backtracking = copy_array(array->line, array);
     //backtracking(array, vars);
     //vars->player.collected = 0;
