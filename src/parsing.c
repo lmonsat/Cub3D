@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/23 20:37:51 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/24 15:56:24 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,19 +332,23 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 int fill(char **tab, t_point size, char target, int row, int col)
 {
     if (row < 0 || col < 0 || row >= size.y || col >= size.x)
+        return (0); 
+
+    if (tab[row][col] == ' ')
         return (1);
 
-	if (tab[row][col] == ' ' || tab[row][col] == '\0' || tab[row][col] == '\n')
-	{
-		printf("test\n");
-		return (1);
-	}
-    if (tab[row][col] == 'F' || tab[row][col] != target || tab[row][col] == 'N')
+    if (tab[row][col] != target)
         return (0);
 
     tab[row][col] = 'F';
-	
-	return (fill(tab, size, target, row - 1, col) || fill(tab, size, target, row + 1, col) || fill(tab, size, target, row, col - 1) || fill(tab, size, target, row, col + 1));
+
+    if (fill(tab, size, target, row - 1, col) ||
+        fill(tab, size, target, row + 1, col) ||
+        fill(tab, size, target, row, col - 1) ||
+        fill(tab, size, target, row, col + 1))
+        return (1);
+
+    return (0);
 }
 
 void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
@@ -355,10 +359,6 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 	target = tab[begin.y][begin.x];
 	if (fill(tab, size, target, begin.y, begin.x))
 	{
-		while (i < 15)
-		{
-			printf("%s", array->line[i++]);
-		}
 		printf("Map building incorrect\n");
 		free_1_array(array);
 		exit(1);
