@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/24 15:56:24 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:11:04 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,6 @@ void	check_characters_in_map(struct s_array *array)
 	}
 }
 
-void	check_first_line(int fd, struct s_array *array)
-{
-	array->line = malloc(2048 * sizeof(char *));
-	if (array->line == NULL)
-	{
-		perror("Error\n Memory allocation failed");
-		exit(EXIT_FAILURE);
-	}
-	array->elmt.cols = 0;
-	array->line[0] = get_next_line(fd);
-	if (array->line[0] == NULL)
-	{
-		free_1_array(array);
-		perror("Error\n Map file is empty");
-		exit(EXIT_FAILURE);
-	}
-	array->elmt.cols = ft_strlen(array->line[0]) - 1;
-	array->elmt.first_line_nb_char = ft_strchr_count(array->line[0], '1');
-}
-
 void	check_player_start_pos(struct s_array *array,
 		struct s_game_stats *value)
 {
@@ -85,33 +65,6 @@ void	check_player_start_pos(struct s_array *array,
 	}
 }
 
-void	check_in_lines(int fd, struct s_array *array)
-{
-	int	line_nb_char;
-	int	i;
-	int	is_incomplete;
-
-	is_incomplete = 0;
-	i = 0;
-	array->line_len = 0;
-	array->elmt.rows = 0;
-	while (1)
-	{
-		array->elmt.rows++;
-		array->line[++i] = get_next_line(fd);
-		if (array->line[i] == NULL)
-			break ;
-		array->line_len = ft_strlen(array->line[i]) - 1;
-		line_nb_char = ft_strchr_count(array->line[i], '1');
-		if (array->line[i][0] != '1' || array->line[i][array->line_len
-			- 1] != '1' || array->elmt.cols != array->line_len)
-			is_incomplete = 1;
-	}
-	array->line[array->elmt.rows + 1] = NULL;
-	if (is_incomplete)
-		free_in_lines(array);
-}
-
 /* Définis la taille max pour array->line 
 	(prend en compte les textures et F C dans sa taille)*/
 static unsigned int dynamic_map_lenght(int fd, char *line)
@@ -133,12 +86,13 @@ static unsigned int dynamic_map_lenght(int fd, char *line)
 
 /* Trouve la première ligne de la map pour copier uniquement la map, 
 	dans le tableau*/
-static char *find_first_line(int fd)
+static char *find_first_line(int fd, unsigned int *total_len)
 {
 	char *line;
 	char *cmp_line;
-	int len;
+	unsigned int len;
 
+	len = 0;
 	line = "value";
 	while (line != NULL)
 	{
@@ -148,7 +102,9 @@ static char *find_first_line(int fd)
 		if ((line[0] == '1' || line[0] == ' ' || line[0] == '\t')/* || !ft_strcmp(line, "\n")*/)
 			break ;
 		free(line);
+		len++;
 	}
+	*total_len -= len;
 	return(line);
 }
 
@@ -164,8 +120,14 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	//printf("test len: %d\n", len);
 	close(fd);
 	fd = open_map_file(argv);
+	line = find_first_line(fd, &len);
+	//printf("len: %u\n", len);
 	array->line = calloc(len + 1, sizeof(char *));
-	line = find_first_line(fd);
+	if (!array->line)
+	{
+		printf("Memory allocation failed\n");
+		exit(1);
+	}
 	array->line[i++] = line; 
 	while (array->line != NULL)
 	{
@@ -271,8 +233,10 @@ void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 	free(line);
 }
 
-static char *fc_get_line(char *line, int fd)
+static char *fc_get_line(int fd)
 {
+	char *line;
+	
 	line = get_next_line(fd);
 	while (1)
 	{
@@ -306,7 +270,7 @@ void check_floor_and_ceilling(int fd, struct s_array *array, char type)
 	int i;
 
 	i = 0;
-	line = fc_get_line(line, fd);
+	line = fc_get_line(fd);
 	//printf("line[%d]: %c\n", i, line[i]);
 	if (line[i] != type)
 		error_parse_fc(fd, array, line, type);
@@ -334,7 +298,7 @@ int fill(char **tab, t_point size, char target, int row, int col)
     if (row < 0 || col < 0 || row >= size.y || col >= size.x)
         return (0); 
 
-    if (tab[row][col] == ' ')
+    if (tab[row][col] == ' ' || tab[row][col] == '\n' || tab[row][col] == '\0' )
         return (1);
 
     if (tab[row][col] != target)
@@ -361,6 +325,9 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 	{
 		printf("Map building incorrect\n");
 		free_1_array(array);
+		free_array(array->ceiling);
+		free_array(array->floor);
+		free_path(array);
 		exit(1);
 	}
 	while (i < 15)
@@ -390,13 +357,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	check_position(fd, array, 'E', 'A');
 	check_floor_and_ceilling(fd, array, 'F');
 	check_floor_and_ceilling(fd, array, 'C');
-	//check_first_line(fd, array);
-    //check_in_lines(fd, array);
     check_characters_in_map(array);
 	check_player_start_pos(array, value);
 	flood_fill(array, array->line, size, begin);
-    //array->backtracking = copy_array(array->line, array);
-    //backtracking(array, vars);
-    //vars->player.collected = 0;
     //vars->array = array;
 }
