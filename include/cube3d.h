@@ -71,6 +71,27 @@ struct	s_trace_line
 
 };
 
+/*struct s_measure
+{
+	//coordonnées du joueur par case
+	int mapx;
+	int mapy;
+
+	//distance que le rayon doit parcourir pour traverser une case
+	float deltaDistx;
+	float deltaDisty;
+
+	//variable de direction
+	int stepx;
+	int stepy;
+	float sidedistx;
+	float sidedisty;
+
+	float distance;
+	int hit;
+	int side // 0 collision en x 1 collision en y
+};*/
+
 struct					s_first
 {
 	int					cols;

@@ -56,11 +56,11 @@ void	render_frame(struct s_vars *vars)
 	//fov(&vars->array->ray, vars->array, &vars->player.pos);
 	fov(&vars->array->ray, vars->array, &vars->player.pos);
 	//debug_fov(rays, 40);
-	for (float angle = -30; angle <= 30; angle += 1.5)
-	{
-    	float rad = angle * (PI / 180.0f);
-    	ft_dda_draw_ray(&vars->player.pos, cosf(rad), sinf(rad), vars->array);
-	}
+	//for (float angle = -15; angle <= 15; angle += 1.5)
+	//{
+    	//float rad = angle * (PI / 180.0f);
+    	//ft_dda_draw_ray(&vars->player.pos, cosf((vars->array->ray.rotation * PI / 180.0f)), sinf((vars->array->ray.rotation * PI / 180.0f)), vars->array);
+	//}
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
