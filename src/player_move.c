@@ -50,7 +50,7 @@ void	render_frame(struct s_vars *vars)
 	clear_image(vars->array, width, height); // Efface tout avant de redessiner
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
-	ft_draw_line(&vars->array->ray, vars->array/*, &vars->player.pos*/);
+	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
 	//ft_perpendiculare(&vars->array->ray, vars->array, &vars->player.pos);
 	//fov_half(&vars->array->ray, vars->array, &vars->player.pos);
 	//fov(&vars->array->ray, vars->array, &vars->player.pos);

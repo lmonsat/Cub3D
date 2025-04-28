@@ -12,53 +12,35 @@
 
 #include "../include/cube3d.h"
 
-/*void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
+
+void distance_central(struct s_array *array, struct s_position *player)
 {
-    pos->width = array->elmt.cols * 40;
-    pos->height = array->elmt.rows * 40;
-    pos->x_start = player->x_pixel;
-    pos->y_start = player->y_pixel;
-    //pos->x_pass = ...
-    //pos->y_pass = ...
+    float ray_angle;
+    float player_angle;
+    float raydirx;
+    float raydiry;
 
-    //vecteurs de direction partant vers la droite 
-    pos->dx = pos->x_pass - player->x_pixel;
-    pos->dy = pos->y_pass - player->y_pixel;
+    // Angle du joueur en radians
+    player_angle = array->ray.rotation * PI / 180.0f;
 
-}*/
+    ray_angle = player_angle;  
+
+    raydirx = cos(ray_angle);
+    raydiry = sin(ray_angle);
+
+    ft_dda_draw_ray(player, raydirx, raydiry, array);
+}
+
 //attention cette fonction modifie mon point de depart pos->x.. me referer a player_x...
 //que je ne modifie pas afin de garder la position du joueur en memoire 
 //pos-> x et y_pass a redefinir a chaque utilisation de la fonction
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array)
+void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-
-   //int width;
-   //int height;
    int i;
    int xi;
    int yi;
 
    i = 0;
-   //width = array->elmt.cols * 40;
-   //height = array->elmt.rows * 40;
-
-   //position de départ
-   //pos->x_start = player->x_pixel;
-   //pos->y_start = player->y_pixel;
-
-   //point de passage de la line (ligne qui va problement devenir facultative)
-   //pos->x_pass = width / 2;
-   //pos->y_pass = height / 2;
-
-   //vecteur de direction
-   //pos->dx = pos->x_pass - player->x_pixel;
-   //pos->dy = pos->y_pass - player->y_pixel;
-   //pos->dx = cosf(0.0f * PI / 180.0f);
-   //pos->dy = sinf(0.0f * PI / 180.0f);
-
-   printf("pos dx est egale a %f\n", pos->dx);
-   printf("pos dy est egale a %f\n", pos->dy);
-
    pos->step = fmaxf(fabsf(pos->dx), fabsf(pos->dy));
    pos->dx /= pos->step;
    pos->dy /= pos->step;
@@ -71,11 +53,12 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array)
             break;
         if (array->line[yi / 40][xi / 40] == '1')
             break;
-        ft_put_pixel(xi, yi, array, RED);
+        ft_put_pixel(xi, yi, array, YELLOW);
         pos->x_start += pos->dx;
         pos->y_start += pos->dy;
         i++;
    }
+   distance_central(array, player);
 }
 
 void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
@@ -387,9 +370,9 @@ void distance(struct s_array *array, struct s_position *player, int i)
     float raydiry;
 
     fov_angle = 2.0f * atanf(21.0f / 80.0f);
-    printf("Angle de FOV: %f degrés\n", fov_angle);
     player_angle = array->ray.rotation * PI / 180.0f;
     ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / 80.0f);
+    printf("ray angle vaut %f\n", ray_angle);
     raydirx = cos(ray_angle);
     raydiry = sin(ray_angle);
     ft_dda_draw_ray(player, raydirx, raydiry, array);
@@ -403,9 +386,9 @@ void distance1(struct s_array *array, struct s_position *player, int i)
     float raydiry;
 
     fov_angle = 2.0f * atanf(21.0f / 80.0f);
-    printf("Angle de FOV: %f degrés\n", fov_angle);
     player_angle = array->ray.rotation * PI / 180.0f;
     ray_angle = player_angle + (i * fov_angle / 80.0f);
+    printf("ray angle vaut %f\n", ray_angle);
     raydirx = cos(ray_angle);
     raydiry = sin(ray_angle);
     ft_dda_draw_ray(player, raydirx, raydiry, array);
@@ -420,7 +403,6 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
     ft_init_line(pos, array, player);
     //float fov_angle = 2.0f * atanf(.0f / 80.0f) * (180.0f / PI);
     //float ray_angle;
-
     for (i = 0; i < 80; i++)
     {
         pos->x_pass += pos->dx;
@@ -466,7 +448,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
             rx += ldx;
             ry += ldy;
         }
-        printf("ray numero: %d", i);
+        //printf("ray numero: %d", i);
         distance(array, player, i);
     }
     printf("===========================");
@@ -498,7 +480,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
             rx += ldx;
             ry += ldy;
         }
-        printf("ray numero: %d", i);
+        //printf("ray numero: %d", i);
         distance1(array, player, i + 40);
     }
     printf("===========================");

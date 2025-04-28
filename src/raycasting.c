@@ -38,7 +38,7 @@ void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius,
     }
 }
 
-/*void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array)
+/*void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array, float ray_angle)
 {
     // Conversion des coordonnées du joueur en position de case (cellule) sur la grille
     int mapX = (int)(player->x_pixel / 40);
@@ -128,8 +128,10 @@ void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius,
         }
     }
 
+    float c_distance = distance * cos(ray_angle);
     // Affichage de la distance du rayon au mur détecté
     printf("Distance au mur : %f\n", distance);
+    printf("Distance corriger : %f\n", c_distance);
 }*/
 
 void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array)
@@ -144,8 +146,6 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     // Calculs des delta distances
     float deltaDistX = (rayDirX == 0) ? 1e30 : fabsf(1.0f / rayDirX);
     float deltaDistY = (rayDirY == 0) ? 1e30 : fabsf(1.0f / rayDirY);
-    //printf("delta dist x vaux %f\n", deltaDistX);
-    //printf("delta dist y vaux %f\n", deltaDistY);
 
     int stepX, stepY;
     float sideDistX, sideDistY;
@@ -175,7 +175,8 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     }
 
     int hit = 0;
-    int side = 0; // 0 = X side, 1 = Y side
+    int side = 0; 
+    // 0 = X side, 1 = Y side
 
     // Boucle DDA
     while (!hit)
@@ -205,23 +206,14 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
         }
     }
 
-    // Calcul correct de la distance projetée
-    float distance;
-    if (side == 0)
-        distance = (mapX - posX + (1.0f - stepX) / 2.0f) / rayDirX;
+    float perpWallDist;
+    if(side == 0) 
+        perpWallDist = (sideDistX - deltaDistX);
     else
-        distance = (mapY - posY + (1.0f - stepY) / 2.0f) / rayDirY;
+        perpWallDist = (sideDistY - deltaDistY);
 
-    //float distance_pixels = distance * 40.0f;
-
-    //float dot = rayDirX * player->dir_x + rayDirY * player->dir_y;
-    //float corrected_distance = distance * dot;
-    
-    // Affichage de la distance
-    printf("Distance au mur (cases) : %f\n", distance);
-    //printf("Distance au mur (pixels) : %f\n", distance_pixels);
+    printf("Distance : %f\n", perpWallDist);
 }
-
 /*void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array, float angle_ray, float angle_player)
 {
     float posX = player->x_pixel / 40.0f;
