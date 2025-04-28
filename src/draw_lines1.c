@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_lines.c                                       :+:      :+:    :+:   */
+/*   draw_lines1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/14 17:18:31 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:05:25 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void distance_central(struct s_array *array, struct s_position *player)
     // Angle du joueur en radians
     player_angle = array->ray.rotation * PI / 180.0f;
 
-    ray_angle = player_angle;  
+    ray_angle = player_angle;
 
     raydirx = cos(ray_angle);
     raydiry = sin(ray_angle);
@@ -32,7 +32,7 @@ void distance_central(struct s_array *array, struct s_position *player)
 }
 
 //attention cette fonction modifie mon point de depart pos->x.. me referer a player_x...
-//que je ne modifie pas afin de garder la position du joueur en memoire 
+//que je ne modifie pas afin de garder la position du joueur en memoire
 //pos-> x et y_pass a redefinir a chaque utilisation de la fonction
 void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
@@ -69,13 +69,13 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
     int height = array->elmt.rows * 40;
     float x;
     float y;
-    
+
     // Repartir du joueur
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
     pos->x_pass = player->x_pixel;
     pos->y_pass = player->y_pixel;
-    
+
     //decale la perpendiculaire par rapport au joueur
     while (i < 80)
     {
@@ -83,13 +83,13 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
         pos->y_start += pos->dy;
         i++;
     }
-    
+
     // Calcul du vecteur perpendiculaire
     float tmp_dx = pos->dx;
     pos->dx = -pos->dy;
     pos->dy = tmp_dx;
 
-    
+
     printf("pos dx perpendiculaire egale a %f\n", pos->dx);
     printf("pos dy perpendiculaire egale a %f\n", pos->dy);
 
@@ -139,7 +139,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
     pos->y_start = player->y_pixel;
     pos->x_pass = player->x_pixel;
     pos->y_pass = player->y_pixel;
-    
+
     pos->dx = pos->x_pass - player->x_pixel;
     pos->dy = pos->y_pass - player->y_pixel;
 
@@ -150,7 +150,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
         pos->y_pass += pos->dy;
         i++;
     }
-    
+
 
 
     float tmp_dx = pos->dx;
@@ -222,12 +222,12 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
     {
         pos->x_pass += pos->dx;
         pos->y_pass += pos->dy;
-        i++;  
+        i++;
     }
     tmp = pos->dx;
     pos->dx = -pos->dy;
     pos->dy = tmp;
-    
+
     pos->step = fmaxf(fabsf(pos->dx), fabsf(pos->dy));
     pos->dx /= pos->step;
     pos->dy /= pos->step;
@@ -256,7 +256,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
             ft_put_pixel(xi, yi, array, RED);
             x += ldx;
             y += ldy;
-            j++; 
+            j++;
         }
         i++;
     }
@@ -281,12 +281,12 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
     {
         pos->x_pass += pos->dx;
         pos->y_pass += pos->dy;
-        i++;  
+        i++;
     }
     tmp = pos->dx;
     pos->dx = -pos->dy;
     pos->dy = tmp;
-    
+
     pos->step = fmaxf(fabsf(pos->dx), fabsf(pos->dy));
     pos->dx /= pos->step;
     pos->dy /= pos->step;
@@ -315,7 +315,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
             ft_put_pixel(xi, yi, array, RED);
             x -= ldx;
             y -= ldy;
-            j++; 
+            j++;
         }
         i++;
     }
@@ -369,14 +369,27 @@ void distance(struct s_array *array, struct s_position *player, int i)
     float raydirx;
     float raydiry;
 
-    fov_angle = 2.0f * atanf(21.0f / 80.0f);
+    //le premier 80 correspont a la taille du plan camera
+    //le deuxieme 80 a la distance entre le joueur et le plan camera
+    //fov angle est donner en radian
+    fov_angle = 2.0f * atanf(80.0f / 80.0f);
+
+    //renvoie l' angle du joueur en radian
     player_angle = array->ray.rotation * PI / 180.0f;
+
+    //renvoie l' angle de la ray en radian
     ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / 80.0f);
-    printf("ray angle vaut %f\n", ray_angle);
+
     raydirx = cos(ray_angle);
     raydiry = sin(ray_angle);
+
+    //calcule la distance brut de la ray et la met dans array->ray.brutdist
     ft_dda_draw_ray(player, raydirx, raydiry, array);
+
+    array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
+    printf("Distance no fisheye: %f\n", array->ray.perpdist);
 }
+
 void distance1(struct s_array *array, struct s_position *player, int i)
 {
     float fov_angle;
@@ -385,14 +398,43 @@ void distance1(struct s_array *array, struct s_position *player, int i)
     float raydirx;
     float raydiry;
 
-    fov_angle = 2.0f * atanf(21.0f / 80.0f);
+    //le premier 80 correspont a la taille du plan camera
+    //le deuxieme 80 a la distance entre le joueur et le plan camera
+    //fov angle est donner en radian
+    fov_angle = 2.0f * atanf(80.0f / 80.0f);
+
+    //renvoie l' angle du joueur en radian
     player_angle = array->ray.rotation * PI / 180.0f;
-    ray_angle = player_angle + (i * fov_angle / 80.0f);
-    printf("ray angle vaut %f\n", ray_angle);
+
+    //renvoie l' angle de la ray en radian
+    ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / 80.0f);
+
+    raydirx = cos(ray_angle);
+    raydiry = sin(ray_angle);
+
+    //calcule la distance brut de la ray et la met dans array->ray.brutdist
+    ft_dda_draw_ray(player, raydirx, raydiry, array);
+
+    array->ray.perpdist = array->ray.brutdist * cos(player_angle - ray_angle);
+    printf("Distance no fisheye: %f\n", array->ray.perpdist);
+}
+/*void distance1(struct s_array *array, struct s_position *player, int i)
+{
+    float fov_angle;
+    float ray_angle;
+    float player_angle;
+    float raydirx;
+    float raydiry;
+
+    fov_angle = 2.0f * atanf(80.0f / 80.0f);
+    player_angle = array->ray.rotation * PI / 180.0f;
+    ray_angle = player_angle + (fov_angle / 2.0f) + (i * fov_angle / 80.0f);
     raydirx = cos(ray_angle);
     raydiry = sin(ray_angle);
     ft_dda_draw_ray(player, raydirx, raydiry, array);
-}
+    array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
+    printf("Distance no fisheye1: %f\n", array->ray.perpdist);
+}*/
 
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
@@ -423,7 +465,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
     x = pos->x_pass;
     y = pos->y_pass;
     printf("===========================");
-    for (i = 0; i < 25; i++)
+    for (i = 0; i < 80; i++)
     {
         x += pos->dx;
         y += pos->dy;
@@ -455,7 +497,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
     // === 2ème moitié de la FOV (inverse) ===
     x = pos->x_pass;
     y = pos->y_pass;
-    for (i = 0; i < 25; i++)
+    for (i = 0; i < 80; i++)
     {
         x -= pos->dx;
         y -= pos->dy;
@@ -481,7 +523,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
             ry += ldy;
         }
         //printf("ray numero: %d", i);
-        distance1(array, player, i + 40);
+        distance1(array, player, i);
     }
     printf("===========================");
     //printf("Angle de fov: %f degrée\n", fov_angle);
@@ -542,17 +584,17 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
             ry += ldy;
             int mapX = (int)(player->x_pixel / 40);
             int mapY = (int)(player->y_pixel / 40);
-            
+
             float rayDirX = ldx;
             float rayDirY = ldy;
-            
+
             // Calcul des distances à parcourir dans X et Y
             float deltaDistX = fabsf(1.0f / rayDirX);
             float deltaDistY = fabsf(1.0f / rayDirY);
-            
+
             int stepX, stepY;
             float sideDistX, sideDistY;
-            
+
             // Initialisation des steps et sideDist
             if (rayDirX < 0)
             {
@@ -564,7 +606,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                 stepX = 1;
                 sideDistX = ((mapX + 1) * 40 - player->x_pixel) / 40 * deltaDistX;
             }
-            
+
             if (rayDirY < 0)
             {
                 stepY = -1;
@@ -575,7 +617,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                 stepY = 1;
                 sideDistY = ((mapY + 1) * 40 - player->y_pixel) / 40 * deltaDistY;
             }
-            
+
             // DDA
             int hit = 0;
             int side = 0;
@@ -593,7 +635,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                     mapY += stepY;
                     side = 1;
                 }
-            
+
                 // Test si on touche un mur
                 if (mapY >= 0 && mapY < array->elmt.rows && mapX >= 0 && mapX < array->elmt.cols)
                 {
@@ -611,7 +653,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                     ray_distances[ray_index] = perpWallDist;
                     ray_index++;
                     break;
-                }        
+                }
             }
         }
     }
@@ -645,17 +687,17 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
             ry += ldy;
             int mapX = (int)(player->x_pixel / 40);
             int mapY = (int)(player->y_pixel / 40);
-            
+
             float rayDirX = ldx;
             float rayDirY = ldy;
-            
+
             // Calcul des distances à parcourir dans X et Y
             float deltaDistX = fabsf(1.0f / rayDirX);
             float deltaDistY = fabsf(1.0f / rayDirY);
-            
+
             int stepX, stepY;
             float sideDistX, sideDistY;
-            
+
             // Initialisation des steps et sideDist
             if (rayDirX < 0)
             {
@@ -667,7 +709,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                 stepX = 1;
                 sideDistX = ((mapX + 1) * 40 - player->x_pixel) / 40 * deltaDistX;
             }
-            
+
             if (rayDirY < 0)
             {
                 stepY = -1;
@@ -678,7 +720,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                 stepY = 1;
                 sideDistY = ((mapY + 1) * 40 - player->y_pixel) / 40 * deltaDistY;
             }
-            
+
             // DDA
             int hit = 0;
             int side = 0;
@@ -696,7 +738,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                     mapY += stepY;
                     side = 1;
                 }
-            
+
                 // Test si on touche un mur
                 if (mapY >= 0 && mapY < array->elmt.rows && mapX >= 0 && mapX < array->elmt.cols)
                 {
@@ -714,7 +756,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                     ray_distances[ray_index] = perpWallDist;
                     ray_index++;
                     break;
-                }                     
+                }
             }
         }
     }
@@ -795,4 +837,3 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
 
     printf("Distance au mur : %f\n", distance); // Affichage de la distance
 }*/
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/01 19:21:51 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/28 13:37:44 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     }
 
     int hit = 0;
-    int side = 0; 
+    int side = 0;
     // 0 = X side, 1 = Y side
 
     // Boucle DDA
@@ -206,13 +206,13 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
         }
     }
 
-    float perpWallDist;
-    if(side == 0) 
-        perpWallDist = (sideDistX - deltaDistX);
+    //float perpWallDist;
+    if(side == 0)
+        array->ray.brutdist = (sideDistX - deltaDistX);
     else
-        perpWallDist = (sideDistY - deltaDistY);
+        array->ray.brutdist = (sideDistY - deltaDistY);
 
-    printf("Distance : %f\n", perpWallDist);
+    printf("Distance brut: %f\n", array->ray.brutdist);
 }
 /*void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array, float angle_ray, float angle_player)
 {
@@ -295,5 +295,3 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     printf("Distance corrigée au mur (cases) : %f\n", distance_corrected);
     printf("Distance corrigée au mur (pixels) : %f\n", distance_pixels);
 }*/
-
-

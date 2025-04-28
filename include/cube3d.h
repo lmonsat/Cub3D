@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/14 15:56:26 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:34:36 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ struct	s_trace_line
 	int width; //array->elmt.cols * 40
 	int height; //array->elmt.rows * 40
 	float rotation; //for rotation of fov
+	float brutdist; //distance brut
+	float perpdist; //distance corriger pour effet fisheye
 
 };
 
