@@ -6,68 +6,11 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:20:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2024/03/25 22:56:53 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:24:32 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-<<<<<<< HEAD
-=======
-
-size_t	cut_buffer(char *buffer)
-{
-	size_t	i;
-
-	i = 0;
-	if (buffer == NULL)
-		return (0);
-	while (buffer[i] != '\n' && buffer[i] != '\0')
-		i++;
-	if (buffer[i] == '\n')
-		i++;
-	return (i);
-}
-
-size_t	check_buffer(char *buffer)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < BUFFER_SIZE)
-	{
-		if (buffer[i] == '\n' || buffer[i] == '\0')
-			return (0);
-		else
-			i++;
-	}
-	return (1);
-}
-
-char	*get_line(int fd)
-{
-	char	*line;
-	char	*buffer;
-	ssize_t	bytes_read;
-
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (fd < 0 || BUFFER_SIZE <= 0 || !buffer || bytes_read == -1)
-		return (ft_free(buffer), NULL);
-	buffer[bytes_read] = '\0';
-	line = NULL;
-	while (check_buffer(buffer) == 1)
-	{
-		line = ft_strjoin(line, buffer);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (ft_free(buffer), ft_free(line), NULL);
-		buffer[bytes_read] = '\0';
-	}
-	if (check_buffer(buffer) == 0)
-		line = ft_strjoin(line, buffer);
-	return (ft_free(buffer), line);
-}
->>>>>>> origin/simple_solong
 
 char	*get_next_line(int fd)
 {
