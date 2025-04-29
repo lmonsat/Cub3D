@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_lines.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/14 15:24:43 by drenquin         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/14 17:18:31 by drenquin         ###   ########.fr       */
->>>>>>> origin/simple_solong
+/*   Updated: 2025/04/29 15:19:50 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +30,7 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 	}
 }
 
-<<<<<<< HEAD
-void ft_draw_grid(struct s_array *array, struct s_vars *vars)
-=======
 void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
->>>>>>> origin/simple_solong
 {
     int x, y;
     int width = array->elmt.cols * 40;
@@ -49,14 +41,10 @@ void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
     {
         for (y = 0; y < height; y++)
         {
-<<<<<<< HEAD
-            ft_put_pixel(x, y, array, WHITE); // Blanc
-=======
             if (array->line[(int)y / 40][(int)x / 40] == '1')
                 ft_put_pixel(x, y, array, BLUE); // Blanc
             else
                 ft_put_pixel(x, y, array, WHITE);
->>>>>>> origin/simple_solong
         }
     }
 
@@ -65,13 +53,6 @@ void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
     {
         for (x = 0; x < width; x++)
         {
-<<<<<<< HEAD
-            ft_put_pixel(x, y, array, WHITE); // Blanc
-        }
-    }
-    // Envoyer l'image mise à jour dans la fenêtre
-    mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
-=======
             if (array->line[(int)y / 40][(int)x / 40] == '1')
                 ft_put_pixel(x, y, array, BLUE); // Blanc
             else
@@ -80,7 +61,6 @@ void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
     }
     // Envoyer l'image mise à jour dans la fenêtre
     //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
->>>>>>> origin/simple_solong
 }
 //algo DDA moins performant que bresenham car calcule de float
 void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
@@ -141,11 +121,7 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
 // algo de bresenham inspirer de la version c++ https://www.youtube.com/watch?v=Frl1cLwfs1U
 //todo: cree une fonction swap
 //todo: mettre les variables dans une structure et ajouter une fonction data init
-<<<<<<< HEAD
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
-=======
 /*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
->>>>>>> origin/simple_solong
 {
     int dx;
     int dy;
@@ -157,23 +133,15 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars
     int x;
     int width;
     int height;
-<<<<<<< HEAD
-=======
     //int angle;
->>>>>>> origin/simple_solong
 
     width = array->elmt.cols * 40;
     height = array->elmt.rows * 40;
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
-<<<<<<< HEAD
-    pos->x_end = width - 1;
-    pos->y_end = player->y_pixel;
-=======
     pos->x_end = width - 1 + cos(60);
     pos->y_end = player->y_pixel + sin(80);
     printf("------------\nx start:%d\n y start:%d\n x end:%d\n y end:%d\n -----------\n", pos->x_start, pos->y_start, pos->x_end, pos->y_end);
->>>>>>> origin/simple_solong
     dx = pos->x_end - pos->x_start;
     dy = pos->y_end - pos->y_start;
 
@@ -268,9 +236,6 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars
         }
     }
     mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
-<<<<<<< HEAD
-}
-=======
 }*/
 
 //#define DEG2RAD(x) ((x) * M_PI / 180.0f)
@@ -521,4 +486,3 @@ void draw_fov_360(struct s_vars *vars)
 
 
 
->>>>>>> origin/simple_solong
