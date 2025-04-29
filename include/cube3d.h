@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/28 13:34:36 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/29 23:59:31 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ struct	s_trace_line
 	float rotation; //for rotation of fov
 	float brutdist; //distance brut
 	float perpdist; //distance corriger pour effet fisheye
+	float *perp_tab;
 
 };
 
@@ -216,20 +217,14 @@ void	requested_player_position_left(struct s_vars *vars);
 
 /* --- draw_lines --- */
 void ft_put_pixel(int x, int y, struct s_array *array, int color);
-void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/);
-//void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_vars *vars,*/ struct s_position *player);
+void ft_draw_grid(struct s_array *array);
 void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-//void ft_perpendiculare(struct s_trace_line * pos, struct s_array *array);
 void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-//void draw_fov(struct s_vars *vars);
-//void draw_fov_360(struct s_vars *vars);
-//void ft_fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-//void ft_draw_fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-//void fov_other(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void rotate_player(struct s_trace_line *pos, float angle_deg);
-//float *fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-//void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array);
 void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array);
+
+/*--- ray_casting ---*/
+void draw_walls(struct s_trace_line *pos, struct s_array *array);
 #endif

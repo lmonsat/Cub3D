@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/28 15:05:25 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:22:39 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,7 +416,7 @@ void distance1(struct s_array *array, struct s_position *player, int i)
     ft_dda_draw_ray(player, raydirx, raydiry, array);
 
     array->ray.perpdist = array->ray.brutdist * cos(player_angle - ray_angle);
-    printf("Distance no fisheye: %f\n", array->ray.perpdist);
+    //printf("Distance no fisheye: %f\n", array->ray.perpdist);
 }
 /*void distance1(struct s_array *array, struct s_position *player, int i)
 {
@@ -435,6 +435,15 @@ void distance1(struct s_array *array, struct s_position *player, int i)
     array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
     printf("Distance no fisheye1: %f\n", array->ray.perpdist);
 }*/
+
+void print_perp_tab(struct s_trace_line *pos)
+{
+    printf("Contenu de pos->perp_tab (160 rayons de gauche à droite) :\n");
+    for (int i = 0; i < 160; i++)
+    {
+        printf("Rayon %3d : %f\n", i, pos->perp_tab[i]);
+    }
+}
 
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
@@ -492,6 +501,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
         }
         //printf("ray numero: %d", i);
         distance(array, player, i);
+        pos->perp_tab[79 - i] = pos->perpdist;
     }
     printf("===========================");
     // === 2ème moitié de la FOV (inverse) ===
@@ -524,8 +534,10 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
         }
         //printf("ray numero: %d", i);
         distance1(array, player, i);
+        pos->perp_tab[80 + i] = pos->perpdist;
     }
     printf("===========================");
+    print_perp_tab(pos);
     //printf("Angle de fov: %f degrée\n", fov_angle);
 }
 

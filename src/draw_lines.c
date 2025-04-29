@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/14 17:18:31 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/30 00:02:17 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 	}
 }
 
-void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
+void ft_draw_grid(struct s_array *array)
 {
     int x, y;
     int width = array->elmt.cols * 40;

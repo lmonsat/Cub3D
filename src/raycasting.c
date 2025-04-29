@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/28 13:37:44 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/29 23:04:17 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->dy = sinf(array->ray.rotation * PI / 180.0f);
     pos->x_pass = player->x_pixel;
     pos->y_pass = player->y_pixel;
+    pos->perp_tab = malloc(sizeof(float) * 160);
 }
 
 void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius, int color)
@@ -212,7 +213,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     else
         array->ray.brutdist = (sideDistY - deltaDistY);
 
-    printf("Distance brut: %f\n", array->ray.brutdist);
+    //printf("Distance brut: %f\n", array->ray.brutdist);
 }
 /*void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array, float angle_ray, float angle_player)
 {
@@ -295,3 +296,64 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     printf("Distance corrigée au mur (cases) : %f\n", distance_corrected);
     printf("Distance corrigée au mur (pixels) : %f\n", distance_pixels);
 }*/
+/*void draw_vertical_line(int x, int start, int end, struct s_array *array)
+{
+    for (int y = start; y <= end; y++)
+    {
+        if (y >= 0 && y < array->ray.height)
+            ft_put_pixel(x, y, array, WHITE); // ou une couleur mur
+    }
+}
+
+void draw_walls(struct s_trace_line *pos, struct s_array *array)
+{
+    int plane;
+
+    plane = (array->ray.width / 2) / tan(45);
+    for (int i = 0; i < 160; i++)
+    {
+        float dist = pos->perp_tab[i];
+        if (dist <= 0.01f) dist = 0.01f; // éviter division par 0
+
+        int line_height = (int)(plane / dist);
+        int draw_start = (array->ray.height / 2) - (line_height / 2);
+        int draw_end = (array->ray.height / 2) + (line_height / 2);
+
+        draw_vertical_line(i, draw_start, draw_end, array);
+    }
+}*/
+
+void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array)
+{
+    for (int x = x_start; x < x_start + band_width; x++)
+    {
+        if (x < 0 || x >= array->ray.width)
+            continue;
+        for (int y = draw_start; y <= draw_end; y++)
+        {
+            if (y >= 0 && y < array->ray.height)
+                ft_put_pixel(x, y, array, WHITE); // couleur du mur
+        }
+    }
+}
+
+void draw_walls(struct s_trace_line *pos, struct s_array *array)
+{
+    int nb_rays = 80;
+    float fov_angle = 60.0f * (PI / 180.0f); // FOV en radians
+    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
+    int band_width = array->ray.width / nb_rays;
+
+    for (int i = 0; i < nb_rays; i++)
+    {
+        float dist = pos->perp_tab[i];
+        if (dist <= 0.01f) dist = 0.01f;
+
+        int line_height = (int)(plane / dist);
+        int draw_start = (array->ray.height / 2) - (line_height / 2);
+        int draw_end = (array->ray.height / 2) + (line_height / 2);
+
+        int x_start = i * band_width;
+        draw_vertical_band(x_start, band_width, draw_start, draw_end, array);
+    }
+}
