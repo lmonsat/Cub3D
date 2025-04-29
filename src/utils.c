@@ -109,6 +109,7 @@ int	open_map_file(char *argv[])
 		perror("Error\n Error while opening file");
 		exit(EXIT_FAILURE);
 	}
+	printf("fd vaut %d",fd);
 	return (fd);
 }
 

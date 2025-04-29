@@ -36,24 +36,44 @@ int	default_close(struct s_vars *vars)
 	return (0);
 }
 
+void rotation_l(struct s_vars *vars)
+{
+	int	width = vars->array->elmt.cols * 40;
+	int	height = vars->array->elmt.rows * 40;
+	
+	clear_image(vars->array, width, height); // Efface tout avant de redessiner
+	ft_draw_grid(vars->array);
+	vars->array->ray.rotation += 5;
+	draw_fov(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+}
+
+void rotation_r(struct s_vars *vars)
+{
+	int	width = vars->array->elmt.cols * 40;
+	int	height = vars->array->elmt.rows * 40;
+	
+	clear_image(vars->array, width, height); // Efface tout avant de redessiner
+	ft_draw_grid(vars->array);
+	vars->array->ray.rotation -= 5;
+	draw_fov(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+}
+
 int	key_handler(int keycode, struct s_vars *vars)
 {
 	if (keycode == KEY_ARROW_UP || keycode == KEY_Z)
-	{
-		//requested_player_position_up(vars);
-	}
+		requested_player_position_up(vars);
 	else if (keycode == KEY_ARROW_DOWN || keycode == KEY_S)
-	{
-		//requested_player_position_down(vars);
-	}
-	else if (keycode == KEY_ARROW_RIGHT || keycode == KEY_D)
-	{
-		//requested_player_position_right(vars);
-	}
-	else if (keycode == KEY_ARROW_LEFT || keycode == KEY_Q)
-	{
-		//requested_player_position_left(vars);
-	}
+		requested_player_position_down(vars);
+	else if (keycode == KEY_D)
+		requested_player_position_right(vars);
+	else if (keycode == KEY_Q)
+		requested_player_position_left(vars);
+	else if(keycode == KEY_ARROW_LEFT)
+		rotation_l(vars);
+	else if(keycode == KEY_ARROW_RIGHT)
+		rotation_r(vars);
 	else if (keycode == ESC)
 	{
 		esc_close(keycode, vars);

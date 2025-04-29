@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/20 20:16:11 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:14:11 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ struct	s_trace_line
 	int dy; //y_end - y_start
 	int width; //array->elmt.cols * 40
 	int height; //array->elmt.rows
+	float rotation; //for rotation of fov
 	int xfov_s; //depart fov x
 	int yfov_s; //depart fov y
 	int xfov_e; //fin fov x
@@ -112,6 +113,8 @@ struct					s_array
 	char				*WE_path;
 	char				**floor;
 	char				**ceiling;
+	struct s_position   position;
+	struct s_trace_line ray;
 	int					**visited;
 	char				**line;
 	char				**backtracking;
@@ -127,6 +130,7 @@ struct					s_vars
 	struct s_game_stats	stats;
 	void				*mlx;
 	void				*win;
+
 };
 
 typedef struct  s_point
@@ -175,14 +179,34 @@ void free_path(struct s_array *array);
 void	backtracking(struct s_array *array, struct s_vars *vars);
 int	can_reach(struct s_array *array, int row, int col);
 
-/* --- draw_lines --- */
+/* --- mapping --- */
 void	mapping(struct s_array *array, struct s_vars *vars);
+void	mapping_ground(struct s_array *array, struct s_vars *vars);
+void	ground(struct s_vars *vars, int x, int y);
+void	loading_player(struct s_vars *vars);
+
+/* --- player_move --- */
+void	move_up(struct s_vars *vars, int x, int y);
+void	move_down(struct s_vars *vars, int x, int y);
+void	move_right(struct s_vars *vars, int x, int y);
+void	move_left(struct s_vars *vars, int x, int y);
+void	clear_image(struct s_array *array, int width, int height);
+
+/* --- requested_player_move --- */
+void	requested_player_position_up(struct s_vars *vars);
+void	requested_player_position_down(struct s_vars *vars);
+void	requested_player_position_right(struct s_vars *vars);
+void	requested_player_position_left(struct s_vars *vars);
+
+/* --- draw_lines --- */
 void ft_put_pixel(int x, int y, struct s_array *array, int color);
-void ft_draw_grid(struct s_array *array, struct s_vars *vars);
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player);
+void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/);
+//void ft_draw_line(struct s_trace_line *pos, struct s_array *array, /*struct s_vars *vars,*/ struct s_position *player);
+void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player);
+void draw_fov(struct s_vars *vars);
+void draw_fov_360(struct s_vars *vars);
 //void ft_draw_ray(struct s_trace_line *pos, struct s_array *array, struct s_position *player, float angle);
 //void ft_draw_all_rays(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player);
-void ft_draw_multiple_rays(struct s_array *array, struct s_vars *vars);
-void ft_draw_cone(struct s_array *array, struct s_vars *vars, struct s_position *player);
-
+//void ft_draw_multiple_rays(struct s_array *array, struct s_vars *vars);
+//void ft_draw_cone(struct s_array *array, struct s_vars *vars, struct s_position *player);
 #endif

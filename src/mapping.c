@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mapping.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:52:46 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/04 16:52:46 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:14:42 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	ground(struct s_vars *vars, int x, int y)
 		perror("Error\n Error while loading image.\n");
 		mlx_destroy_image(vars->mlx, img);
 		default_close(vars);
+		printf("fonction jamais atteinte");
+		mlx_put_image_to_window(vars->mlx, vars->win, img, x, y);
 	}
 	mlx_put_image_to_window(vars->mlx, vars->win, img, x, y);
 	mlx_destroy_image(vars->mlx, img);
@@ -77,7 +79,7 @@ void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
     {
         vars->player.pos.x_pixel = j * 40;
         vars->player.pos.y_pixel = i * 40;
-        loading_player(vars);
+        //loading_player(vars);
     }
 }
 

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/18 18:14:36 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:15:03 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
         return ;
     vars->stats.mov_count = 0;
     //mapping_ground(array, vars);
-    ft_draw_grid(array, vars);
+    ft_draw_grid(array);
     mapping(array, vars);
     //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
     mlx_key_hook(vars->win, key_handler, vars);

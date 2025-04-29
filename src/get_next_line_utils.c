@@ -94,7 +94,39 @@ void	reset_bank(t_list **bank)
 	*bank = node_reset;
 }
 
+<<<<<<< HEAD
 void	generate_line(char **line, t_list *bank)
+=======
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t			lenght;
+	char			*join;
+	unsigned int	i;
+	unsigned int	j;
+
+	j = 0;
+	i = 0;
+	if (!s2)
+		return (s1);
+	if (!s1)
+		return (ft_strdup(s2));
+	lenght = ft_strlen(s1) + ft_strlen(s2);
+	join = malloc((lenght + 1) * (sizeof(char)));
+	if (join == NULL)
+		return (ft_free(join), NULL);
+	while (ft_strlen(s1) > i)
+	{
+		join[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+		join[i++] = s2[j++];
+	join[i] = '\0';
+	return (ft_free(s1), join);
+}
+
+void	ft_free(char *ptr)
+>>>>>>> origin/simple_solong
 {
 	int	i;
 	int	len;
