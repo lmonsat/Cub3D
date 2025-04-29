@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/29 15:14:11 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 16:46:09 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,7 @@ struct					s_array
 	char				**ceiling;
 	struct s_position   position;
 	struct s_trace_line ray;
-	int					**visited;
 	char				**line;
-	char				**backtracking;
 	int					line_len;
 	int					is_exitable;
 	int					is_newline;
@@ -174,6 +172,8 @@ void	free_1_array(struct s_array *array);
 void	free_arrays(struct s_array *array);
 void	free_tabs(struct s_vars *vars);
 void free_path(struct s_array *array);
+int get_max_width(char **array);
+int get_max_height(char **array);
 
 /* --- Backtracking --- */
 void	backtracking(struct s_array *array, struct s_vars *vars);

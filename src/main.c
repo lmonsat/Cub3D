@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/29 15:15:03 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 16:50:48 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
+    int width;
+    int height;
+
+    width = get_max_width(array->line);
+    height = get_max_height(array->line);
     vars->mlx = mlx_init();
     if (vars->mlx == NULL)
         return ;
-    vars->win = mlx_new_window(vars->mlx, array->elmt.cols * 40,
-            array->elmt.rows * 40, "Cube3D");
+    vars->win = mlx_new_window(vars->mlx, width * 40,
+            height * 40, "Cube3D");
     if (vars->win == NULL)
         return ;
-    array->draw.img_ptr = mlx_new_image(vars->mlx, array->elmt.cols * 40, array->elmt.rows * 40);
+    array->draw.img_ptr = mlx_new_image(vars->mlx, width * 40, height * 40);
     if (array->draw.img_ptr == NULL)
         return ;
-    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &array->line_len, &array->draw.endian);
+    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &width, &array->draw.endian);
     if (array->draw.addr == NULL)
         return ;
     vars->stats.mov_count = 0;
@@ -77,11 +82,10 @@ int	main(int argc, char *argv[])
 	check_arguments(argc, argv);
     parse_map(&vars, &array, &value, argv);
     //vars.stats = value;
-    //ft_game_loop(&vars, &array);
+    ft_game_loop(&vars, &array);
     free_1_array(&array);
 	free_array(array.ceiling);
 	free_array(array.floor);
 	free_path(&array);
-    //free_visited(&array);
     return (0);
 }

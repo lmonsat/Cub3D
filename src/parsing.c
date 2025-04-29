@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/25 15:29:33 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 17:06:46 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,20 @@ void	check_player_start_pos(struct s_array *array,
 		perror("Error\n More or less than 1 player start position");
 		exit(EXIT_FAILURE);
 	}
+}
+
+void player_start_pos(struct s_array *array)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (array->line[i])
+	{
+		/* code */
+	}
+	
 }
 
 /* Définis la taille max pour array->line 
@@ -343,12 +357,12 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	t_point begin;
 	t_point size;
 
-	size.x = 34;
-	size.y = 13;
 	begin.x = 27;
 	begin.y = 11;
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
+	size.x = get_max_width(array->line);
+	size.y = get_max_height(array->line);
 	close(fd);
 	fd = open_map_file(argv);
 	check_position(fd, array, 'N', 'O');

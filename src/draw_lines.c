@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/29 15:19:50 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 17:01:01 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 	int width;
 	int height;
 
-	width = array->elmt.cols * 40;
-	height = array->elmt.rows * 40;
+	width = get_max_width(array->line) * 40;
+	height = get_max_height(array->line) * 40;
 	pxl = NULL;
 
 	if (x >= 0 && x < width && y >= 0 && y < height)
@@ -33,8 +33,8 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
 {
     int x, y;
-    int width = array->elmt.cols * 40;
-    int height = array->elmt.rows * 40;
+    int width = get_max_width(array->line) * 40;
+    int height = get_max_height(array->line) * 40;
 
     // Dessiner les lignes verticales
     for (x = 0; x < width; x += 40)
@@ -76,8 +76,8 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
 
-    width = array->elmt.cols * 40;
-    height = array->elmt.rows * 40;
+    width = get_max_width(array->line)* 40;
+    height = get_max_height(array->line) * 40;
 
     pos->x_end = width - 1;
     pos->y_end = player->y_pixel;

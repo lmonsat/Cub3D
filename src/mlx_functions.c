@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/02 18:23:17 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:59:09 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	esc_close(int keycode, struct s_vars *vars)
 		mlx_destroy_display(vars->mlx);
 		free(vars->mlx);
 		free_tabs(vars);
-		free_visited_vars(vars);
 		exit(0);
 	}
 }
@@ -31,7 +30,6 @@ int	default_close(struct s_vars *vars)
 	mlx_destroy_display(vars->mlx);
 	free(vars->mlx);
 	free_tabs(vars);
-	free_visited_vars(vars);
 	exit(0);
 	return (0);
 }

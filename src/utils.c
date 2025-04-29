@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/17 21:25:05 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/29 16:45:07 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,26 +45,6 @@ void free_array(char **array)
 		i++;
 	}
 	free(array);
-}
-
-void	free_arrays(struct s_array *array)
-{
-	int	i;
-
-	i = 0;
-	while (array->line[i] != NULL)
-	{
-		free(array->line[i]);
-		i++;
-	}
-	free(array->line);
-	i = 0;
-	while (array->backtracking[i] != NULL)
-	{
-		free(array->backtracking[i]);
-		i++;
-	}
-	free(array->backtracking);
 }
 
 void free_path(struct s_array *array)
@@ -111,32 +91,6 @@ int	open_map_file(char *argv[])
 	}
 	printf("fd vaut %d",fd);
 	return (fd);
-}
-
-void	free_visited(struct s_array *array)
-{
-	int	i;
-
-	i = 0;
-	while (array->visited[i] != NULL)
-	{
-		free(array->visited[i]);
-		i++;
-	}
-	free(array->visited);
-}
-
-void	free_visited_vars(struct s_vars *vars)
-{
-	int	i;
-
-	i = 0;
-	while (vars->array->visited[i] != NULL)
-	{
-		free(vars->array->visited[i]);
-		i++;
-	}
-	free(vars->array->visited);
 }
 
 void	handle_error_mem(struct s_array *array, char **copy)
@@ -194,4 +148,34 @@ int	ft_strchr_count(const char *s, int c)
 	if ((char)c == '\0')
 		return (0);
 	return (nb_char);
+}
+
+int get_max_width(char **array)
+{
+	int len;
+	int i;
+	int j;
+
+	i = 0;
+	len = 0;
+	while (array[i])
+	{
+		j = 0;
+		while (array[i][j])
+			j++;
+		if (len < j)
+			len = j;
+		i++;
+	}
+	return (len);
+}
+
+int get_max_height(char **array)
+{
+	int i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
 }
