@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/30 17:42:12 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/30 18:06:30 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	main(int argc, char *argv[])
 
 	check_arguments(argc, argv);
     parse_map(&vars, &array, &value, argv);
-    //vars.stats = value;
+    vars.stats = value;
+    vars.array = &array;
     ft_game_loop(&vars, &array);
     free_1_array(&array);
 	free_array(array.ceiling);
