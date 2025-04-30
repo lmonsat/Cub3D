@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/29 17:06:46 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/30 17:30:36 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,6 +359,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 
 	begin.x = 27;
 	begin.y = 11;
+	vars->player.pos.x = 27;
+	vars->player.pos.y = 11;
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
 	size.x = get_max_width(array->line);

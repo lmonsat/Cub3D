@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_lines1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/29 22:22:39 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:19:32 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
 {
     int i = 0;
     int xi, yi;
-    int width = array->elmt.cols * 40;
-    int height = array->elmt.rows * 40;
+    int width = get_max_width(array->line) * 40;
+    int height = get_max_height(array->line) * 40;
     float x;
     float y;
 
