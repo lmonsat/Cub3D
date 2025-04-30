@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/29 17:01:01 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/30 16:51:34 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 	}
 }
 
-void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
+void ft_draw_grid(struct s_array *array)
 {
     int x, y;
     int width = get_max_width(array->line) * 40;
@@ -47,8 +47,6 @@ void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
                 ft_put_pixel(x, y, array, WHITE);
         }
     }
-
-    // Dessiner les lignes horizontales
     for (y = 0; y < height; y += 40)
     {
         for (x = 0; x < width; x++)
@@ -59,11 +57,9 @@ void ft_draw_grid(struct s_array *array/*, struct s_vars *vars*/)
                 ft_put_pixel(x, y, array, WHITE);
         }
     }
-    // Envoyer l'image mise à jour dans la fenêtre
-    //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
 }
 //algo DDA moins performant que bresenham car calcule de float
-void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
+/*void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_vars *vars, struct s_position *player)
 {
     float dy;
     int swap;
@@ -117,7 +113,7 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
         }
         mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
     }
-}
+}*/
 // algo de bresenham inspirer de la version c++ https://www.youtube.com/watch?v=Frl1cLwfs1U
 //todo: cree une fonction swap
 //todo: mettre les variables dans une structure et ajouter une fonction data init
@@ -398,7 +394,7 @@ void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, struct s_var
     }
 }*/
 
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
+/*void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
 {
     float angle_rad = DEG2RAD(angle_deg);
     float ray_length = 1000.0f;
@@ -437,16 +433,16 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_d
 
     pos->x_end = (int)x;
     pos->y_end = (int)y;
-}
+}*/
 
-void draw_fov(struct s_vars *vars)
+/*void draw_fov(struct s_vars *vars)
 {
     float first_line;
     float last_line;
     float current_angle;
     float rotation_offset;
 
-    rotation_offset = vars->array->ray.rotation;
+    rotation_offset = vars->array->ray.rotation 60;
     first_line = -FOV / 2.0f;
     last_line = FOV / 2.0f;
 
@@ -461,13 +457,11 @@ void draw_fov(struct s_vars *vars)
         if (current_angle >= 360)
             current_angle -= 360;
 
-        ft_draw_line(&vars->array->ray, vars->array, current_angle, &vars->player.pos);
+        ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
         first_line++;
     }
-}
-
-
-void draw_fov_360(struct s_vars *vars)
+}*/
+/*void draw_fov_360(struct s_vars *vars)
 {
     float angle = 0.0f;
 
@@ -479,10 +473,47 @@ void draw_fov_360(struct s_vars *vars)
         ft_draw_line(&vars->array->ray, vars->array, angle, &vars->player.pos);
         angle += angle_step;
     }
-}
+}*/
 
+/*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
+{
 
+   float step;
+   int width;
+   int height;
+   int i;
+   int xi;
+   int yi;
 
+   i = 0;
 
+   width = array->elmt.cols * 40;
+   height = array->elmt.rows * 40;
 
+   pos->x_start = player->x_pixel;
+   pos->y_start = player->y_pixel;
 
+   pos->x_pass = width / 2;
+   pos->y_pass = height / 2;
+
+   pos->dx = pos->x_pass - player->x_pixel;
+   pos->dy = pos->y_pass - player->y_pixel;
+
+   step = fmaxf(fabsf(pos->dx), fabsf(pos->dy));
+   pos->dx /= step;
+   pos->dy /= step;
+
+   while (i < 1000)
+   {
+        xi = (int)roundf(pos->x_start);
+        yi = (int)roundf(pos->y_start);
+        if (xi < 0 || xi >= width || yi < 0 || yi >= height)
+            break;
+        if (array->line[yi / 40][xi / 40] == '1')
+            break;
+        ft_put_pixel(xi, yi, array, RED);
+        pos->x_start += pos->dx;
+        pos->y_start += pos->dy;
+        i++;
+   }
+}*/

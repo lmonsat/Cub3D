@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/14 14:25:32 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/29 23:58:22 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	clear_image(struct s_array *array, int width, int height)
 		x = 0;
 		while (x < width)
 		{
-			// On remplit l'image en noir
-			//*(int *)(array->draw->addr + (y * draw->line_len + x * (draw->bpp / 8))) = 0x000000;
 			ft_put_pixel(x, y, array, BLACK);
 			x++;
 		}
@@ -31,16 +29,28 @@ void	clear_image(struct s_array *array, int width, int height)
 	}
 }
 
+void debug_fov(float *ray_distances, int count)
+{
+    printf("=== DEBUG RAY DISTANCES ===\n");
+    for (int i = 0; i < count; i++)
+    {
+        printf("Ray %2d: %.2f\n", i, ray_distances[i]);
+    }
+    printf("===========================\n");
+}
+
+
 void	render_frame(struct s_vars *vars)
 {
 	int	width = vars->array->elmt.cols * 40;
 	int	height = vars->array->elmt.rows * 40;
 
 	clear_image(vars->array, width, height); // Efface tout avant de redessiner
-
+	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
-	//ft_draw_line(&vars->array->ray, vars->array, 0, &vars->player.pos);
-	draw_fov(vars);
+	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
+	fov(&vars->array->ray, vars->array, &vars->player.pos);
+	draw_walls(&vars->array->ray, vars->array);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
