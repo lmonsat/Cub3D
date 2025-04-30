@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/01 20:07:53 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:06:48 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ void	free_1_array(struct s_array *array)
 
 void	free_in_lines(struct s_array *array)
 {
-	free_1_array(array);
+	/*free_1_array(array);
 	perror("Error\n Map edges incomplete");
-	exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);*/
 }
 
 int	open_map_file(char *argv[])

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/02 18:19:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:14:34 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	check_characters_in_map(struct s_array *array)
 		{
 			if (!is_valid_char(array->line[i][j]))
 			{
-				free_1_array(array);
+				/*free_1_array(array);
 				perror("Error\n Map contains unneeded characters");
-				exit(EXIT_FAILURE);
+				exit(EXIT_FAILURE);*/
 			}
 			j++;
 		}
@@ -63,7 +63,7 @@ void	check_first_line(int fd, struct s_array *array)
 void	handle_check_error_epc(struct s_game_stats *value,
 		struct s_array *array)
 {
-	if (value->nb_exit > 1 || value->nb_exit < 1)
+	/*if (value->nb_exit > 1 || value->nb_exit < 1)
 	{
 		free_1_array(array);
 		perror("Error\n More or less than 1 exit");
@@ -80,7 +80,7 @@ void	handle_check_error_epc(struct s_game_stats *value,
 		free_1_array(array);
 		perror("Error\n Not enough collectibles");
 		exit(EXIT_FAILURE);
-	}
+	}*/
 }
 
 void	check_exit_player_collect(struct s_array *array,
@@ -107,7 +107,7 @@ void	check_exit_player_collect(struct s_array *array,
 void	is_rectangular(struct s_array *array, int rows, int first_line_nb_char,
 		int line_nb_char)
 {
-	if (array->line_len == rows)
+	/*if (array->line_len == rows)
 	{
 		free_1_array(array);
 		perror("Error\n Map is not rectangular");
@@ -118,7 +118,7 @@ void	is_rectangular(struct s_array *array, int rows, int first_line_nb_char,
 		free_1_array(array);
 		perror("Error\n First or last line incomplete");
 		exit(EXIT_FAILURE);
-	}
+	}*/
 }
 
 void	check_in_lines(int fd, struct s_array *array)

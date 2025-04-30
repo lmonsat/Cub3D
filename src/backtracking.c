@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:05:24 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/01 20:09:23 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:19:59 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int	is_valid(struct s_array *array, int row, int col)
 	int	is_free_space;
 	int	not_visited;
 
-	is_free_space = array->backtracking[row][col] != '1';
-	not_visited = !array->visited[row][col];
-	return (is_free_space && not_visited);
+	//is_free_space = array->backtracking[row][col] != '1';
+	//not_visited = !array->visited[row][col];
+	return (1);
 }
 
 int	searching_map(struct s_array *array, int new_row, int new_col)
@@ -138,10 +138,10 @@ void	handle_can_reach(struct s_array *array, int player_row, int player_col)
 	array->stats.collected = 0;
 	if (!can_reach(array, player_row, player_col))
 	{
-		free_arrays(array);
+		/*free_arrays(array);
 		free_visited(array);
 		perror("Error\n Exit or collectibles are unreachable\n");
-		exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);*/
 	}
 }
 
@@ -167,5 +167,5 @@ void	backtracking(struct s_array *array, struct s_vars *vars)
 		}
 		i++;
 	}
-	handle_can_reach(array, vars->player.pos.y, vars->player.pos.x);
+	//handle_can_reach(array, vars->player.pos.y, vars->player.pos.x);
 }
