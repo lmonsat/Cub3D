@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/29 16:45:07 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/01 16:13:33 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,35 +99,6 @@ void	handle_error_mem(struct s_array *array, char **copy)
 	free(copy);
 	perror("Error\n Memory allocation failed");
 	exit(EXIT_FAILURE);
-}
-
-char	**copy_array(char **source, struct s_array *array)
-{
-	int		i;
-	int		size;
-	char	**copy;
-
-	size = array->elmt.rows;
-	i = 0;
-	copy = malloc((size + 1) * sizeof(char *));
-	if (copy == NULL)
-		handle_error_mem(array, copy);
-	while (i < size)
-	{
-		copy[i] = ft_strdup(source[i]);
-		if (copy[i] == NULL)
-		{
-			free_1_array(array);
-			while (i > 0)
-				free(copy[--i]);
-			free(copy);
-			perror("Error\n Memory allocation failed");
-			exit(EXIT_FAILURE);
-		}
-		i++;
-	}
-	copy[size] = NULL;
-	return (copy);
 }
 
 int	ft_strchr_count(const char *s, int c)

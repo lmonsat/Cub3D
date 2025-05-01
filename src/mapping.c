@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:52:46 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/29 15:14:42 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:17:13 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
 	{
         rock(vars, j * 40, i * 40);
 	}
-    else if (array->line[i][j] == 'P')
+    else if (array->line[i][j] == 'N' || array->line[i][j] == 'W' || array->line[i][j] == 'E' || array->line[i][j] == 'S')
     {
         vars->player.pos.x_pixel = j * 40;
         vars->player.pos.y_pixel = i * 40;

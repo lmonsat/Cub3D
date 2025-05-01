@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/30 16:53:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/01 16:12:59 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ struct	s_trace_line
 
 struct					s_first
 {
-	int					cols;
-	int					first_line_nb_char;
-	int					rows;
+
 };
 
 struct					s_move

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/30 18:06:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/01 19:02:06 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     if (array->draw.addr == NULL)
         return ;
     vars->stats.mov_count = 0;
+    array->ray.rotation = 0;
     //mapping_ground(array, vars);
     ft_draw_grid(array);
     mapping(array, vars);

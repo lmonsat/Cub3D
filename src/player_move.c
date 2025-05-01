@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/29 23:58:22 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:42:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void debug_fov(float *ray_distances, int count)
 
 void	render_frame(struct s_vars *vars)
 {
-	int	width = vars->array->elmt.cols * 40;
-	int	height = vars->array->elmt.rows * 40;
+	int	width = get_max_width(vars->array->line) * 40;
+	int	height = get_max_height(vars->array->line) * 40;
 
 	clear_image(vars->array, width, height); // Efface tout avant de redessiner
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);

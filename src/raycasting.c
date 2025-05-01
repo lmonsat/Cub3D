@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/29 23:04:17 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/05/01 19:02:51 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-    pos->width = array->elmt.cols * 40;
-    pos->height = array->elmt.rows * 40;
+    pos->width = get_max_width(array->line) * 40;
+    pos->height = get_max_height(array->line) * 40;
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
     pos->dx = cosf(array->ray.rotation * PI / 180.0f);
@@ -196,7 +196,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
         }
 
         // Vérifie les limites
-        if (mapX < 0 || mapY < 0 || mapX >= array->elmt.cols || mapY >= array->elmt.rows)
+        if (mapX < 0 || mapY < 0 || mapX >= get_max_width(array->line) || mapY >= get_max_height(array->line))
             break;
 
         if (array->line[mapY][mapX] == '1')

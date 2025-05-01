@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/04/30 19:00:19 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/01 18:46:33 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void ft_put_pixel(int x, int y, struct s_array *array, int color)
 
 	if (x >= 0 && x < width && y >= 0 && y < height)
 	{
-		pxl = array->draw.addr + (y * get_max_width(array->line) + x
+		pxl = array->draw.addr + (y * width + x
 		* (array->draw.bpp / 8));
 		*(unsigned int *)pxl = color;
 	}
