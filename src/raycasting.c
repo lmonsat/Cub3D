@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/01 19:02:51 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/06 17:47:48 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->x_pass = player->x_pixel;
     pos->y_pass = player->y_pixel;
     pos->perp_tab = malloc(sizeof(float) * 160);
+	if (pos->perp_tab != NULL)
+		free(pos->perp_tab);
 }
 
 void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius, int color)
