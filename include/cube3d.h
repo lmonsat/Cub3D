@@ -65,8 +65,8 @@ struct	s_trace_line
 	float y_pass;   //point de passage y
 	float dx; //x_end - x_start vecteur de direction
 	float dy; //y_end - y_start vecteur de direction
-	int width; //array->elmt.cols * 40
-	int height; //array->elmt.rows * 40
+	int width;
+	int height; 
 	float rotation; //for rotation of fov
 	float brutdist; //distance brut
 	float perpdist; //distance corriger pour effet fisheye

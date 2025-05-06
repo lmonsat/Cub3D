@@ -12,34 +12,46 @@
 
 #include "../include/cube3d.h"
 
-void ft_put_pixel(int x, int y, struct s_array *array, int color)
+/*void ft_put_pixel(int x, int y, struct s_array *array, int color)
 {
 	char *pxl;
-	int width;
-	int height;
+	int w;
+	int h;
 
-	width = get_max_width(array->line) * 40;
-	height = get_max_height(array->line) * 40;
+	w = get_max_width(array->line);
+	h = get_max_height(array->line);
+    printf("w vaut %d et h vaut %d\n",w,h);
 	pxl = NULL;
 
-	if (x >= 0 && x < width && y >= 0 && y < height)
+	if (x >= 0 && x < array->ray.width && y >= 0 && y < array->ray.height)
 	{
-		pxl = array->draw.addr + (y * width + x
+		pxl = array->draw.addr + (y * (array->ray.width * 8) + x
 		* (array->draw.bpp / 8));
 		*(unsigned int *)pxl = color;
 	}
+}*/
+void ft_put_pixel(int x, int y, struct s_array *array, int color)
+{
+    char *pxl;
+
+    if (x >= 0 && x < array->ray.width && y >= 0 && y < array->ray.height)
+    {
+        pxl = array->draw.addr + (y * array->line_len + x * (array->draw.bpp / 8));
+        *(unsigned int *)pxl = color;
+    }
 }
+
 
 void ft_draw_grid(struct s_array *array)
 {
     int x, y;
-    int width = get_max_width(array->line) * 40;
-    int height = get_max_height(array->line) * 40;
+    //int width = get_max_width(array->line) * 40;
+    //int height = get_max_height(array->line) * 40;
 
     // Dessiner les lignes verticales
-    for (x = 0; x < width; x += 40)
+    for (x = 0; x < array->ray.width; x += 40)
     {
-        for (y = 0; y < height; y++)
+        for (y = 0; y < array->ray.height; y++)
         {
             if (array->line[(int)y / 40][(int)x / 40] == '1')
                 ft_put_pixel(x, y, array, BLUE); // Blanc
@@ -47,9 +59,9 @@ void ft_draw_grid(struct s_array *array)
                 ft_put_pixel(x, y, array, WHITE);
         }
     }
-    for (y = 0; y < height; y += 40)
+    for (y = 0; y < array->ray.height; y += 40)
     {
-        for (x = 0; x < width; x++)
+        for (x = 0; x < array->ray.width; x++)
         {
             if (array->line[(int)y / 40][(int)x / 40] == '1')
                 ft_put_pixel(x, y, array, BLUE); // Blanc

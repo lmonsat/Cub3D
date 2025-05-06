@@ -14,28 +14,29 @@
 
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
-    int width;
-    int height;
+    //int width;
+    //int height;
 
-    width = get_max_width(array->line);
-    height = get_max_height(array->line);
+    //width = get_max_width(array->line);
+    //height = get_max_height(array->line);
+    array->ray.width = get_max_width(array->line) * 40;
+    array->ray.height = get_max_height(array->line) * 40;
+    //int size_line = array->ray.height * 8;
     vars->mlx = mlx_init();
     if (vars->mlx == NULL)
         return ;
-    vars->win = mlx_new_window(vars->mlx, width * 40,
-            height * 40, "Cube3D");
+    vars->win = mlx_new_window(vars->mlx, array->ray.width,array->ray.height, "Cube3D");
     if (vars->win == NULL)
         return ;
-    array->draw.img_ptr = mlx_new_image(vars->mlx, width * 40, height * 40);
+    array->draw.img_ptr = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
     if (array->draw.img_ptr == NULL)
         return ;
-    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &width, &array->draw.endian);
+    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &array->line_len, &array->draw.endian);
     if (array->draw.addr == NULL)
         return ;
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
     //mapping_ground(array, vars);
-    ft_draw_grid(array);
     mapping(array, vars);
     //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
     mlx_key_hook(vars->win, key_handler, vars);

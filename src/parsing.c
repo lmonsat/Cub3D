@@ -131,11 +131,11 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 
 	i = 0;
 	len = dynamic_map_lenght(fd, line);
-	//printf("test len: %d\n", len);
+	printf("test len: %d\n", len);
 	close(fd);
 	fd = open_map_file(argv);
 	line = find_first_line(fd, &len);
-	//printf("len: %u\n", len);
+	printf("len: %u\n", len);
 	array->line = calloc(len + 1, sizeof(char *));
 	if (!array->line)
 	{

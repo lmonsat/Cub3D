@@ -39,13 +39,10 @@ void debug_fov(float *ray_distances, int count)
     printf("===========================\n");
 }
 
-
 void	render_frame(struct s_vars *vars)
 {
-	int	width = get_max_width(vars->array->line) * 40;
-	int	height = get_max_height(vars->array->line) * 40;
 
-	clear_image(vars->array, width, height); // Efface tout avant de redessiner
+	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
