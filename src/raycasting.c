@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/06 17:47:48 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 17:33:20 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->dy = sinf(array->ray.rotation * PI / 180.0f);
     pos->x_pass = player->x_pixel;
     pos->y_pass = player->y_pixel;
-    pos->perp_tab = malloc(sizeof(float) * 160);
-	if (pos->perp_tab != NULL)
-		free(pos->perp_tab);
+	if (pos->perp_tab)
+    	free(pos->perp_tab);	// free pour chaque frame de généré l'ancien perp_tab
+	pos->perp_tab = calloc(sizeof(float), 160);	// utilisation de calloc, pour l'initialisation a zéro
+	if (pos->perp_tab == NULL)
+		exit(1);
 }
 
 void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius, int color)

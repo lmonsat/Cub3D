@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/01 16:12:59 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 17:15:30 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ struct					s_vars
 	struct s_player		player;
 	struct s_array		*array;
 	struct s_game_stats	stats;
+	struct s_trace_line	*pos;
 	void				*mlx;
 	void				*win;
 

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/06 15:42:03 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 17:32:19 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ void debug_fov(float *ray_distances, int count)
 void	render_frame(struct s_vars *vars)
 {
 	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
+	vars->array->ray.perp_tab = NULL;	// évite l'invalid free dans ft_init_line()
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
 	fov(&vars->array->ray, vars->array, &vars->player.pos);
 	draw_walls(&vars->array->ray, vars->array);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+	free(vars->array->ray.perp_tab);
 }
 
 
