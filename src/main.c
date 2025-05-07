@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/06 17:54:25 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 18:03:37 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     mlx_hook(vars->win, 17, 1L << 0, default_close, vars);
     mlx_loop(vars->mlx);
     mlx_destroy_window(vars->mlx, vars->win);
-    //mlx_destroy_display(vars->mlx);
+    mlx_destroy_display(vars->mlx);
     free(vars->mlx);
 }
 

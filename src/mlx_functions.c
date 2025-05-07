@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 17:24:17 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 18:16:10 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,14 @@ void	esc_close(int keycode, struct s_vars *vars)
 {
 	if (keycode == 65307)
 	{
+		if (vars->mlx && vars->array->draw.img_ptr)
+		{
+			mlx_destroy_image(vars->mlx, vars->array->draw.img_ptr);
+			vars->array->draw.img_ptr = NULL;
+		}
 		mlx_destroy_window(vars->mlx, vars->win);
 		mlx_destroy_display(vars->mlx);
 		free(vars->mlx);
-		//free(vars->array->ray.perp_tab);
 		free_array(vars->array->line);
 		free_array(vars->array->ceiling);
 		free_array(vars->array->floor);
@@ -33,7 +37,6 @@ int	default_close(struct s_vars *vars)
 	mlx_destroy_window(vars->mlx, vars->win);
 	mlx_destroy_display(vars->mlx);
 	free(vars->mlx);
-	free(vars->array->ray.perp_tab);
 	free_array(vars->array->line);
 	free_array(vars->array->ceiling);
 	free_array(vars->array->floor);

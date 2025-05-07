@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/04/30 17:30:36 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 18:32:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,6 +349,19 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 		printf("%s", array->line[i++]);
 	}
 }
+/*	Permet de clear le buffer gnl entièrement car si l'on ne parcourt par jusqu'au EOF,
+	le buffer reste encore alloué dans gnl */
+void clear_line_gnl(int fd)
+{
+	char *line;
+	
+	line = "value";
+	while (line)
+	{
+		line = get_next_line(fd);
+		free(line);
+	}
+}
 
 void	parse_map(struct s_vars *vars, struct s_array *array,
     struct s_game_stats *value, char *argv[])
@@ -373,6 +386,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	check_position(fd, array, 'E', 'A');
 	check_floor_and_ceilling(fd, array, 'F');
 	check_floor_and_ceilling(fd, array, 'C');
+	clear_line_gnl(fd);
     check_characters_in_map(array);
 	check_player_start_pos(array, value);
 	flood_fill(array, array->line, size, begin);
