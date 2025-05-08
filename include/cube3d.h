@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 17:15:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 19:24:49 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@
 //structure utile pour la fonction put_pixel
 struct					s_draw
 {
-	void	*img_ptr;
+	void	*img_game;
+	void	*img_map;
 	char	*addr;
+	char	*addr_map;
 	int		bpp;
 	int		endian;
 };
@@ -153,7 +155,7 @@ struct					s_vars
 	struct s_trace_line	*pos;
 	void				*mlx;
 	void				*win;
-
+	void				*win_map;
 };
 
 typedef struct  s_point

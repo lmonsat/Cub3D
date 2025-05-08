@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 18:03:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 19:32:39 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,14 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     vars->mlx = mlx_init();
     if (vars->mlx == NULL)
         return ;
-    vars->win = mlx_new_window(vars->mlx, array->ray.width,array->ray.height, "Cube3D");
-    if (vars->win == NULL)
-        return ;
-    array->draw.img_ptr = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
-    if (array->draw.img_ptr == NULL)
-        return ;
-    array->draw.addr = mlx_get_data_addr(array->draw.img_ptr, &array->draw.bpp, &array->line_len, &array->draw.endian);
-    if (array->draw.addr == NULL)
-        return ;
+    vars->win = mlx_new_window(vars->mlx, array->ray.width, array->ray.height, "Cube3D");
+	vars->win_map = mlx_new_window(vars->mlx, 720, 480, "Minimap");
+    array->draw.img_game = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
+	array->draw.img_map = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
+
+    array->draw.addr = mlx_get_data_addr(array->draw.img_game, &array->draw.bpp, &array->line_len, &array->draw.endian);
+	array->draw.addr_map = mlx_get_data_addr(array->draw.img_map, &array->draw.bpp, &array->line_len, &array->draw.endian);
+
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
     //mapping_ground(array, vars);

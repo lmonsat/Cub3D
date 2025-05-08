@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 17:32:19 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/07 19:12:03 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	render_frame(struct s_vars *vars)
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
 	fov(&vars->array->ray, vars->array, &vars->player.pos);
 	draw_walls(&vars->array->ray, vars->array);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
 	free(vars->array->ray.perp_tab);
 }
 
