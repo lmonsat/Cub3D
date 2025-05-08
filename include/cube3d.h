@@ -37,11 +37,14 @@
 # define ORANGE 0xFFA500
 # define PINK 0xFFC0CB
 # define PURPLE 0x800080
-
+# define BROWN 0x8B4513
+# define GRAY 0xA9A9A9
 # define FOV 60.0f         // Champ de vision en degrés
 # define NUM_RAYS 120      // Nombre de rayons à lancer
+# define cam_dist 80		//distance entre le joueur et le plan camera
 # define STEP (FOV / NUM_RAYS)
 # define DEG2RAD(x) ((x) * PI / 180.0f)
+# define mouv_step 4
 
 //structure utile pour la fonction put_pixel
 struct					s_draw
@@ -63,8 +66,10 @@ struct	s_trace_line
 	float y_end;	// fin du ray (mur)
 	float x_pass;   //point de passage x
 	float y_pass;   //point de passage y
-	float dx; //x_end - x_start vecteur de direction
-	float dy; //y_end - y_start vecteur de direction
+	float dx; //x_end - x_start vecteur de direction avant arriere
+	float dy; //y_end - y_start vecteur de direction avant arriere
+	float dx_side; //vecteur de direction gauche droite
+	float dy_side; //vecteur de direction gauche droite
 	int width;
 	int height; 
 	float rotation; //for rotation of fov
@@ -187,8 +192,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array, struct s_game_stats *
 /* --- Utils ---*/
 char	**copy_array(char **source, struct s_array *array);
 void	handle_error_mem(struct s_array *array, char **copy);
-int	open_map_file(char *argv[]);
-int	ft_strchr_count(const char *s, int c);
+int		open_map_file(char *argv[]);
+int		ft_strchr_count(const char *s, int c);
 void	free_visited(struct s_array *array);
 void	free_visited_vars(struct s_vars *vars);
 void	free_in_lines(struct s_array *array);
@@ -211,10 +216,6 @@ void	ground(struct s_vars *vars, int x, int y);
 void	loading_player(struct s_vars *vars);
 
 /* --- player_move --- */
-void	move_up(struct s_vars *vars, int x, int y);
-void	move_down(struct s_vars *vars, int x, int y);
-void	move_right(struct s_vars *vars, int x, int y);
-void	move_left(struct s_vars *vars, int x, int y);
 void	clear_image(struct s_array *array, int width, int height);
 void	render_frame(struct s_vars *vars);
 

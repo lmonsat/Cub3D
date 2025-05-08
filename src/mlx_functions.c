@@ -47,25 +47,50 @@ int	default_close(struct s_vars *vars)
 
 void rotation_l(struct s_vars *vars)
 {
-	//int	width = vars->array->elmt.cols * 40;
-	//int	height = vars->array->elmt.rows * 40;
-	
-	//clear_image(vars->array, width, height); // Efface tout avant de redessiner
-	//ft_draw_grid(vars->array);
 	vars->array->ray.rotation += 5;
-	//draw_fov(vars);
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void rotation_r(struct s_vars *vars)
 {
-	//int	width = vars->array->elmt.cols * 40;
-	//int	height = vars->array->elmt.rows * 40;
-	
-	//clear_image(vars->array, width, height); // Efface tout avant de redessiner
-	//ft_draw_grid(vars->array);
 	vars->array->ray.rotation -= 5;
+	render_frame(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+}
+
+void	move_up(struct s_vars *vars)
+{
+	//vars->player.pos.y_pixel -= 4;
+	vars->player.pos.x_pixel += vars->array->ray.dx * mouv_step;
+    vars->player.pos.y_pixel += vars->array->ray.dy * mouv_step;
+	render_frame(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+}
+
+void	move_down(struct s_vars *vars)
+{
+	//vars->player.pos.y_pixel += 4;
+	vars->player.pos.x_pixel -= vars->array->ray.dx * mouv_step;
+    vars->player.pos.y_pixel -= vars->array->ray.dy * mouv_step;
+	render_frame(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+}
+
+void	move_right(struct s_vars *vars)
+{
+	//vars->player.pos.x_pixel += 4;
+	vars->player.pos.x_pixel += vars->array->ray.dx_side * mouv_step;
+    vars->player.pos.y_pixel += vars->array->ray.dy_side * mouv_step;
+	render_frame(vars);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+}
+
+void move_left(struct s_vars *vars)
+{
+	//vars->player.pos.x_pixel -= 4;
+	vars->player.pos.x_pixel -= vars->array->ray.dx_side * mouv_step;
+    vars->player.pos.y_pixel -= vars->array->ray.dy_side * mouv_step;
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
@@ -73,13 +98,13 @@ void rotation_r(struct s_vars *vars)
 int	key_handler(int keycode, struct s_vars *vars)
 {
 	if (keycode == KEY_ARROW_UP || keycode == KEY_Z)
-		requested_player_position_up(vars);
+		move_up(vars);
 	else if (keycode == KEY_ARROW_DOWN || keycode == KEY_S)
-		requested_player_position_down(vars);
+		move_down(vars);
 	else if (keycode == KEY_D)
-		requested_player_position_right(vars);
+		move_right(vars);
 	else if (keycode == KEY_Q)
-		requested_player_position_left(vars);
+		move_left(vars);
 	else if(keycode == KEY_ARROW_LEFT)
 		rotation_l(vars);
 	else if(keycode == KEY_ARROW_RIGHT)

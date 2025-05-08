@@ -29,79 +29,33 @@ void	clear_image(struct s_array *array, int width, int height)
 	}
 }
 
-void debug_fov(float *ray_distances, int count)
+void ft_draw_half_screen(struct s_array *array, int width, int height)
 {
-    printf("=== DEBUG RAY DISTANCES ===\n");
-    for (int i = 0; i < count; i++)
+    int x, y;
+
+    for (y = 0; y < height; y++)
     {
-        printf("Ray %2d: %.2f\n", i, ray_distances[i]);
+        for (x = 0; x < width; x++)
+        {
+            if (y < height / 2)
+                ft_put_pixel(x, y, array, BLUE);
+            else
+                ft_put_pixel(x, y, array, BROWN);
+        }
     }
-    printf("===========================\n");
 }
+
 
 void	render_frame(struct s_vars *vars)
 {
 	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
 	vars->array->ray.perp_tab = NULL;	// évite l'invalid free dans ft_init_line()
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
-	ft_draw_grid(vars->array);
-	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
-	fov(&vars->array->ray, vars->array, &vars->player.pos);
+	//ft_draw_grid(vars->array);
+	//ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
+	fov(&vars->array->ray, vars->array, &vars->player.pos);//fonction necessaire au rendu 3d car elle cree l 'array de float
+	ft_draw_half_screen(vars->array, vars->array->ray.width, vars->array->ray.height);
 	draw_walls(&vars->array->ray, vars->array);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 	free(vars->array->ray.perp_tab);
-}
-
-
-
-void	move_up(struct s_vars *vars, int x, int y)
-{
-	vars->player.pos.y -= 1;
-	vars->player.pos.y_pixel -= 40;
-	vars->stats.mov_count++;
-	if (vars->array->line[y][x] == 'C')
-	{
-		vars->array->line[y][x] = '0';
-	}
-	render_frame(vars);
-}
-
-void	move_down(struct s_vars *vars, int x, int y)
-{
-	vars->player.pos.y += 1;
-	vars->player.pos.y_pixel += 40;
-	vars->stats.mov_count++;
-	printf("Movement count : %d\n", vars->stats.mov_count);
-	if (vars->array->line[y][x] == 'C')
-	{
-		vars->array->line[y][x] = '0';
-	}
-	render_frame(vars);
-
-}
-
-void	move_right(struct s_vars *vars, int x, int y)
-{
-	vars->player.pos.x += 1;
-	vars->player.pos.x_pixel += 40;
-	vars->stats.mov_count++;
-	printf("Movement count : %d\n", vars->stats.mov_count);
-	if (vars->array->line[y][x] == 'C')
-	{
-		vars->array->line[y][x] = '0';
-	}
-	render_frame(vars);
-}
-
-void	move_left(struct s_vars *vars, int x, int y)
-{
-	vars->player.pos.x -= 1;
-	vars->player.pos.x_pixel -= 40;
-	vars->stats.mov_count++;
-	printf("Movement count : %d\n", vars->stats.mov_count);
-	if (vars->array->line[y][x] == 'C')
-	{
-		vars->array->line[y][x] = '0';
-	}
-	render_frame(vars);
 }

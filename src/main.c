@@ -14,14 +14,8 @@
 
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
-    //int width;
-    //int height;
-
-    //width = get_max_width(array->line);
-    //height = get_max_height(array->line);
     array->ray.width = get_max_width(array->line) * 40;
     array->ray.height = get_max_height(array->line) * 40;
-    //int size_line = array->ray.height * 8;
     vars->mlx = mlx_init();
     if (vars->mlx == NULL)
         return ;
@@ -36,9 +30,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
         return ;
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
-    //mapping_ground(array, vars);
-    mapping(array, vars);
-    //mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
+    mapping(array, vars); // la fonction mapping definie la position initial du joueur 
     mlx_key_hook(vars->win, key_handler, vars);
     mlx_hook(vars->win, 17, 1L << 0, default_close, vars);
     mlx_loop(vars->mlx);
