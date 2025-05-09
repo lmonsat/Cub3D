@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 19:32:39 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/08 21:15:20 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     if (vars->mlx == NULL)
         return ;
     vars->win = mlx_new_window(vars->mlx, array->ray.width, array->ray.height, "Cube3D");
-	vars->win_map = mlx_new_window(vars->mlx, 720, 480, "Minimap");
+	vars->win_map = mlx_new_window(vars->mlx, array->ray.width, array->ray.height, "Minimap");
     array->draw.img_game = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
 	array->draw.img_map = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
 

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 19:24:49 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/08 19:49:10 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ struct					s_draw
 	char	*addr;
 	char	*addr_map;
 	int		bpp;
+	int		bpp_map;
 	int		endian;
+	int		endian_map;
 };
 
 struct	s_trace_line
@@ -143,6 +145,7 @@ struct					s_array
 	struct s_trace_line ray;
 	char				**line;
 	int					line_len;
+	int					line_len_map;
 	int					is_exitable;
 	int					is_newline;
 };
