@@ -59,38 +59,100 @@ void rotation_r(struct s_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
+int		check_margin(float x, float y, char **map, int margin)
+{
+	int map_x1;
+	int map_x2;
+	int map_y1;
+	int map_y2;
+
+	map_x1 = (int)(x + margin) / 40;
+	map_x2 = (int)(x + margin) / 40;
+	map_y1 = (int)(y + margin) / 40;
+	map_y2 = (int)(y - margin) / 40;
+
+	if (map[map_y1][map_x1] == '1' || map[map_y1][map_x2] == '1' ||
+		map[map_y2][map_x1] == '1' || map[map_y2][map_x2] == '1')
+		return(0);
+	return(1);
+}
+
 void	move_up(struct s_vars *vars)
 {
-	//vars->player.pos.y_pixel -= 4;
-	vars->player.pos.x_pixel += vars->array->ray.dx * mouv_step;
-    vars->player.pos.y_pixel += vars->array->ray.dy * mouv_step;
+	float next_x;
+	float next_y;
+	int map_x;
+	int map_y;
+
+	next_x = vars->player.pos.x_pixel + vars->array->ray.dx * mouv_step;
+	next_y =  vars->player.pos.y_pixel + vars->array->ray.dy * mouv_step;
+	map_x = (int)(next_x) / 40;
+	map_y = (int)(next_y) / 40;
+	if (check_margin(next_x, next_y, vars->array->line, 2))
+	{
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
+	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void	move_down(struct s_vars *vars)
 {
-	//vars->player.pos.y_pixel += 4;
-	vars->player.pos.x_pixel -= vars->array->ray.dx * mouv_step;
-    vars->player.pos.y_pixel -= vars->array->ray.dy * mouv_step;
+	float next_x;
+	float next_y;
+	int map_x;
+	int map_y;
+
+	next_x = vars->player.pos.x_pixel - vars->array->ray.dx * mouv_step;
+    next_y = vars->player.pos.y_pixel - vars->array->ray.dy * mouv_step;
+	map_x = (int)(next_x) / 40;
+	map_y = (int)(next_y) / 40;
+	if (check_margin(next_x, next_y, vars->array->line, 2))
+	{
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
+	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void	move_right(struct s_vars *vars)
 {
-	//vars->player.pos.x_pixel += 4;
-	vars->player.pos.x_pixel += vars->array->ray.dx_side * mouv_step;
-    vars->player.pos.y_pixel += vars->array->ray.dy_side * mouv_step;
+	float next_x;
+	float next_y;
+	int map_x;
+	int map_y;
+
+	next_x = vars->player.pos.x_pixel - vars->array->ray.dx_side * mouv_step;
+    next_y = vars->player.pos.y_pixel - vars->array->ray.dy_side * mouv_step;
+	map_x = (int)(next_x) / 40;
+	map_y = (int)(next_y) / 40;
+	if (check_margin(next_x, next_y, vars->array->line, 2))
+	{
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
+	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void move_left(struct s_vars *vars)
 {
-	//vars->player.pos.x_pixel -= 4;
-	vars->player.pos.x_pixel -= vars->array->ray.dx_side * mouv_step;
-    vars->player.pos.y_pixel -= vars->array->ray.dy_side * mouv_step;
+	float next_x;
+	float next_y;
+	int map_x;
+	int map_y;
+
+	next_x = vars->player.pos.x_pixel + vars->array->ray.dx_side * mouv_step;
+    next_y = vars->player.pos.y_pixel + vars->array->ray.dy_side * mouv_step;
+	map_x = (int)(next_x) / 40;
+	map_y = (int)(next_y) / 40;
+	if (check_margin(next_x, next_y, vars->array->line, 2))
+	{
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
+	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
