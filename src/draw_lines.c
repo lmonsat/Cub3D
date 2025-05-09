@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/08 21:17:20 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 21:26:42 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,42 @@
 		*(unsigned int *)pxl = color;
 	}
 }*/
-void ft_put_pixel(int x, int y, struct s_array *array, int color)
+void ft_put_pixel(int x, int y, struct s_array *array, int color, int is_minimap)
 {
     char *pxl;
+	int map_x;
+	int map_y;
 
-    if (x >= 0 && x < array->ray.width && y >= 0 && y < array->ray.height)
+    if (!is_minimap && (x >= 0 && x < array->ray.width && y >= 0 && y < array->ray.height))
     {
         pxl = array->draw.addr + (y * array->line_len + x * (array->draw.bpp / 8));
         *(unsigned int *)pxl = color;
+    }
+    if (is_minimap)
+    {
+        map_x = x / 2;
+        map_y = y / 2;
+        if (map_x >= 0 && map_x < array->ray.width / 2 && map_y >= 0 && map_y < array->ray.height / 2)
+        {
+            pxl = array->draw.addr_map + (map_y * array->line_len_map + map_x * (array->draw.bpp_map / 8));
+            *(unsigned int *)pxl = color;
+        }
+    }
+}
+
+void ft_draw_half_screen(struct s_array *array, int width, int height)
+{
+    int x, y;
+
+    for (y = 0; y < height; y++)
+    {
+        for (x = 0; x < width; x++)
+        {
+            if (y < height / 2)
+                ft_put_pixel(x, y, array, BLUE, 0);
+            else
+                ft_put_pixel(x, y, array, BROWN, 0);
+        }
     }
 }
 
@@ -54,9 +82,9 @@ void ft_draw_grid(struct s_array *array)
         for (y = 0; y < array->ray.height; y++)
         {
             if (array->line[(int)y / 40][(int)x / 40] == '1')
-                ft_put_pixel(x, y, array, BLUE); // Blanc
+                ft_put_pixel(x, y, array, BLUE, 1); // Blanc
             else
-                ft_put_pixel(x, y, array, WHITE);
+                ft_put_pixel(x, y, array, WHITE, 1);
         }
     }
     for (y = 0; y < array->ray.height; y += 40)
@@ -64,9 +92,9 @@ void ft_draw_grid(struct s_array *array)
         for (x = 0; x < array->ray.width; x++)
         {
             if (array->line[(int)y / 40][(int)x / 40] == '1')
-                ft_put_pixel(x, y, array, BLUE); // Blanc
+                ft_put_pixel(x, y, array, BLUE, 1); // Blanc
             else
-                ft_put_pixel(x, y, array, WHITE);
+                ft_put_pixel(x, y, array, WHITE, 1);
         }
     }
 }
@@ -262,7 +290,7 @@ void ft_draw_grid(struct s_array *array)
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
 
-    // Point d’arrivée selon un angle et une distance
+    // Point d'arrivée selon un angle et une distance
     pos->x_end = pos->x_start + cosf(angle_rad) * ray_length;
     pos->y_end = pos->y_start + sinf(angle_rad) * ray_length;
 
@@ -327,166 +355,6 @@ void ft_draw_grid(struct s_array *array)
     mlx_put_image_to_window(vars->mlx, vars->win, array->draw.img_ptr, 0, 0);
 }*/
 
-/*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
-{
-    int dx, dy, swap, x_inc, y_inc, y, d, x;
-    int width = array->elmt.cols * 40;
-    int height = array->elmt.rows * 40;
-
-    // Image temporaire pour le rayon
-    //void *line_img = mlx_new_image(vars->mlx, width, height);
-    //int *data = (int *)mlx_get_data_addr(line_img, &(int){0}, &(int){0}, &(int){0});
-    //float angle_deg = 45.0f;                   // <- change ça pour tester différents angles
-    float angle_rad = DEG2RAD(angle_deg);      // conversion en radians
-    float ray_length = 1000.0f;                // distance max du rayon
-
-    pos->x_start = player->x_pixel;
-    pos->y_start = player->y_pixel;
-    pos->x_end = player->x_pixel + cos(angle_rad) * ray_length;
-    pos->y_end = player->y_pixel + sin(angle_rad) * ray_length;
-
-    dx = pos->x_end - pos->x_start;
-    dy = pos->y_end - pos->y_start;
-
-    if (abs(dx) > abs(dy))
-    {
-        if (pos->x_start > pos->x_end)
-        {
-            swap = pos->x_start; pos->x_start = pos->x_end; pos->x_end = swap;
-            swap = pos->y_start; pos->y_start = pos->y_end; pos->y_end = swap;
-            dx = -dx; dy = -dy;
-        }
-        y_inc = (dy < 0) ? -1 : 1;
-        dy = abs(dy);
-        y = pos->y_start;
-        d = 2 * dy - dx;
-        x = pos->x_start;
-
-        while (x <= pos->x_end)
-        {
-            if (x >= 0 && x < width && y >= 0 && y < height)
-            {
-                if (array->line[y / 40][x / 40] == '1')
-                    break;
-                //data[y * width + x] = 0x00FF00; // GREEN pixel (format RGB)
-                ft_put_pixel(x, y, array, RED);
-            }
-            if (d < 0) d += 2 * dy;
-            else { d += 2 * (dy - dx); y += y_inc; }
-            x++;
-        }
-    }
-    else
-    {
-        if (pos->y_start > pos->y_end)
-        {
-            swap = pos->x_start; pos->x_start = pos->x_end; pos->x_end = swap;
-            swap = pos->y_start; pos->y_start = pos->y_end; pos->y_end = swap;
-            dx = -dx; dy = -dy;
-        }
-        x_inc = (dx < 0) ? -1 : 1;
-        dx = abs(dx);
-        x = pos->x_start;
-        d = 2 * dx - dy;
-        y = pos->y_start;
-
-        while (y <= pos->y_end)
-        {
-            if (x >= 0 && x < width && y >= 0 && y < height)
-            {
-                if (array->line[y / 40][x / 40] == '1')
-                    break;
-                //data[y * width + x] = 0xFF0000; // RED pixel
-                ft_put_pixel(x, y, array, RED);
-            }
-            if (d < 0) d += 2 * dx;
-            else { d += 2 * (dx - dy); x += x_inc; }
-            y++;
-        }
-    }
-}*/
-
-/*void ft_draw_line1(struct s_trace_line *pos, struct s_array *array, float angle_deg, struct s_position *player)
-{
-    float angle_rad = DEG2RAD(angle_deg);
-    float ray_length = 1000.0f;
-
-    float x = player->x_pixel;
-    float y = player->y_pixel;
-
-    float dx = cos(angle_rad);
-    float dy = sin(angle_rad);
-
-    float step_size = 0.5f; // plus petit = plus précis
-    float max_steps = ray_length / step_size;
-
-    int width = array->elmt.cols * 40;
-    int height = array->elmt.rows * 40;
-
-    pos->x_start = (int)x;
-    pos->y_start = (int)y;
-
-    for (int i = 0; i < max_steps; i++)
-    {
-        int xi = (int)x;
-        int yi = (int)y;
-
-        if (xi < 0 || xi >= width || yi < 0 || yi >= height)
-            break;
-
-        if (array->line[yi / 40][xi / 40] == '1')
-            break;
-
-        ft_put_pixel(xi, yi, array, RED);
-
-        x += dx * step_size;
-        y += dy * step_size;
-    }
-
-    pos->x_end = (int)x;
-    pos->y_end = (int)y;
-}*/
-
-/*void draw_fov(struct s_vars *vars)
-{
-    float first_line;
-    float last_line;
-    float current_angle;
-    float rotation_offset;
-
-    rotation_offset = vars->array->ray.rotation 60;
-    first_line = -FOV / 2.0f;
-    last_line = FOV / 2.0f;
-
-    while (first_line <= last_line)
-    {
-        // On ajoute la rotation ici :
-        current_angle = first_line + rotation_offset;
-
-        // On garde l'angle entre 0 et 360
-        if (current_angle < 0)
-            current_angle += 360;
-        if (current_angle >= 360)
-            current_angle -= 360;
-
-        ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
-        first_line++;
-    }
-}*/
-/*void draw_fov_360(struct s_vars *vars)
-{
-    float angle = 0.0f;
-
-    // Tu peux changer ça pour + de rayons (ex: 0.5 pour plus de densité)
-    float angle_step = 1.0f;
-
-    while (angle < 60.0f)
-    {
-        ft_draw_line(&vars->array->ray, vars->array, angle, &vars->player.pos);
-        angle += angle_step;
-    }
-}*/
-
 /*void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
 
@@ -529,3 +397,4 @@ void ft_draw_grid(struct s_array *array)
         i++;
    }
 }*/
+

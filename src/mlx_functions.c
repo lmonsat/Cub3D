@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/08 21:23:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 20:55:38 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,30 +64,21 @@ int	default_close(struct s_vars *vars)
 
 void rotation_l(struct s_vars *vars)
 {
-	//int	width = vars->array->elmt.cols * 40;
-	//int	height = vars->array->elmt.rows * 40;
-	
-	//clear_image(vars->array, width, height); // Efface tout avant de redessiner
-	//ft_draw_grid(vars->array);
-	vars->array->ray.rotation += 5;
-	//draw_fov(vars);
+	vars->array->ray.rotation -= 5;
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
 void rotation_r(struct s_vars *vars)
 {
-	//int	width = vars->array->elmt.cols * 40;
-	//int	height = vars->array->elmt.rows * 40;
-	
-	//clear_image(vars->array, width, height); // Efface tout avant de redessiner
-	//ft_draw_grid(vars->array);
-	vars->array->ray.rotation -= 5;
+	vars->array->ray.rotation += 5;
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
-int	key_handler(int keycode, struct s_vars *vars)
+int key_handler(int keycode, struct s_vars *vars)
 {
 	if (keycode == KEY_ARROW_UP || keycode == KEY_Z)
 		requested_player_position_up(vars);

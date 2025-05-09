@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 19:12:03 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 21:25:58 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	clear_image(struct s_array *array, int width, int height)
 		x = 0;
 		while (x < width)
 		{
-			ft_put_pixel(x, y, array, BLACK);
+			ft_put_pixel(x, y, array, BLACK, 1);
 			x++;
 		}
 		y++;
@@ -47,8 +47,10 @@ void	render_frame(struct s_vars *vars)
 	ft_draw_grid(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
 	fov(&vars->array->ray, vars->array, &vars->player.pos);
+	ft_draw_half_screen(vars->array, vars->array->ray.width, vars->array->ray.height);
 	draw_walls(&vars->array->ray, vars->array);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 	free(vars->array->ray.perp_tab);
 }
 

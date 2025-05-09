@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/08 21:15:20 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 20:40:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     if (vars->mlx == NULL)
         return ;
     vars->win = mlx_new_window(vars->mlx, array->ray.width, array->ray.height, "Cube3D");
-	vars->win_map = mlx_new_window(vars->mlx, array->ray.width, array->ray.height, "Minimap");
+    vars->win_map = mlx_new_window(vars->mlx, array->ray.width / 2, array->ray.height / 2, "Minimap");
     array->draw.img_game = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
-	array->draw.img_map = mlx_new_image(vars->mlx, array->ray.width, array->ray.height);
+    array->draw.img_map = mlx_new_image(vars->mlx, array->ray.width / 2, array->ray.height / 2);
 
     array->draw.addr = mlx_get_data_addr(array->draw.img_game, &array->draw.bpp, &array->line_len, &array->draw.endian);
-	array->draw.addr_map = mlx_get_data_addr(array->draw.img_map, &array->draw.bpp, &array->line_len, &array->draw.endian);
+    array->draw.addr_map = mlx_get_data_addr(array->draw.img_map, &array->draw.bpp_map, &array->line_len_map, &array->draw.endian_map);
 
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
@@ -65,8 +65,7 @@ void	check_arguments(int argc, char *argv[])
     {
         while (argv[1][i] != '\0')
             i++;
-        if (argv[1][i - 4] != '.' && argv[1][i - 3] != 'c' && argv[1][i
-            - 2] != 'u' && argv[1][i - 1] != 'b')
+        if (argv[1][i - 4] != '.' && argv[1][i - 3] != 'c' && argv[1][i - 2] != 'u' && argv[1][i - 1] != 'b')
         {
             perror("Error\n Not a .cub format\n");
             exit(EXIT_FAILURE);

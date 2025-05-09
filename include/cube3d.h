@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/08 19:49:10 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 21:21:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define RED 0xFF0000
 # define GREEN 0x00FF00
 # define BLUE 0x0000FF
+# define BROWN 0x8B4513
 # define YELLOW 0xFFFF00
 # define CYAN 0x00FFFF
 # define MAGENTA 0xFF00FF
@@ -44,7 +45,7 @@
 # define DEG2RAD(x) ((x) * PI / 180.0f)
 
 //structure utile pour la fonction put_pixel
-struct					s_draw
+typedef struct s_draw
 {
 	void	*img_game;
 	void	*img_map;
@@ -52,9 +53,11 @@ struct					s_draw
 	char	*addr_map;
 	int		bpp;
 	int		bpp_map;
+	int		line_len;
+	int		line_len_map;
 	int		endian;
 	int		endian_map;
-};
+} t_draw;
 
 struct	s_trace_line
 {
@@ -230,7 +233,7 @@ void	requested_player_position_right(struct s_vars *vars);
 void	requested_player_position_left(struct s_vars *vars);
 
 /* --- draw_lines --- */
-void ft_put_pixel(int x, int y, struct s_array *array, int color);
+void ft_put_pixel(int x, int y, struct s_array *array, int color, int is_minimap);
 void ft_draw_grid(struct s_array *array);
 void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
@@ -238,6 +241,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void rotate_player(struct s_trace_line *pos, float angle_deg);
 void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array);
+void ft_draw_half_screen(struct s_array *array, int width, int height);
 
 /*--- ray_casting ---*/
 void draw_walls(struct s_trace_line *pos, struct s_array *array);

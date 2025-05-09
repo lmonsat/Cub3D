@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/07 17:15:33 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 20:32:46 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
             break;
         if (array->line[yi / 40][xi / 40] == '1')
             break;
-        ft_put_pixel(xi, yi, array, YELLOW);
+        ft_put_pixel(xi, yi, array, YELLOW, 1);
         pos->x_start += pos->dx;
         pos->y_start += pos->dy;
         i++;
@@ -105,7 +105,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
             break;
         if (array->line[yi / 40][xi / 40] == '1')
             break;
-        ft_put_pixel(xi, yi, array, YELLOW);
+        ft_put_pixel(xi, yi, array, YELLOW, 1);
         pos->x_start += pos->dx;
         pos->y_start += pos->dy;
         i++;
@@ -120,7 +120,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
             break;
         if (array->line[yi / 40][xi / 40] == '1')
             break;
-        ft_put_pixel(xi, yi, array, BLUE);
+        ft_put_pixel(xi, yi, array, BLUE, 1);
         x -= pos->dx;
         y -= pos->dy;
         i++;
@@ -198,7 +198,7 @@ void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s
         i++;
     }
 
-    // Réinitialiser la direction d’origine si besoin
+    // Réinitialiser la direction d'origine si besoin
     pos->dx = base_dx;
     pos->dy = base_dy;
 }*/
@@ -495,7 +495,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                 break;
             if (array->line[yi / 40][xi / 40] == '1')
                 break;
-            ft_put_pixel(xi, yi, array, RED);
+            ft_put_pixel(xi, yi, array, RED, 1);
             rx += ldx;
             ry += ldy;
         }
@@ -528,7 +528,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
                 break;
             if (array->line[yi / 40][xi / 40] == '1')
                 break;
-            ft_put_pixel(xi, yi, array, RED);
+            ft_put_pixel(xi, yi, array, RED, 1);
             rx += ldx;
             ry += ldy;
         }
@@ -817,7 +817,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
 
     while (!hit)
     {
-        ft_put_pixel((int)rayX, (int)rayY, array, YELLOW);
+        ft_put_pixel((int)rayX, (int)rayY, array, YELLOW, 1);
 
         if (sideDistX < sideDistY)
         {
@@ -842,7 +842,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
 
         if (array->line[mapY][mapX] == '1')
         {
-            ft_put_pixel(rayX, rayY, array, RED);
+            ft_put_pixel(rayX, rayY, array, RED, 1);
             hit = 1;
         }
     }

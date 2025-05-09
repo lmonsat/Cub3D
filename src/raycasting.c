@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 17:33:20 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/09 20:48:35 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius,
         for (x = -radius; x <= radius; x++)
         {
             if (x * x + y * y <= radius * radius) // Vérifie si le point est dans le cercle
-                ft_put_pixel(centerX + x, centerY + y, array, color);
+                ft_put_pixel(centerX + x, centerY + y, array, color, 1);
         }
     }
 }
@@ -127,7 +127,7 @@ void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius,
         // Si on touche un mur (cellule contenant '1'), arrêt de la boucle
         if (array->line[mapY][mapX] == '1')
         {
-            ft_put_pixel(rayX, rayY, array, RED); // Colorie la case touchée en rouge pour indiquer un mur
+            ft_put_pixel(rayX, rayY, array, RED, 0); // Colorie la case touchée en rouge pour indiquer un mur
             ft_draw_circle(array,(int)rayX, (int)rayY, 2, YELLOW);
             hit = 1;
         }
@@ -205,7 +205,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
 
         if (array->line[mapY][mapX] == '1')
         {
-            // Dessine un cercle à l’impact
+            // Dessine un cercle à l'impact
             ft_draw_circle(array, mapX * 40, mapY * 40, 5, YELLOW);
             hit = 1;
         }
@@ -336,7 +336,7 @@ void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_en
         for (int y = draw_start; y <= draw_end; y++)
         {
             if (y >= 0 && y < array->ray.height)
-                ft_put_pixel(x, y, array, WHITE); // couleur du mur
+                ft_put_pixel(x, y, array, WHITE, 0); // couleur du mur
         }
     }
 }
