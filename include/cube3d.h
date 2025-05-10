@@ -40,8 +40,8 @@
 # define BROWN 0x8B4513
 # define GRAY 0xA9A9A9
 # define FOV 60.0f         // Champ de vision en degrés
-# define NUM_RAYS 120      // Nombre de rayons à lancer
-# define cam_dist 80		//distance entre le joueur et le plan camera
+# define NUM_RAYS 1360      // Nombre de rayons à lancer
+# define cam_dist 1360		//distance entre le joueur et le plan camera
 # define STEP (FOV / NUM_RAYS)
 # define DEG2RAD(x) ((x) * PI / 180.0f)
 # define mouv_step 4
@@ -76,7 +76,10 @@ struct	s_trace_line
 	float brutdist; //distance brut
 	float perpdist; //distance corriger pour effet fisheye
 	float *perp_tab;
-
+	float dx_step;
+	float dy_step;
+	float ldx;
+	float ldy;
 };
 
 /*struct s_measure
@@ -231,10 +234,13 @@ void ft_draw_grid(struct s_array *array);
 void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void rotate_player(struct s_trace_line *pos, float angle_deg);
 void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array);
 
 /*--- ray_casting ---*/
 void draw_walls(struct s_trace_line *pos, struct s_array *array);
+void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
+void ft_init_line2(struct s_trace_line *pos, struct s_position *player, float x, float y);
+void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y);
+void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 #endif

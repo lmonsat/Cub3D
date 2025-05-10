@@ -51,8 +51,8 @@ void	render_frame(struct s_vars *vars)
 	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
 	vars->array->ray.perp_tab = NULL;	// évite l'invalid free dans ft_init_line()
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
-	//ft_draw_grid(vars->array);
-	//ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
+	ft_draw_grid(vars->array);
+	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
 	fov(&vars->array->ray, vars->array, &vars->player.pos);//fonction necessaire au rendu 3d car elle cree l 'array de float
 	ft_draw_half_screen(vars->array, vars->array->ray.width, vars->array->ray.height);
 	draw_walls(&vars->array->ray, vars->array);

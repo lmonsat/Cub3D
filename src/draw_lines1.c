@@ -72,13 +72,13 @@ void distance(struct s_array *array, struct s_position *player, int i)
     //le premier 80 correspont a la taille du plan camera
     //le deuxieme 80 a la distance entre le joueur et le plan camera
     //fov angle est donner en radian
-    fov_angle = 2.0f * atanf(80.0f / cam_dist);
+    fov_angle = 2.0f * atanf(NUM_RAYS / cam_dist);
 
     //renvoie l' angle du joueur en radian
     player_angle = array->ray.rotation * PI / 180.0f;
 
     //renvoie l' angle de la ray en radian
-    ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / 80.0f);
+    ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / NUM_RAYS);
 
     raydirx = cos(ray_angle);
     raydiry = sin(ray_angle);
@@ -87,7 +87,7 @@ void distance(struct s_array *array, struct s_position *player, int i)
     ft_dda_draw_ray(player, raydirx, raydiry, array);
 
     array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
-    printf("Distance no fisheye: %f\n", array->ray.perpdist);
+    //printf("Distance no fisheye: %f\n", array->ray.perpdist);
 }
 
 void distance1(struct s_array *array, struct s_position *player, int i)
@@ -121,216 +121,42 @@ void distance1(struct s_array *array, struct s_position *player, int i)
 void print_perp_tab(struct s_trace_line *pos)
 {
     printf("Contenu de pos->perp_tab (160 rayons de gauche à droite) :\n");
-    for (int i = 0; i < 160; i++)
+    for (int i = 0; i < NUM_RAYS; i++)
     {
         printf("Rayon %3d : %f\n", i, pos->perp_tab[i]);
     }
 }
 
-void swap_90(struct s_trace_line *pos) 
-{
-    int tmp;
-    tmp = pos->dx;
-    pos->dx = -pos->dy;
-    pos->dy = tmp;
-}
-
-void fov1(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
-{
-    printf("fonction fov\n");
-    int i, j, xi, yi;
-    float x, y, ldx, ldy;
-
-    //initiation des valeurs 
-    ft_init_line(pos, array, player);
-
-    //rotation de 90 degrées afin de dessiner le plan caméra
-    swap_90(pos);
-
-    // Normalisation pour parcourir la perpendiculaire
-    pos->step = fmaxf(fabsf(pos->dx), fabsf(pos->dy));
-    pos->dx /= pos->step;
-    pos->dy /= pos->step;
-
-    x = pos->x_pass;
-    y = pos->y_pass;
-
-    // === 1ère moitié de la FOV ===
-    for (i = 0; i < 80; i++)
-    {
-        x += pos->dx;
-        y += pos->dy;
-        ldx = x - player->x_pixel;
-        ldy = y - player->y_pixel;
-
-        pos->step = fmaxf(fabsf(ldx), fabsf(ldy));
-        ldx /= pos->step;
-        ldy /= pos->step;
-
-        float rx = player->x_pixel;
-        float ry = player->y_pixel;
-        float prev_rx = rx;
-        float prev_ry = ry;
-        for (j = 0; j < 1000; j++)
-        {
-            xi = (int)roundf(rx);
-            yi = (int)roundf(ry);
-            if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
-                break;
-            if (array->line[yi / 40][xi / 40] == '1')
-            {
-                /*if (fabsf(rx - prev_rx) > fabsf(ry - prev_ry))
-                {
-                    printf("Mur touché en X\n");
-                }
-                else
-                {
-                    printf("Mur touché en Y\n");
-                }*/
-                break;
-            }
-            ft_put_pixel(xi, yi, array, RED);
-            rx += ldx;
-            ry += ldy;
-        }
-        distance(array, player, i);
-        pos->perp_tab[79 - i] = pos->perpdist;
-    }
-    //=== 2ème moitié de la FOV (inverse) ===
-    x = pos->x_pass;
-    y = pos->y_pass;
-    for (i = 0; i < 80; i++)
-    {
-        x -= pos->dx;
-        y -= pos->dy;
-        ldx = x - player->x_pixel;
-        ldy = y - player->y_pixel;
-
-        pos->step = fmaxf(fabsf(ldx), fabsf(ldy));
-        ldx /= pos->step;
-        ldy /= pos->step;
-        float rx = player->x_pixel;
-        float ry = player->y_pixel;
-        float prev_rx = rx;
-        float prev_ry = ry;
-        for (j = 0; j < 1000; j++)
-        {
-            xi = (int)roundf(rx);
-            yi = (int)roundf(ry);
-            if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
-                break;
-            if (array->line[yi / 40][xi / 40] == '1')
-            {
-                /*if (fabsf(rx - prev_rx) > fabsf(ry - prev_ry))
-                {
-                    printf("Mur touché en X\n");
-                }
-                else
-                {
-                    printf("Mur touché en Y\n");
-                }*/
-                break;
-            }
-            ft_put_pixel(xi, yi, array, RED);
-            rx += ldx;
-            ry += ldy;
-        }
-        distance1(array, player, i);
-        pos->perp_tab[80 + i] = pos->perpdist;
-    }
-}
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-    int i, j, xi, yi;
-    float x, y, ldx, ldy;
 
-    // Initialisation des valeurs
+    int i; 
+    int j; 
+    int xi; 
+    int yi;
+    float x; 
+    float y;
+
     ft_init_line(pos, array, player);
-
-    // Normalisation pour parcourir la perpendiculaire au regard du joueur
-    float dx_step = pos->dx_side;
-    float dy_step = pos->dy_side;
-
-    pos->step = fmaxf(fabsf(dx_step), fabsf(dy_step));
-    dx_step /= pos->step;
-    dy_step /= pos->step;
-
     x = pos->x_pass;
     y = pos->y_pass;
-
-    // === 1ère moitié de la FOV ===
-    for (i = 0; i < 80; i++)
+    i = 0;
+    while (i < NUM_RAYS/2)
     {
-        x += dx_step;
-        y += dy_step;
-
-        ldx = x - player->x_pixel;
-        ldy = y - player->y_pixel;
-
-        pos->step = fmaxf(fabsf(ldx), fabsf(ldy));
-        ldx /= pos->step;
-        ldy /= pos->step;
-
-        float rx = player->x_pixel;
-        float ry = player->y_pixel;
-
-        for (j = 0; j < 1000; j++)
-        {
-            xi = (int)roundf(rx);
-            yi = (int)roundf(ry);
-
-            if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
-                break;
-
-            if (array->line[yi / 40][xi / 40] == '1')
-                break;
-
-            ft_put_pixel(xi, yi, array, RED);
-            rx += ldx;
-            ry += ldy;
-        }
-
+        x -= pos->dx_step;
+        y -= pos->dy_step;
+        i++;
+    }
+    i = 0;
+    while (i < NUM_RAYS)
+    {
+        x += pos->dx_step;
+        y += pos->dy_step;
+        ft_init_line1(pos, player, x, y);
+        loop(pos, array, player);
         distance(array, player, i);
-        pos->perp_tab[79 - i] = pos->perpdist;
+        pos->perp_tab[(NUM_RAYS - 1) - i] = pos->perpdist;
+        i++;
     }
-
-    // === 2ème moitié de la FOV (inverse) ===
-    x = pos->x_pass;
-    y = pos->y_pass;
-
-    for (i = 0; i < 80; i++)
-    {
-        x -= dx_step;
-        y -= dy_step;
-
-        ldx = x - player->x_pixel;
-        ldy = y - player->y_pixel;
-
-        pos->step = fmaxf(fabsf(ldx), fabsf(ldy));
-        ldx /= pos->step;
-        ldy /= pos->step;
-
-        float rx = player->x_pixel;
-        float ry = player->y_pixel;
-
-        for (j = 0; j < 1000; j++)
-        {
-            xi = (int)roundf(rx);
-            yi = (int)roundf(ry);
-
-            if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
-                break;
-
-            if (array->line[yi / 40][xi / 40] == '1')
-                break;
-
-            ft_put_pixel(xi, yi, array, RED);
-            rx += ldx;
-            ry += ldy;
-        }
-
-        distance1(array, player, i);
-        pos->perp_tab[80 + i] = pos->perpdist;
-    }
+    print_perp_tab(pos); 
 }
-
