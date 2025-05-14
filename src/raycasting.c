@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/14 15:55:08 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/14 17:04:14 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
         }
 
         // Vérifie les limites
-        if (mapX < 0 || mapY < 0 || mapX >= get_max_width(array->line) || mapY >= get_max_height(array->line))
+        if (mapX < 0 || mapY < 0 || mapX >= array->ray.width / 40 || mapY >= array->ray.width / 40)
             break;
 
         if (array->line[mapY][mapX] == '1')
