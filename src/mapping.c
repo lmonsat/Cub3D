@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:52:46 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/09 20:23:24 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:19:13 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,14 @@ void	ground(struct s_vars *vars, int x, int y)
 
 void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
 {
-    if(array->line[i][j] == '1')
-	{
-        rock(vars, j * 40, i * 40);
-	}
-    else if (array->line[i][j] == 'N' || array->line[i][j] == 'W' || array->line[i][j] == 'E' || array->line[i][j] == 'S')
+    if (array->line[i][j] == 'N' || array->line[i][j] == 'W' || array->line[i][j] == 'E' || array->line[i][j] == 'S')
     {
         vars->player.pos.x_pixel = j * 40;
         vars->player.pos.y_pixel = i * 40;
+		vars->player.pos.x = (int)j;
+        vars->player.pos.y = (int)i;
         //loading_player(vars);
+		printf("test player pos_x: %d\n", (int)vars->player.pos.x);
     }
 }
 

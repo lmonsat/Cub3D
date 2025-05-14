@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 18:32:41 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:35:25 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,8 +332,10 @@ int fill(char **tab, t_point size, char target, int row, int col)
 void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 {
     char target;
-	int i = 0;
+	int i;
 
+	i = 0;
+	tab[begin.y][begin.x] = '0';
 	target = tab[begin.y][begin.x];
 	if (fill(tab, size, target, begin.y, begin.x))
 	{
@@ -370,14 +372,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	t_point begin;
 	t_point size;
 
-	begin.x = 27;
-	begin.y = 11;
-	vars->player.pos.x = 27;
-	vars->player.pos.y = 11;
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
-	size.x = get_max_width(array->line);
-	size.y = get_max_height(array->line);
 	close(fd);
 	fd = open_map_file(argv);
 	check_position(fd, array, 'N', 'O');
@@ -389,6 +385,11 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	clear_line_gnl(fd);
     check_characters_in_map(array);
 	check_player_start_pos(array, value);
+	mapping(array, vars); // la fonction mapping definie la position initial du joueur 
+	begin.x = (int)vars->player.pos.x;
+	begin.y = (int)vars->player.pos.y;
+	size.x = get_max_width(array->line);
+	size.y = get_max_height(array->line);
 	flood_fill(array, array->line, size, begin);
     //vars->array = array;
 }

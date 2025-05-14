@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/09 20:55:38 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:14:29 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	default_close(struct s_vars *vars)
 	return (0);
 }
 
-void rotation_l(struct s_vars *vars)
+static void rotation_l(struct s_vars *vars)
 {
 	vars->array->ray.rotation -= 5;
 	render_frame(vars);
@@ -70,7 +70,7 @@ void rotation_l(struct s_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
-void rotation_r(struct s_vars *vars)
+static void rotation_r(struct s_vars *vars)
 {
 	vars->array->ray.rotation += 5;
 	render_frame(vars);
@@ -78,16 +78,16 @@ void rotation_r(struct s_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
-int key_handler(int keycode, struct s_vars *vars)
+int	key_handler(int keycode, struct s_vars *vars)
 {
 	if (keycode == KEY_ARROW_UP || keycode == KEY_Z)
-		requested_player_position_up(vars);
+		move_up(vars);
 	else if (keycode == KEY_ARROW_DOWN || keycode == KEY_S)
-		requested_player_position_down(vars);
+		move_down(vars);
 	else if (keycode == KEY_D)
-		requested_player_position_right(vars);
+		move_right(vars);
 	else if (keycode == KEY_Q)
-		requested_player_position_left(vars);
+		move_left(vars);
 	else if(keycode == KEY_ARROW_LEFT)
 		rotation_l(vars);
 	else if(keycode == KEY_ARROW_RIGHT)
