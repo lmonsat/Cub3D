@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/14 16:35:25 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/15 20:42:37 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,6 +375,17 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
 	close(fd);
+	fd = open(argv[1], O_RDWR);
+	char *line;
+
+	line = "value";
+	//while (line)
+	//{
+		get_next_line(fd);
+		write(fd, &"\0", 4);
+	//}
+	close(fd);
+	exit(1);
 	fd = open_map_file(argv);
 	check_position(fd, array, 'N', 'O');
 	check_position(fd, array, 'S', 'O');
