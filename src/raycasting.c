@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 17:33:20 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:52:33 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,28 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     //permet des mouvement gauche droite sur l' axe du joueur
     pos->dx_side = cosf((array->ray.rotation + 90.0f) * PI / 180.0f);
     pos->dy_side = sinf((array->ray.rotation + 90.0f) * PI / 180.0f);
-    
+
     //defini la distance entre le joueur et le plan caméra
     pos->x_pass = player->x_pixel + cam_dist * pos->dx;
     pos->y_pass = player->y_pixel + cam_dist * pos->dy;
-    
+
     pos->step = fmaxf(fabsf(pos->dx_side), fabsf(pos->dy_side));
     pos->dx_step = pos->dx_side / pos->step;
     pos->dy_step = pos->dy_side / pos->step;
 	if (pos->perp_tab)
     	free(pos->perp_tab);	// free pour chaque frame de généré l'ancien perp_tab
-	pos->perp_tab = calloc(sizeof(float), /*pos->width*/ NUM_RAYS);	// utilisation de calloc, pour l'initialisation a zéro
+	pos->perp_tab = calloc(sizeof(float), NUM_RAYS);	// utilisation de calloc, pour l'initialisation a zéro
 	if (pos->perp_tab == NULL)
 		exit(1);
     if (pos->hit_orien)
         free(pos->hit_orien);
     pos->hit_orien = calloc(sizeof(int), NUM_RAYS);
     if (pos->hit_orien == NULL)
+        exit(1);
+    if (pos->tex_x)
+        free(pos->tex_x);
+    pos->tex_x = calloc(sizeof(int), NUM_RAYS);
+    if (pos->tex_x == NULL)
         exit(1);
 }
 
@@ -162,11 +167,9 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
             mapY += stepY;
             side = 1;
         }
-
         // Vérifie les limites
         if (mapX < 0 || mapY < 0 || mapX >= get_max_width(array->line) || mapY >= get_max_height(array->line))
             break;
-
         if (array->line[mapY][mapX] == '1')
         {
             hit = 1;
@@ -189,23 +192,9 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
         else
             array->ray.orientation = NORTH;
     }
-    /*if(side == 0) // Ray a frappé un mur vertical (Est/Ouest)
-    {
-        if (rayDirX > 0)
-            array->ray.orientation = EAST;
-        else
-            array->ray.orientation = WEST;
-    }
-    else // Ray a frappé un mur horizontal (Nord/Sud)
-    {
-        if (rayDirY > 0)
-            array->ray.orientation = SOUTH;
-        else
-            array->ray.orientation = NORTH;
-    }*/
 }
 
-void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array)
+/*void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array)
 {
     for (int x = x_start; x < x_start + band_width; x++)
     {
@@ -217,69 +206,39 @@ void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_en
                 ft_put_pixel(x, y, array, GRAY); // couleur du mur
         }
     }
-}
+}*/
 
-/*void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array, struct s_texture *texture, int tex_x)
+void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int draw_end, struct s_trace_line *pos, struct s_array *array)
 {
+    int tex_x = pos->tex_x[i];             // coordonnée x dans la texture
     int wall_height = draw_end - draw_start;
+    if (wall_height <= 0) return;
+
+    int orientation = pos->hit_orien[i];   // 0=N, 1=S, 2=E, 3=W
+    struct s_texture *tex = &array->textures[orientation];
+
     for (int x = x_start; x < x_start + band_width; x++)
     {
         if (x < 0 || x >= array->ray.width)
             continue;
 
-        for (int y = draw_start; y <= draw_end; y++)
+        for (int y = draw_start; y < draw_end; y++)
         {
             if (y < 0 || y >= array->ray.height)
                 continue;
 
-            // Position verticale dans la texture (scaling sur la hauteur du mur à l’écran)
-            int tex_y = ((y - draw_start) * texture->height) / wall_height;
+            // coordonnée y dans la texture
+            int tex_y = (int)(((float)(y - draw_start) / wall_height) * tex->height);
+            if (tex_y >= tex->height) tex_y = tex->height - 1;
 
-            // Prend la couleur du pixel dans la texture
-            int color = texture->data[tex_y * (texture->size_line / 4) + tex_x];
+            // Calcul adresse pixel texture
+            char *tex_pixel = tex->addr + (tex_y * tex->line_len + tex_x * (tex->bpp / 8));
+            int color = *(unsigned int *)tex_pixel;
 
             ft_put_pixel(x, y, array, color);
         }
     }
-}*/
-
-/*void draw_walls(struct s_trace_line *pos, struct s_array *array, struct s_texture *textures)
-{
-    float fov_angle = 60.0f * (PI / 180.0f);
-    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
-
-    int base_band = array->ray.width / NUM_RAYS;
-    int remainder = array->ray.width % NUM_RAYS;
-    int x_offset = 0;
-
-    for (int i = 0; i < NUM_RAYS; i++)
-    {
-        int band_width = base_band + (i < remainder ? 1 : 0);
-        float dist = pos->perp_tab[i];
-        if (dist <= 0.01f)
-            dist = 0.01f;
-
-        int line_height = (int)(plane / dist);
-        int draw_start = (array->ray.height / 2) - (line_height / 2);
-        int draw_end = (array->ray.height / 2) + (line_height / 2);
-
-        // Choisir une texture arbitraire pour l'instant (à améliorer)
-        int texture_id = 0;
-
-        // Calcule tex_x (coordonnée horizontale sur la texture)
-        float wall_x = pos->wall_hit_x[i];  // supposé: coordonnée exacte où le rayon touche le mur (entre 0.0 et 1.0)
-        if (wall_x < 0.0f) wall_x = 0.0f;
-        if (wall_x > 1.0f) wall_x = 1.0f;
-
-        int tex_x = (int)(wall_x * textures[texture_id].width);
-        if (tex_x < 0) tex_x = 0;
-        if (tex_x >= textures[texture_id].width) tex_x = textures[texture_id].width - 1;
-
-        draw_vertical_band(x_offset, band_width, draw_start, draw_end, array, &textures[texture_id], tex_x);
-
-        x_offset += band_width;
-    }
-}*/
+}
 
 
 void draw_walls(struct s_trace_line *pos, struct s_array *array)
@@ -302,48 +261,7 @@ void draw_walls(struct s_trace_line *pos, struct s_array *array)
         int draw_start = (array->ray.height / 2) - (line_height / 2);
         int draw_end = (array->ray.height / 2) + (line_height / 2);
 
-        draw_vertical_band(x_offset, band_width, draw_start, draw_end, array);
+        draw_vertical_band(i, x_offset, band_width, draw_start, draw_end, pos, array);
         x_offset += band_width;
     }
 }
-/*void draw_walls(struct s_trace_line *pos, struct s_array *array)
-{
-    float fov_angle = 60.0f * (PI / 180.0f); // FOV en radians
-    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
-    int band_width = array->ray.width / NUM_RAYS;
-
-    for (int i = 0; i < NUM_RAYS; i++)
-    {
-        float dist = pos->perp_tab[i];
-        if (dist <= 0.01f)
-            dist = 0.01f;
-
-        int line_height = (int)(plane / dist);
-        int draw_start = (array->ray.height / 2) - (line_height / 2);
-        int draw_end = (array->ray.height / 2) + (line_height / 2);
-
-        int x_start = i * band_width;
-        draw_vertical_band(x_start, band_width, draw_start, draw_end, array);
-    }
-}*/
-/*void draw_walls(struct s_trace_line *pos, struct s_array *array)
-{
-    float fov_angle = 60.0f * (PI / 180.0f); // FOV en radians
-    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
-    int band_width = array->ray.width / NUM_RAYS;
-
-    for (int i = 0; i < NUM_RAYS; i++)
-    {
-        float dist = pos->perp_tab[i];
-        if (dist <= 0.01f)
-            dist = 0.01f;
-
-        int line_height = (int)(plane / dist);
-        int draw_start = (array->ray.height / 2) - (line_height / 2);
-        int draw_end = (array->ray.height / 2) + (line_height / 2);
-
-        int x_start = i * band_width;
-        draw_vertical_band(x_start, band_width, draw_start, draw_end, array);
-    }
-}*/
-

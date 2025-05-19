@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 17:15:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:59:38 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <limits.h>
 # include <math.h>
 # include <stdio.h>
-# include <stdlib.h> 
+# include <stdlib.h>
 # define PI 3.141592653589
 # define B_BLUE "\033[1;36m"
 # define RESET "\033[0m"
@@ -47,15 +47,16 @@
 # define mouv_step 4
 # define NB_TEXTURES 6
 # define T1 "./textures/wood.xpm"
-# define T2 "./textures/redbrick.xpm"
+# define T5 "./textures/redbrick.xpm"
 # define T3 "./textures/greystone.xpm"
-# define T4 "./textures/bluestone.xpm"
-# define T5 "./textures/mossy.xpm"
-# define T6 "./textures/colorstone.xpm"
+# define T6 "./textures/bluestone.xpm"
+# define T2 "./textures/mossy.xpm"
+# define T4 "./textures/colorstone.xpm"
 # define NORTH 0
 # define SOUTH 1
 # define EAST  2
 # define WEST  3
+# define tex_width 64
 
 //structure utile pour la fonction put_pixel
 struct					s_draw
@@ -66,7 +67,7 @@ struct					s_draw
 	int		endian;
 };
 
-struct			s_texture 
+struct			s_texture
 {
     void    *img;
     int     width;
@@ -80,8 +81,9 @@ struct			s_texture
 
 struct	s_trace_line
 {
+	int *tex_x;
 	int *hit_orien;
-	int orientation; // 0 = NORD, 1 = SUD, 2 = EST, 3 = OUEST 
+	int orientation; // 0 = NORD, 1 = SUD, 2 = EST, 3 = OUEST
 	float step;
 	float x_cam;
 	float y_cam;
@@ -96,7 +98,7 @@ struct	s_trace_line
 	float dx_side; //vecteur de direction gauche droite
 	float dy_side; //vecteur de direction gauche droite
 	int width;
-	int height; 
+	int height;
 	float rotation; //for rotation of fov
 	float brutdist; //distance brut
 	float perpdist; //distance corriger pour effet fisheye

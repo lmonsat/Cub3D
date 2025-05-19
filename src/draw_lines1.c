@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_lines1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/07 17:15:33 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/19 20:31:20 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,14 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
    distance_central(array, player);
 }
 
-void distance(struct s_array *array, struct s_position *player, int i)
+/*void distance(struct s_array *array, struct s_position *player, int i)
 {
     float fov_angle;
     float ray_angle;
     float player_angle;
     float raydirx;
     float raydiry;
+    float wall_x;
 
     //le premier 80 correspont a la taille du plan camera
     //le deuxieme 80 a la distance entre le joueur et le plan camera
@@ -87,13 +88,53 @@ void distance(struct s_array *array, struct s_position *player, int i)
     ft_dda_draw_ray(player, raydirx, raydiry, array);
 
     array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
-    //printf("Distance no fisheye: %f\n", array->ray.perpdist);
-    /*float hit_x = player->x_pixel / 40.0f + array->ray.perpdist * raydirx;
-    float hit_y = player->y_pixel / 40.0f + array->ray.perpdist * raydiry;
+}*/
 
-    array->ray.wall_hit_x[(NUM_RAYS - 1) - i] = hit_x;
-    array->ray.wall_hit_y[(NUM_RAYS - 1) - i] = hit_y;*/
+void distance(struct s_array *array, struct s_position *player, int i)
+{
+    float fov_angle;
+    float ray_angle;
+    float player_angle;
+    float raydirx;
+    float raydiry;
+    float wall_x;
+    int tex_x;
+
+    // FOV angle (en radians)
+    fov_angle = 2.0f * atanf((float)NUM_RAYS / cam_dist);
+
+    // Angle du joueur
+    player_angle = array->ray.rotation * PI / 180.0f;
+
+    // Angle du rayon actuel
+    ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / NUM_RAYS);
+
+    raydirx = cos(ray_angle);
+    raydiry = sin(ray_angle);
+
+    // Appel DDA pour détecter le mur
+    ft_dda_draw_ray(player, raydirx, raydiry, array);
+
+    // Correction fisheye
+    array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
+
+    // Calcul point d'impact sur le mur
+    if (array->ray.orientation == EAST || array->ray.orientation == WEST)
+        wall_x = player->y_pixel / 40.0f + array->ray.perpdist * raydiry;
+    else
+        wall_x = player->x_pixel / 40.0f + array->ray.perpdist * raydirx;
+
+    wall_x -= floorf(wall_x); // On garde uniquement la partie fractionnaire
+    tex_x = (int)(wall_x * tex_width);
+
+    // Correction pour certaines directions
+    if ((array->ray.orientation == EAST && raydirx < 0) ||
+        (array->ray.orientation == NORTH && raydiry > 0))
+        tex_x = tex_width - tex_x - 1;
+    //printf("tex_x vaut %d\n", tex_x);
+    array->ray.tex_x[(NUM_RAYS - 1) - i] = tex_x;
 }
+
 
 void distance1(struct s_array *array, struct s_position *player, int i)
 {
@@ -122,24 +163,37 @@ void distance1(struct s_array *array, struct s_position *player, int i)
 
     array->ray.perpdist = array->ray.brutdist * cos(player_angle - ray_angle);
 }
-
 void print_perp_tab(struct s_trace_line *pos)
 {
     printf("Contenu de pos->perp_tab (160 rayons de gauche à droite) :\n");
     for (int i = 0; i < NUM_RAYS; i++)
     {
-        printf("Rayon %3d : %f\n", i, pos->perp_tab[i]);
+        printf("Rayon %3d : %d\n", i, pos->tex_x[i]);
+    }
+}
+void afficher_orientations(int *hit_orien, int nb_rays)
+{
+    for (int i = 0; i < nb_rays; i++)
+    {
+        switch (hit_orien[i])
+        {
+            case 0: printf("Rayon %d: NORD\n", i); break;
+            case 1: printf("Rayon %d: SUD\n", i); break;
+            case 2: printf("Rayon %d: EST\n", i); break;
+            case 3: printf("Rayon %d: OUEST\n", i); break;
+            default: printf("Rayon %d: orientation inconnue (%d)\n", i, hit_orien[i]); break;
+        }
     }
 }
 
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
 
-    int i; 
-    int j; 
-    int xi; 
+    int i;
+    int j;
+    int xi;
     int yi;
-    float x; 
+    float x;
     float y;
 
     ft_init_line(pos, array, player);
@@ -164,5 +218,6 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
         pos->hit_orien[(NUM_RAYS - 1) - i] = pos->orientation;
         i++;
     }
-    print_perp_tab(pos); 
+    print_perp_tab(pos);
+    //afficher_orientations(pos->hit_orien, NUM_RAYS);
 }
