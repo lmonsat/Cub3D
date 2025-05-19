@@ -12,7 +12,7 @@
 
 #include "../include/cube3d.h"
 
-void	requested_player_position_up(struct s_vars *vars)
+/*void	requested_player_position_up(struct s_vars *vars)
 {
 	int	x;
 	int	y;
@@ -122,4 +122,4 @@ void	requested_player_position_left(struct s_vars *vars)
 		return ;
 	}
 	//ground(vars, (x + 1) * 40, y * 40);
-}
+}*/

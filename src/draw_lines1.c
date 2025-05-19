@@ -88,6 +88,11 @@ void distance(struct s_array *array, struct s_position *player, int i)
 
     array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
     //printf("Distance no fisheye: %f\n", array->ray.perpdist);
+    /*float hit_x = player->x_pixel / 40.0f + array->ray.perpdist * raydirx;
+    float hit_y = player->y_pixel / 40.0f + array->ray.perpdist * raydiry;
+
+    array->ray.wall_hit_x[(NUM_RAYS - 1) - i] = hit_x;
+    array->ray.wall_hit_y[(NUM_RAYS - 1) - i] = hit_y;*/
 }
 
 void distance1(struct s_array *array, struct s_position *player, int i)
@@ -156,6 +161,7 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
         loop(pos, array, player);
         distance(array, player, i);
         pos->perp_tab[(NUM_RAYS - 1) - i] = pos->perpdist;
+        pos->hit_orien[(NUM_RAYS - 1) - i] = pos->orientation;
         i++;
     }
     print_perp_tab(pos); 

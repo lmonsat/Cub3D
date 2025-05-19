@@ -94,7 +94,7 @@ void	move_up(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+	//mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void	move_down(struct s_vars *vars)
@@ -114,7 +114,7 @@ void	move_down(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+	//mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void	move_right(struct s_vars *vars)
@@ -134,7 +134,7 @@ void	move_right(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+	//mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 void move_left(struct s_vars *vars)
@@ -154,7 +154,7 @@ void move_left(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
+	//mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
 }
 
 int	key_handler(int keycode, struct s_vars *vars)

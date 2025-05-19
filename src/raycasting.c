@@ -39,6 +39,11 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
 	pos->perp_tab = calloc(sizeof(float), /*pos->width*/ NUM_RAYS);	// utilisation de calloc, pour l'initialisation a zéro
 	if (pos->perp_tab == NULL)
 		exit(1);
+    if (pos->hit_orien)
+        free(pos->hit_orien);
+    pos->hit_orien = calloc(sizeof(int), NUM_RAYS);
+    if (pos->hit_orien == NULL)
+        exit(1);
 }
 
 void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y)
@@ -164,19 +169,40 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
 
         if (array->line[mapY][mapX] == '1')
         {
-            // Dessine un cercle à l’impact
-            //ft_draw_circle(array, mapX * 40, mapY * 40, 5, YELLOW);
             hit = 1;
         }
     }
-
     //float perpWallDist;
-    if(side == 0)
+    if(side == 0) // Ray a frappé un mur vertical (Est/Ouest)
+    {
         array->ray.brutdist = (sideDistX - deltaDistX);
-    else
+        if (rayDirX > 0)
+            array->ray.orientation = EAST;
+        else
+            array->ray.orientation = WEST;
+    }
+    else // Ray a frappé un mur horizontal (Nord/Sud)
+    {
         array->ray.brutdist = (sideDistY - deltaDistY);
-
-    //printf("Distance brut: %f\n", array->ray.brutdist);
+        if (rayDirY > 0)
+            array->ray.orientation = SOUTH;
+        else
+            array->ray.orientation = NORTH;
+    }
+    /*if(side == 0) // Ray a frappé un mur vertical (Est/Ouest)
+    {
+        if (rayDirX > 0)
+            array->ray.orientation = EAST;
+        else
+            array->ray.orientation = WEST;
+    }
+    else // Ray a frappé un mur horizontal (Nord/Sud)
+    {
+        if (rayDirY > 0)
+            array->ray.orientation = SOUTH;
+        else
+            array->ray.orientation = NORTH;
+    }*/
 }
 
 void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array)
@@ -192,6 +218,69 @@ void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_en
         }
     }
 }
+
+/*void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array, struct s_texture *texture, int tex_x)
+{
+    int wall_height = draw_end - draw_start;
+    for (int x = x_start; x < x_start + band_width; x++)
+    {
+        if (x < 0 || x >= array->ray.width)
+            continue;
+
+        for (int y = draw_start; y <= draw_end; y++)
+        {
+            if (y < 0 || y >= array->ray.height)
+                continue;
+
+            // Position verticale dans la texture (scaling sur la hauteur du mur à l’écran)
+            int tex_y = ((y - draw_start) * texture->height) / wall_height;
+
+            // Prend la couleur du pixel dans la texture
+            int color = texture->data[tex_y * (texture->size_line / 4) + tex_x];
+
+            ft_put_pixel(x, y, array, color);
+        }
+    }
+}*/
+
+/*void draw_walls(struct s_trace_line *pos, struct s_array *array, struct s_texture *textures)
+{
+    float fov_angle = 60.0f * (PI / 180.0f);
+    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
+
+    int base_band = array->ray.width / NUM_RAYS;
+    int remainder = array->ray.width % NUM_RAYS;
+    int x_offset = 0;
+
+    for (int i = 0; i < NUM_RAYS; i++)
+    {
+        int band_width = base_band + (i < remainder ? 1 : 0);
+        float dist = pos->perp_tab[i];
+        if (dist <= 0.01f)
+            dist = 0.01f;
+
+        int line_height = (int)(plane / dist);
+        int draw_start = (array->ray.height / 2) - (line_height / 2);
+        int draw_end = (array->ray.height / 2) + (line_height / 2);
+
+        // Choisir une texture arbitraire pour l'instant (à améliorer)
+        int texture_id = 0;
+
+        // Calcule tex_x (coordonnée horizontale sur la texture)
+        float wall_x = pos->wall_hit_x[i];  // supposé: coordonnée exacte où le rayon touche le mur (entre 0.0 et 1.0)
+        if (wall_x < 0.0f) wall_x = 0.0f;
+        if (wall_x > 1.0f) wall_x = 1.0f;
+
+        int tex_x = (int)(wall_x * textures[texture_id].width);
+        if (tex_x < 0) tex_x = 0;
+        if (tex_x >= textures[texture_id].width) tex_x = textures[texture_id].width - 1;
+
+        draw_vertical_band(x_offset, band_width, draw_start, draw_end, array, &textures[texture_id], tex_x);
+
+        x_offset += band_width;
+    }
+}*/
+
 
 void draw_walls(struct s_trace_line *pos, struct s_array *array)
 {
@@ -217,7 +306,6 @@ void draw_walls(struct s_trace_line *pos, struct s_array *array)
         x_offset += band_width;
     }
 }
-
 /*void draw_walls(struct s_trace_line *pos, struct s_array *array)
 {
     float fov_angle = 60.0f * (PI / 180.0f); // FOV en radians

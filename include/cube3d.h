@@ -45,6 +45,17 @@
 # define STEP (FOV / NUM_RAYS)
 # define DEG2RAD(x) ((x) * PI / 180.0f)
 # define mouv_step 4
+# define NB_TEXTURES 6
+# define T1 "./textures/wood.xpm"
+# define T2 "./textures/redbrick.xpm"
+# define T3 "./textures/greystone.xpm"
+# define T4 "./textures/bluestone.xpm"
+# define T5 "./textures/mossy.xpm"
+# define T6 "./textures/colorstone.xpm"
+# define NORTH 0
+# define SOUTH 1
+# define EAST  2
+# define WEST  3
 
 //structure utile pour la fonction put_pixel
 struct					s_draw
@@ -55,8 +66,22 @@ struct					s_draw
 	int		endian;
 };
 
+struct			s_texture 
+{
+    void    *img;
+    int     width;
+    int     height;
+	char 	*path;
+	char	*addr;
+    int     bpp;
+    int     line_len;
+    int     endian;
+};
+
 struct	s_trace_line
 {
+	int *hit_orien;
+	int orientation; // 0 = NORD, 1 = SUD, 2 = EST, 3 = OUEST 
 	float step;
 	float x_cam;
 	float y_cam;
@@ -80,28 +105,9 @@ struct	s_trace_line
 	float dy_step;
 	float ldx;
 	float ldy;
+	float *wall_hit_x;
+	float *wall_hit_y;
 };
-
-/*struct s_measure
-{
-	//coordonnées du joueur par case
-	int mapx;
-	int mapy;
-
-	//distance que le rayon doit parcourir pour traverser une case
-	float deltaDistx;
-	float deltaDisty;
-
-	//variable de direction
-	int stepx;
-	int stepy;
-	float sidedistx;
-	float sidedisty;
-
-	float distance;
-	int hit;
-	int side // 0 collision en x 1 collision en y
-};*/
 
 struct					s_first
 {
@@ -139,6 +145,7 @@ struct					s_array
 	struct s_game_stats	stats;
 	struct s_first		elmt;
 	struct s_move		move;
+	struct s_texture    textures[NB_TEXTURES];
 	char				*NO_path;
 	char				*SO_path;
 	char				*EA_path;
@@ -239,6 +246,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
 
 /*--- ray_casting ---*/
 void draw_walls(struct s_trace_line *pos, struct s_array *array);
+//void draw_walls(struct s_trace_line *pos, struct s_array *array, struct s_texture *textures);
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void ft_init_line2(struct s_trace_line *pos, struct s_position *player, float x, float y);
 void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y);
