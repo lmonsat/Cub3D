@@ -6,13 +6,13 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/14 16:40:08 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:25:30 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
 
-static void mlx_ptr_init(struct s_vars *vars, struct s_array *array)
+void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
     array->ray.width = get_max_width(array->line) * 40;
     array->ray.height = get_max_height(array->line) * 40;
@@ -27,11 +27,7 @@ static void mlx_ptr_init(struct s_vars *vars, struct s_array *array)
     array->draw.addr_map = mlx_get_data_addr(array->draw.img_map, &array->draw.bpp_map, &array->line_len_map, &array->draw.endian_map);
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
-}
-
-static void	ft_game_loop(struct s_vars *vars, struct s_array *array)
-{
-
+    mapping(array, vars);
     mlx_key_hook(vars->win, key_handler, vars);
     mlx_hook(vars->win, 17, 1L << 0, default_close, vars);
     mlx_loop(vars->mlx);
@@ -40,7 +36,7 @@ static void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     free(vars->mlx);
 }
 
-static void	check_arguments(int argc, char *argv[])
+void	check_arguments(int argc, char *argv[])
 {
     int	i;
 
@@ -77,8 +73,6 @@ int	main(int argc, char *argv[])
     parse_map(&vars, &array, &value, argv);
     vars.stats = value;
     vars.array = &array;
-	mlx_ptr_init(&vars, &array);
-	render_frame(&vars);
     ft_game_loop(&vars, &array);
     free_1_array(&array);
 	free_array(array.ceiling);
