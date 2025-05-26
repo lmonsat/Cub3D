@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/15 20:42:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/22 23:14:51 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,77 @@ static char *find_first_line(int fd, unsigned int *total_len)
 	return(line);
 }
 
+static int index_data_array(struct s_array *array)
+{
+	static int i = 0;
+
+	while (array->line[i] != NULL)
+	{
+		printf("%s", array->line[i]);
+		if (array->line[i][0] == 'N' && array->line[i][1] == 'O')
+		{
+			return (i++);
+		}
+		else if (array->line[i][0] == 'S' && array->line[i][1] == 'O')
+		{
+			return (i++);
+		}
+		else if (array->line[i][0] == 'W' && array->line[i][1] == 'E')
+		{
+			return (i++);
+		}
+		else if (array->line[i][0] == 'W' && array->line[i][1] == 'E')
+		{
+			return (i++);
+		}
+		else if (array->line[i][0] == 'F')
+		{
+			return (i++);
+		}
+		else if (array->line[i][0] == 'C')
+		{
+			return (i++);
+		}
+		else
+		{
+			return (-1);
+		}
+	}
+	return (i);
+}
+
+static void sort_data_array(struct s_array *array, unsigned int len)
+{
+	int i;
+	int next;
+	char **array_sorted;
+
+	i = 0;
+	next = 0;
+	array_sorted = calloc(len + 1, sizeof(char *));
+	if (!array_sorted)
+	{
+		printf("Memory allocation failed\n");
+		exit(1);
+	}
+	while (next != -1 && array->line != NULL)
+	{
+		printf("test\n");
+		next = index_data_array(array);
+		if (next == -1)
+			break;
+		array_sorted[i] = array->line[next];
+		i++;
+	}
+	i = 0;
+	while (i < len)
+	{
+		printf("%s", array_sorted[i]);
+		i++;
+	}
+	exit(1);
+}
+
 /* Allocation dynamique a zéro de l'entièreté du fichier map */
 void alloc_data_array(int fd, struct s_array *array, char *argv[])
 {
@@ -150,6 +221,7 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 			break ;
 		i++;
 	}
+	sort_data_array(array, len);
 	i = 0;
 	while (i < len)
 	{
@@ -375,17 +447,17 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
 	close(fd);
-	fd = open(argv[1], O_RDWR);
+	/*fd = open(argv[1], O_RDWR);
 	char *line;
 
 	line = "value";
-	//while (line)
-	//{
+	while (line)
+	{
 		get_next_line(fd);
 		write(fd, &"\0", 4);
-	//}
+	}
 	close(fd);
-	exit(1);
+	exit(1);*/
 	fd = open_map_file(argv);
 	check_position(fd, array, 'N', 'O');
 	check_position(fd, array, 'S', 'O');
