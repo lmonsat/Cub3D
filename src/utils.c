@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/06 17:41:46 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/27 22:23:29 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	open_map_file(char *argv[])
 		perror("Error\n Error while opening file");
 		exit(EXIT_FAILURE);
 	}
-	printf("fd vaut %d",fd);
+	//printf("fd vaut %d",fd);
 	return (fd);
 }
 

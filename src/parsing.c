@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/26 21:50:54 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/27 22:24:18 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void	check_characters_in_map(struct s_array *array)
 	}
 }
 
-void	check_player_start_pos(struct s_array *array,
-		struct s_game_stats *value)
+void	check_player_start_pos(struct s_array *array, struct s_game_stats *value)
 {
 	int	i;
 
@@ -84,89 +83,87 @@ static unsigned int dynamic_map_lenght(int fd, char *line)
 	return (len);
 }
 
-/* Trouve la première ligne de la map pour copier uniquement la map, 
-	dans le tableau*/
-static char *find_first_line(int fd, unsigned int *total_len)
+/* Trouve la première ligne de la map dans un char ** */
+int find_first_line(char **lines)
 {
-	char *line;
-	char *cmp_line;
-	unsigned int len;
+    char *line;
+    int map_index;
 
-	len = 0;
-	line = "value";
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break ;
-		if ((line[0] == '1' || line[0] == ' ' || line[0] == '\t')/* || !ft_strcmp(line, "\n")*/)
-			break ;
-		free(line);
-		len++;
-	}
-	*total_len -= len;
-	return(line);
+	map_index = 0;
+    while (lines[map_index] != NULL)
+    {
+        line = lines[map_index];
+        if (line[0] == '1' || line[0] == ' ' || line[0] == '\t')
+            break;
+        map_index++;
+    }
+    return (map_index);
 }
+
 
 static int index_data_array(struct s_array *array)
 {
-	static int i = 0;
+    int i;
+    static int step = 0;
 
-	while (array->line[i] != NULL)
-	{
-		//printf("%s", array->line[i]);
-		if (array->line[i][0] == '\n' || array->line[i][0] == '\0')
-		{
-			i++;
-			continue ;
-		}
-		if (array->line[i][0] == 'N' && array->line[i][1] == 'O' ||
-			array->line[i][0] == 'S' && array->line[i][1] == 'O' ||
-			array->line[i][0] == 'W' && array->line[i][1] == 'E' ||
-			array->line[i][0] == 'E' && array->line[i][1] == 'A' ||
-			array->line[i][0] == 'F' ||
-			array->line[i][0] == 'C')
-		{
-			return (i++);
-		}
-		else
-		{
-			return (-1);
-		}
-	}
-	return (-1);
+	i = 0;
+    while (array->line[i] != NULL)
+    {
+        if (array->line[i][0] == '\n' || array->line[i][0] == '\0')
+        {
+            i++;
+            continue ;
+        }
+        if (step == 0 && array->line[i][0] == 'N' && array->line[i][1] == 'O')
+            return (step++, i++);
+        if (step == 1 && array->line[i][0] == 'S' && array->line[i][1] == 'O')
+            return (step++, i++);
+        if (step == 2 && array->line[i][0] == 'W' && array->line[i][1] == 'E')
+            return (step++, i++);
+        if (step == 3 && array->line[i][0] == 'E' && array->line[i][1] == 'A')
+            return (step++, i++);
+        if (step == 4 && array->line[i][0] == 'F')
+            return (step++, i++);
+        if (step == 5 && array->line[i][0] == 'C')
+            return (step++, i++);
+        i++;
+    }
+    return (-1);
 }
 
-static void sort_data_array(struct s_array *array, unsigned int len)
+
+static int sort_data_array(struct s_array *array, unsigned int len)
 {
 	int i;
 	int next;
-	char **array_sorted;
+	int map_index;
 
 	i = 0;
 	next = 0;
-	array_sorted = calloc(len + 1, sizeof(char *));
-	if (!array_sorted)
+	map_index = find_first_line(array->line);
+	array->sorted = calloc(map_index + 1, sizeof(char *));
+	if (!array->sorted)
 	{
 		printf("Memory allocation failed\n");
 		exit(1);
 	}
-	while (next != -1 && array->line != NULL)
+	while (next != -1 || array->line != NULL)
 	{
 		next = index_data_array(array);
-		printf("test next: %d\n", next);
+		//printf("test next: %d\n", next);
 		if (next == -1)
 			break;
-		array_sorted[i] = array->line[next];
+		array->sorted[i] = array->line[next];
 		i++;
 	}
+	array->sorted[i] = NULL;
 	i = 0;
-	while (i < len)
+	while (i < map_index)
 	{
-		printf("%s", array_sorted[i]);
+		printf("%s", array->sorted[i]);
 		i++;
 	}
-	array->sorted = array_sorted;
+	return (map_index);
 }
 
 /* Allocation dynamique a zéro de l'entièreté du fichier map */
@@ -178,12 +175,12 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 
 	i = 0;
 	len = dynamic_map_lenght(fd, line);
-	printf("test len: %d\n", len);
+	//printf("test len: %d\n", len);
 	close(fd);
 	fd = open_map_file(argv);
 	//line = find_first_line(fd, &len);
 	line = get_next_line(fd);
-	printf("len: %u\n", len);
+	//printf("len: %u\n", len);
 	array->line = calloc(len + 1, sizeof(char *));
 	if (!array->line)
 	{
@@ -200,10 +197,10 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	}
 	sort_data_array(array, len);
 	i = 0;
-	/*while (i < len)
+	while (i < len)
 	{
 		printf("%s", array->line[i++]);
-	}*/
+	}
 }
 /* Extrait le chemin des textures en fonction de la position donnée, 
 	les assigne aux variables de la structure */
@@ -241,7 +238,8 @@ void copy_path(struct s_array *array, char *line, char pos[2], int start)
 void error_parse_textures(struct s_array *array, char *line, char pos[2])
 {
 	printf("%s: path format incorrect: %s\n", pos, strerror(errno));
-	free_1_array(array);
+	//free_1_array(array);
+	free_array(array->sorted);
 	//free(line);
 	exit(1);
 }
@@ -250,6 +248,7 @@ void error_parse_fc(struct s_array *array, char *line, char type)
 {
 	printf("%c: format incorrect: %s\n", type, strerror(errno));
 	//free_1_array(array);
+	free_array(array->sorted);
 	//free(line);
 	exit(1);
 }
@@ -257,6 +256,7 @@ void error_parse_fc(struct s_array *array, char *line, char type)
 void error_parse_fc_2(struct s_array *array, char *line, char *new_line)
 {
 	//free_1_array(array);
+	free_array(array->sorted);
 	//free(line);
 	free(new_line);
 	exit(1);
@@ -275,14 +275,12 @@ void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 	pos[0] = pos_1;
 	pos[1] = pos_2;
 	line = array->sorted[j++];
-	printf("line: %s\n", line);
 	if (line && (line[0] != pos[0] || line[1] != pos[1]))
 	{
 		error_parse_textures(array, line, pos);
 	}
 	while ((line && line[i]) && line[i] != '.')
-	i++;
-	//printf("line[%d]: %c\n", i, line[i]);
+		i++;
 	if (line && line[i] == '\n')
 	{
 		error_parse_textures(array, line, pos);
@@ -292,21 +290,21 @@ void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
 		error_parse_textures(array, line, pos);
 	}
 	copy_path(array, line, pos, i);
-	free(line);
 }
 
 static char *fc_get_line(struct s_array *array, char type)
 {
-	int i = 0;
-
+	int i;
+	
+	i = 0;
 	while (array->sorted[i])
 	{
-		if (array->sorted[i][0] == type)
+		if (array->sorted[i] && array->sorted[i][0] == type)
 			break;
 		i++;
 	}
 	if (!array->sorted[i])
-		return (NULL); // not found
+		return (NULL);
 
 	while (array->sorted[i] && !ft_strcmp(array->sorted[i], "\n"))
 		i++;
@@ -331,11 +329,11 @@ int array_max_value(char **array)
 	int i;
 
 	i = 0;
-	if (!array || array[i])
+	if (!array)
 		return (1);
 	while (array[i])
 	{
-		if (ft_atoi(array[i]) > 255)
+		if (ft_atoi(array[i]) > 255 || ft_atoi(array[i]) < 0)
 			return (1);
 		i++;
 	}
@@ -454,43 +452,62 @@ void clear_line_gnl(int fd)
 	}
 }
 
+void realloc_data_array(struct s_array *array)
+{
+    int start;
+    int total_len;
+    int new_len;
+	char **map;
+	int i;
+	
+	i = 0;
+	start = find_first_line(array->line);
+	total_len = array_len(array->line);
+	new_len = total_len - start;
+    map = calloc(new_len + 1, sizeof(char *));
+    if (!map)
+    {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    while(i < new_len)
+    {
+        map[i] = array->line[start + i];
+		i++;
+    }
+    map[new_len] = NULL;
+    free(array->line);
+    array->line = map;
+}
+
+
 void	parse_map(struct s_vars *vars, struct s_array *array,
     struct s_game_stats *value, char *argv[])
 {
     int	fd;
 	t_point begin;
 	t_point size;
+	int map_index;
 
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
+	clear_line_gnl(fd);
 	close(fd);
-	/*fd = open(argv[1], O_RDWR);
-	char *line;
-
-	line = "value";
-	while (line)
-	{
-		get_next_line(fd);
-		write(fd, &"\0", 4);
-	}
-	close(fd);
-	exit(1);*/
-	fd = open_map_file(argv);
+	realloc_data_array(array);
 	check_position(fd, array, 'N', 'O');
 	check_position(fd, array, 'S', 'O');
 	check_position(fd, array, 'W', 'E');
 	check_position(fd, array, 'E', 'A');
 	check_floor_and_ceilling(array, 'F');
 	check_floor_and_ceilling(array, 'C');
-	exit(1);
-	clear_line_gnl(fd);
     check_characters_in_map(array);
 	check_player_start_pos(array, value);
-	mapping(array, vars); // la fonction mapping definie la position initial du joueur 
+	mapping(array, vars); // la fonction mapping definie la position initial du joueur
 	begin.x = (int)vars->player.pos.x;
 	begin.y = (int)vars->player.pos.y;
 	size.x = get_max_width(array->line);
 	size.y = get_max_height(array->line);
 	flood_fill(array, array->line, size, begin);
     //vars->array = array;
+    free_array(array->sorted);
 }

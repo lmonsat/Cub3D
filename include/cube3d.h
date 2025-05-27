@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/26 18:10:10 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/27 21:29:19 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ int key_handler(int keycode, struct s_vars *vars);
 
 /* --- Parsing --- */
 void	parse_map(struct s_vars *vars, struct s_array *array, struct s_game_stats *value, char *argv[]);
+int 	find_first_line(char **lines);
 
 /* --- Utils ---*/
 char	**copy_array(char **source, struct s_array *array);

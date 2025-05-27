@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:52:46 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/14 16:19:13 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/27 21:29:40 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	mapping(struct s_array *array, struct s_vars *vars)
 	int	i;
 	int	j;
 
-	i = 0;
+	i = find_first_line(array->line);
 	while (array->line[i] != NULL)
 	{
 		j = 0;
