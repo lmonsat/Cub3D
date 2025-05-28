@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/27 22:24:18 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:56:55 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 int	is_valid_char(char c)
 {
 	return (ft_strchr("10WSEN \n\t", c) != NULL);
+}
+
+/*	Permet de clear le buffer gnl entièrement car si l'on ne parcourt par jusqu'au EOF,
+	le buffer reste encore alloué dans gnl */
+void clear_line_gnl(int fd)
+{
+	char *line;
+	
+	line = "value";
+	while (line)
+	{
+		line = get_next_line(fd);
+		free(line);
+	}
 }
 
 void	check_characters_in_map(struct s_array *array)
@@ -176,6 +190,7 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	i = 0;
 	len = dynamic_map_lenght(fd, line);
 	//printf("test len: %d\n", len);
+	//clear_line_gnl(fd);
 	close(fd);
 	fd = open_map_file(argv);
 	//line = find_first_line(fd, &len);
@@ -187,13 +202,13 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 		printf("Memory allocation failed\n");
 		exit(1);
 	}
-	array->line[i++] = line; 
-	while (array->line != NULL)
+	array->line[i++] = line;
+	while (1)
 	{
-		array->line[i] = get_next_line(fd);
-		if (array->line[i] == NULL)
-			break ;
-		i++;
+		line = get_next_line(fd);
+		if (!line)
+			break;
+		array->line[i++] = line;
 	}
 	sort_data_array(array, len);
 	i = 0;
@@ -201,6 +216,8 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	{
 		printf("%s", array->line[i++]);
 	}
+	//clear_line_gnl(fd);
+	close(fd);
 }
 /* Extrait le chemin des textures en fonction de la position donnée, 
 	les assigne aux variables de la structure */
@@ -438,27 +455,14 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 		printf("%s", array->line[i++]);
 	}
 }
-/*	Permet de clear le buffer gnl entièrement car si l'on ne parcourt par jusqu'au EOF,
-	le buffer reste encore alloué dans gnl */
-void clear_line_gnl(int fd)
-{
-	char *line;
-	
-	line = "value";
-	while (line)
-	{
-		line = get_next_line(fd);
-		free(line);
-	}
-}
 
 void realloc_data_array(struct s_array *array)
 {
     int start;
     int total_len;
     int new_len;
-	char **map;
 	int i;
+	char **map;
 	
 	i = 0;
 	start = find_first_line(array->line);
@@ -472,6 +476,7 @@ void realloc_data_array(struct s_array *array)
     }
     while(i < new_len)
     {
+
         map[i] = array->line[start + i];
 		i++;
     }
@@ -492,7 +497,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);
-	close(fd);
+	clear_line_gnl(fd);
+	//close(fd);
 	realloc_data_array(array);
 	check_position(fd, array, 'N', 'O');
 	check_position(fd, array, 'S', 'O');
