@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/26 17:25:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 14:05:23 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
-    array->ray.width = get_max_width(array->line) * 40;
-    array->ray.height = get_max_height(array->line) * 40;
+    array->ray.width = get_max_width(array->map) * 40;
+    array->ray.height = get_max_height(array->map) * 40;
     vars->mlx = mlx_init();
     if (vars->mlx == NULL)
         return ;

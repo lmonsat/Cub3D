@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/14 16:14:35 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 13:45:52 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,27 @@
 
 static int		check_margin(float x, float y, char **map, int margin)
 {
-	int map_x1;
-	int map_x2;
-	int map_y1;
-	int map_y2;
+	int	map_x;
+	int	map_y;
 
-	map_x1 = (int)(x + margin) / 40;
-	map_x2 = (int)(x + margin) / 40;
-	map_y1 = (int)(y + margin) / 40;
-	map_y2 = (int)(y - margin) / 40;
-
-	if (map[map_y1][map_x1] == '1' || map[map_y1][map_x2] == '1' ||
-		map[map_y2][map_x1] == '1' || map[map_y2][map_x2] == '1')
-		return(0);
-	return(1);
+	map_x = (int)x / 40;
+	map_y = (int)y / 40;
+	if (map[map_y][map_x] == '1')
+		return (0);
+	return (1);
 }
 
 void	move_up(struct s_vars *vars)
 {
-	float next_x;
-	float next_y;
-	int map_x;
-	int map_y;
+	float	next_x;
+	float	next_y;
 
-	next_x = vars->player.pos.x_pixel + vars->array->ray.dx * mouv_step;
-	next_y =  vars->player.pos.y_pixel + vars->array->ray.dy * mouv_step;
-	map_x = (int)(next_x) / 40;
-	map_y = (int)(next_y) / 40;
-	if (check_margin(next_x, next_y, vars->array->line, 2))
+	next_x = vars->player.pos.x + vars->array->ray.dx * mouv_step;
+	next_y = vars->player.pos.y + vars->array->ray.dy * mouv_step;
+	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x_pixel = next_x;
-		vars->player.pos.y_pixel = next_y;
+		vars->player.pos.x = next_x;
+		vars->player.pos.y = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
@@ -52,19 +42,15 @@ void	move_up(struct s_vars *vars)
 
 void	move_down(struct s_vars *vars)
 {
-	float next_x;
-	float next_y;
-	int map_x;
-	int map_y;
+	float	next_x;
+	float	next_y;
 
-	next_x = vars->player.pos.x_pixel - vars->array->ray.dx * mouv_step;
-    next_y = vars->player.pos.y_pixel - vars->array->ray.dy * mouv_step;
-	map_x = (int)(next_x) / 40;
-	map_y = (int)(next_y) / 40;
-	if (check_margin(next_x, next_y, vars->array->line, 2))
+	next_x = vars->player.pos.x - vars->array->ray.dx * mouv_step;
+	next_y = vars->player.pos.y - vars->array->ray.dy * mouv_step;
+	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x_pixel = next_x;
-		vars->player.pos.y_pixel = next_y;
+		vars->player.pos.x = next_x;
+		vars->player.pos.y = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
@@ -72,39 +58,31 @@ void	move_down(struct s_vars *vars)
 
 void	move_right(struct s_vars *vars)
 {
-	float next_x;
-	float next_y;
-	int map_x;
-	int map_y;
+	float	next_x;
+	float	next_y;
 
-	next_x = vars->player.pos.x_pixel - vars->array->ray.dx_side * mouv_step;
-    next_y = vars->player.pos.y_pixel - vars->array->ray.dy_side * mouv_step;
-	map_x = (int)(next_x) / 40;
-	map_y = (int)(next_y) / 40;
-	if (check_margin(next_x, next_y, vars->array->line, 2))
+	next_x = vars->player.pos.x + vars->array->ray.dx_side * mouv_step;
+	next_y = vars->player.pos.y + vars->array->ray.dy_side * mouv_step;
+	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x_pixel = next_x;
-		vars->player.pos.y_pixel = next_y;
+		vars->player.pos.x = next_x;
+		vars->player.pos.y = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
 }
 
-void move_left(struct s_vars *vars)
+void	move_left(struct s_vars *vars)
 {
-	float next_x;
-	float next_y;
-	int map_x;
-	int map_y;
+	float	next_x;
+	float	next_y;
 
-	next_x = vars->player.pos.x_pixel + vars->array->ray.dx_side * mouv_step;
-    next_y = vars->player.pos.y_pixel + vars->array->ray.dy_side * mouv_step;
-	map_x = (int)(next_x) / 40;
-	map_y = (int)(next_y) / 40;
-	if (check_margin(next_x, next_y, vars->array->line, 2))
+	next_x = vars->player.pos.x - vars->array->ray.dx_side * mouv_step;
+	next_y = vars->player.pos.y - vars->array->ray.dy_side * mouv_step;
+	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x_pixel = next_x;
-		vars->player.pos.y_pixel = next_y;
+		vars->player.pos.x = next_x;
+		vars->player.pos.y = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/28 15:56:55 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 14:06:05 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ void	check_characters_in_map(struct s_array *array)
 	int	j;
 
 	i = 0;
-	while (array->line[i] != NULL)
+	while (array->map[i] != NULL)
 	{
 		j = 0;
-		while (array->line[i][j] != '\0')
+		while (array->map[i][j] != '\0')
 		{
-			if (!is_valid_char(array->line[i][j]))
+			if (!is_valid_char(array->map[i][j]))
 			{
-				free_1_array(array);
 				perror("Error\n Map contains unneeded characters");
+				free_1_array(array);
 				exit(EXIT_FAILURE);
 			}
 			j++;
@@ -62,12 +62,12 @@ void	check_player_start_pos(struct s_array *array, struct s_game_stats *value)
 	i = 0;
 	while (1)
 	{
-		value->nb_start_pos += ft_strchr_count(array->line[i], 'W');
-		value->nb_start_pos += ft_strchr_count(array->line[i], 'N');
-		value->nb_start_pos += ft_strchr_count(array->line[i], 'S');
-		value->nb_start_pos += ft_strchr_count(array->line[i], 'E');
+		value->nb_start_pos += ft_strchr_count(array->map[i], 'W');
+		value->nb_start_pos += ft_strchr_count(array->map[i], 'N');
+		value->nb_start_pos += ft_strchr_count(array->map[i], 'S');
+		value->nb_start_pos += ft_strchr_count(array->map[i], 'E');
 		i++;
-		if (array->line[i] == NULL)
+		if (array->map[i] == NULL)
 			break ;
 	}
 	if (value->nb_start_pos != 1)
@@ -190,7 +190,7 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	i = 0;
 	len = dynamic_map_lenght(fd, line);
 	//printf("test len: %d\n", len);
-	//clear_line_gnl(fd);
+	clear_line_gnl(fd);
 	close(fd);
 	fd = open_map_file(argv);
 	//line = find_first_line(fd, &len);
@@ -413,10 +413,11 @@ void check_floor_and_ceilling(struct s_array *array, char type)
 
 int fill(char **tab, t_point size, char target, int row, int col)
 {
-    if (row < 0 || col < 0 || row >= size.y || col >= size.x)
-        return (0); 
+    // Vérification des limites de la carte
+    if (row < 0 || col < 0 || row >= size.y || col >= size.x || !tab[row] || !tab[row][col])
+        return (1); 
 
-    if (tab[row][col] == ' ' || tab[row][col] == '\n' || tab[row][col] == '\0' )
+    if (tab[row][col] == ' ' || tab[row][col] == '\n' || tab[row][col] == '\0')
         return (1);
 
     if (tab[row][col] != target)
@@ -424,10 +425,11 @@ int fill(char **tab, t_point size, char target, int row, int col)
 
     tab[row][col] = 'F';
 
-    if (fill(tab, size, target, row - 1, col) ||
-        fill(tab, size, target, row + 1, col) ||
-        fill(tab, size, target, row, col - 1) ||
-        fill(tab, size, target, row, col + 1))
+    // Vérification des limites avant chaque appel récursif
+    if ((row > 0 && fill(tab, size, target, row - 1, col)) ||
+        (row < size.y - 1 && fill(tab, size, target, row + 1, col)) ||
+        (col > 0 && fill(tab, size, target, row, col - 1)) ||
+        (col < size.x - 1 && fill(tab, size, target, row, col + 1)))
         return (1);
 
     return (0);
@@ -436,24 +438,39 @@ int fill(char **tab, t_point size, char target, int row, int col)
 void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 {
     char target;
-	int i;
+    int i;
 
-	i = 0;
-	tab[begin.y][begin.x] = '0';
-	target = tab[begin.y][begin.x];
-	if (fill(tab, size, target, begin.y, begin.x))
-	{
-		printf("Map building incorrect\n");
-		free_1_array(array);
-		free_array(array->ceiling);
-		free_array(array->floor);
-		free_path(array);
-		exit(1);
-	}
-	while (i < 15)
-	{
-		printf("%s", array->line[i++]);
-	}
+    i = 0;
+    // Vérification des limites avant d'accéder à la carte
+    if (begin.y < 0 || begin.y >= size.y || begin.x < 0 || begin.x >= size.x ||
+        !tab[begin.y] || !tab[begin.y][begin.x])
+    {
+        printf("Map building incorrect: Invalid starting position\n");
+        free_array(array->map);
+        free_array(array->ceiling);
+        free_array(array->floor);
+        free_path(array);
+        exit(1);
+    }
+
+    tab[begin.y][begin.x] = '0';
+    target = tab[begin.y][begin.x];
+    
+    if (fill(tab, size, target, begin.y, begin.x))
+    {
+        printf("Map building incorrect: Map is not closed\n");
+        free_array(array->map);
+        free_array(array->ceiling);
+        free_array(array->floor);
+        free_path(array);
+        exit(1);
+    }
+
+    // Affichage de la carte pour debug
+    while (i < size.y && array->map[i])
+    {
+        printf("%s", array->map[i++]);
+    }
 }
 
 void realloc_data_array(struct s_array *array)
@@ -461,28 +478,26 @@ void realloc_data_array(struct s_array *array)
     int start;
     int total_len;
     int new_len;
-	int i;
-	char **map;
-	
-	i = 0;
-	start = find_first_line(array->line);
-	total_len = array_len(array->line);
-	new_len = total_len - start;
-    map = calloc(new_len + 1, sizeof(char *));
-    if (!map)
+    int i;
+    
+    i = 0;
+    start = find_first_line(array->line);
+    total_len = array_len(array->line);
+    new_len = total_len - start;
+    
+    array->map = calloc(new_len + 1, sizeof(char *));
+    if (!array->map)
     {
         printf("Memory allocation failed\n");
         exit(1);
     }
     while(i < new_len)
     {
-
-        map[i] = array->line[start + i];
-		i++;
+        array->map[i] = array->line[start + i];
+		printf("array->map[%d]: %s\n", i, array->map[i]);
+        i++;
     }
-    map[new_len] = NULL;
-    free(array->line);
-    array->line = map;
+    array->map[new_len] = NULL;
 }
 
 
@@ -497,8 +512,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     fd = open_map_file(argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);
-	clear_line_gnl(fd);
-	//close(fd);
+	close(fd);
 	realloc_data_array(array);
 	check_position(fd, array, 'N', 'O');
 	check_position(fd, array, 'S', 'O');
@@ -511,9 +525,9 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	mapping(array, vars); // la fonction mapping definie la position initial du joueur
 	begin.x = (int)vars->player.pos.x;
 	begin.y = (int)vars->player.pos.y;
-	size.x = get_max_width(array->line);
-	size.y = get_max_height(array->line);
-	flood_fill(array, array->line, size, begin);
+	size.x = get_max_width(array->map);
+	size.y = get_max_height(array->map);
+	flood_fill(array, array->map, size, begin);
     //vars->array = array;
     free_array(array->sorted);
 }

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/14 17:04:14 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 13:50:16 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-    pos->width = get_max_width(array->line) * 40;
-    pos->height = get_max_height(array->line) * 40;
+    pos->width = get_max_width(array->map) * 40;
+    pos->height = get_max_height(array->map) * 40;
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
 
@@ -76,7 +76,7 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
         yi = (int)roundf(ry);
         if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
                 break;
-        if (array->line[yi / 40][xi / 40] == '1')
+        if (array->map[yi / 40][xi / 40] == '1')
                 break;
         ft_put_pixel(xi, yi, array, RED, 0);
         rx += pos->ldx;
@@ -162,7 +162,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
         if (mapX < 0 || mapY < 0 || mapX >= array->ray.width / 40 || mapY >= array->ray.width / 40)
             break;
 
-        if (array->line[mapY][mapX] == '1')
+        if (array->map[mapY][mapX] == '1')
         {
             // Dessine un cercle à l’impact
             //ft_draw_circle(array, mapX * 40, mapY * 40, 5, YELLOW);
@@ -217,45 +217,3 @@ void draw_walls(struct s_trace_line *pos, struct s_array *array)
         x_offset += band_width;
     }
 }
-
-/*void draw_walls(struct s_trace_line *pos, struct s_array *array)
-{
-    float fov_angle = 60.0f * (PI / 180.0f); // FOV en radians
-    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
-    int band_width = array->ray.width / NUM_RAYS;
-
-    for (int i = 0; i < NUM_RAYS; i++)
-    {
-        float dist = pos->perp_tab[i];
-        if (dist <= 0.01f)
-            dist = 0.01f;
-
-        int line_height = (int)(plane / dist);
-        int draw_start = (array->ray.height / 2) - (line_height / 2);
-        int draw_end = (array->ray.height / 2) + (line_height / 2);
-
-        int x_start = i * band_width;
-        draw_vertical_band(x_start, band_width, draw_start, draw_end, array);
-    }
-}*/
-/*void draw_walls(struct s_trace_line *pos, struct s_array *array)
-{
-    float fov_angle = 60.0f * (PI / 180.0f); // FOV en radians
-    int plane = (int)((array->ray.width / 2.0f) / tanf(fov_angle / 2.0f));
-    int band_width = array->ray.width / NUM_RAYS;
-
-    for (int i = 0; i < NUM_RAYS; i++)
-    {
-        float dist = pos->perp_tab[i];
-        if (dist <= 0.01f)
-            dist = 0.01f;
-
-        int line_height = (int)(plane / dist);
-        int draw_start = (array->ray.height / 2) - (line_height / 2);
-        int draw_end = (array->ray.height / 2) + (line_height / 2);
-
-        int x_start = i * band_width;
-        draw_vertical_band(x_start, band_width, draw_start, draw_end, array);
-    }
-}*/
-

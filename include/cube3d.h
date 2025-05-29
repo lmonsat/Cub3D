@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/27 21:29:19 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 13:33:30 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ struct					s_array
 	struct s_trace_line ray;
 	char				**line;
 	char				**sorted;
+	char				**map;
 	int					line_len;
 	int					line_len_map;
 	int					is_exitable;

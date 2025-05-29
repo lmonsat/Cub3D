@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/27 22:23:29 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 14:02:06 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,32 @@ void	free_1_array(struct s_array *array)
 	i = 0;
 	while (array->line[i])
 	{
-		free(array->line[i]);
+		if (array->line[i] != NULL)
+		{
+			free(array->line[i]);
+			array->line[i] = NULL;
+		}
 		i++;
 	}
 	free(array->line);
 	array->line = NULL;
+	
+	// Libérer array->map si il existe
+	if (array->map)
+	{
+		i = 0;
+		while (array->map[i])
+		{
+			if (array->map[i] != NULL)
+			{
+				free(array->map[i]);
+				array->map[i] = NULL;
+			}
+			i++;
+		}
+		free(array->map);
+		array->map = NULL;
+	}
 }
 
 

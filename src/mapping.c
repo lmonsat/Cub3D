@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:52:46 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/27 21:29:40 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/05/29 14:08:46 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	ground(struct s_vars *vars, int x, int y)
 
 void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
 {
-    if (array->line[i][j] == 'N' || array->line[i][j] == 'W' || array->line[i][j] == 'E' || array->line[i][j] == 'S')
+    if (array->map[i][j] == 'N' || array->map[i][j] == 'W' || array->map[i][j] == 'E' || array->map[i][j] == 'S')
     {
         vars->player.pos.x_pixel = j * 40;
         vars->player.pos.y_pixel = i * 40;
@@ -87,11 +87,11 @@ void	mapping(struct s_array *array, struct s_vars *vars)
 	int	i;
 	int	j;
 
-	i = find_first_line(array->line);
-	while (array->line[i] != NULL)
+	i = 0;
+	while (array->map[i] != NULL)
 	{
 		j = 0;
-		while (array->line[i][j] != '\0')
+		while (array->map[i][j] != '\0')
 		{
 			mapping_case(array, vars, i, j);
 			j++;
