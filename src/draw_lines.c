@@ -3,33 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   draw_lines.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/06 15:18:00 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/02 13:29:11 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
 
-/*void ft_put_pixel(int x, int y, struct s_array *array, int color)
-{
-	char *pxl;
-	int w;
-	int h;
-
-	w = get_max_width(array->line);
-	h = get_max_height(array->line);
-    printf("w vaut %d et h vaut %d\n",w,h);
-	pxl = NULL;
-
-	if (x >= 0 && x < array->ray.width && y >= 0 && y < array->ray.height)
-	{
-		pxl = array->draw.addr + (y * (array->ray.width * 8) + x
-		* (array->draw.bpp / 8));
-		*(unsigned int *)pxl = color;
-	}
-}*/
 void ft_put_pixel(int x, int y, struct s_array *array, int color)
 {
     char *pxl;

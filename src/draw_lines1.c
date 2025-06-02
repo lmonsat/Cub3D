@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/19 20:31:20 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:19:23 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,35 +61,6 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
    distance_central(array, player);
 }
 
-/*void distance(struct s_array *array, struct s_position *player, int i)
-{
-    float fov_angle;
-    float ray_angle;
-    float player_angle;
-    float raydirx;
-    float raydiry;
-    float wall_x;
-
-    //le premier 80 correspont a la taille du plan camera
-    //le deuxieme 80 a la distance entre le joueur et le plan camera
-    //fov angle est donner en radian
-    fov_angle = 2.0f * atanf(NUM_RAYS / cam_dist);
-
-    //renvoie l' angle du joueur en radian
-    player_angle = array->ray.rotation * PI / 180.0f;
-
-    //renvoie l' angle de la ray en radian
-    ray_angle = player_angle - (fov_angle / 2.0f) + (i * fov_angle / NUM_RAYS);
-
-    raydirx = cos(ray_angle);
-    raydiry = sin(ray_angle);
-
-    //calcule la distance brut de la ray et la met dans array->ray.brutdist
-    ft_dda_draw_ray(player, raydirx, raydiry, array);
-
-    array->ray.perpdist = array->ray.brutdist * cos(ray_angle - player_angle);
-}*/
-
 void distance(struct s_array *array, struct s_position *player, int i)
 {
     float fov_angle;
@@ -131,7 +102,6 @@ void distance(struct s_array *array, struct s_position *player, int i)
     if ((array->ray.orientation == EAST && raydirx < 0) ||
         (array->ray.orientation == NORTH && raydiry > 0))
         tex_x = tex_width - tex_x - 1;
-    //printf("tex_x vaut %d\n", tex_x);
     array->ray.tex_x[(NUM_RAYS - 1) - i] = tex_x;
 }
 
@@ -219,5 +189,4 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
         i++;
     }
     print_perp_tab(pos);
-    //afficher_orientations(pos->hit_orien, NUM_RAYS);
 }

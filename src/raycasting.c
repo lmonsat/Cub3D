@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/19 20:52:33 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:56:24 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->dy_step = pos->dy_side / pos->step;
 	if (pos->perp_tab)
     	free(pos->perp_tab);	// free pour chaque frame de généré l'ancien perp_tab
-	pos->perp_tab = calloc(sizeof(float), NUM_RAYS);	// utilisation de calloc, pour l'initialisation a zéro
+	pos->perp_tab = ft_calloc(sizeof(float), NUM_RAYS);	// utilisation de calloc, pour l'initialisation a zéro
 	if (pos->perp_tab == NULL)
 		exit(1);
     if (pos->hit_orien)
         free(pos->hit_orien);
-    pos->hit_orien = calloc(sizeof(int), NUM_RAYS);
+    pos->hit_orien = ft_calloc(sizeof(int), NUM_RAYS);
     if (pos->hit_orien == NULL)
         exit(1);
     if (pos->tex_x)
         free(pos->tex_x);
-    pos->tex_x = calloc(sizeof(int), NUM_RAYS);
+    pos->tex_x = ft_calloc(sizeof(int), NUM_RAYS);
     if (pos->tex_x == NULL)
         exit(1);
 }
@@ -194,28 +194,24 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
     }
 }
 
-/*void draw_vertical_band(int x_start, int band_width, int draw_start, int draw_end, struct s_array *array)
-{
-    for (int x = x_start; x < x_start + band_width; x++)
-    {
-        if (x < 0 || x >= array->ray.width)
-            continue;
-        for (int y = draw_start; y <= draw_end; y++)
-        {
-            if (y >= 0 && y < array->ray.height)
-                ft_put_pixel(x, y, array, GRAY); // couleur du mur
-        }
-    }
-}*/
-
 void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int draw_end, struct s_trace_line *pos, struct s_array *array)
 {
-    int tex_x = pos->tex_x[i];             // coordonnée x dans la texture
+    int tex_x = pos->tex_x[i];
     int wall_height = draw_end - draw_start;
     if (wall_height <= 0) return;
 
-    int orientation = pos->hit_orien[i];   // 0=N, 1=S, 2=E, 3=W
+    int orientation = pos->hit_orien[i];
     struct s_texture *tex = &array->textures[orientation];
+
+    // Distance du rayon
+    float dist = pos->perp_tab[i];
+    if (dist < 0.1f) dist = 0.1f; // évite div/0
+
+    // Calcul du facteur d'ombrage (simple, linéaire)
+    float shade_factor = 1.0f / (1.0f + dist * 0.20f); // Ajuste 0.05f pour un rendu plus ou moins sombre
+    int mod = (int)(shade_factor * 255.0f);
+    if (mod > 255) mod = 255;
+    if (mod < 50) mod = 50; // Ne pas totalement noircir
 
     for (int x = x_start; x < x_start + band_width; x++)
     {
@@ -227,13 +223,24 @@ void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int 
             if (y < 0 || y >= array->ray.height)
                 continue;
 
-            // coordonnée y dans la texture
             int tex_y = (int)(((float)(y - draw_start) / wall_height) * tex->height);
             if (tex_y >= tex->height) tex_y = tex->height - 1;
 
-            // Calcul adresse pixel texture
             char *tex_pixel = tex->addr + (tex_y * tex->line_len + tex_x * (tex->bpp / 8));
             int color = *(unsigned int *)tex_pixel;
+
+            // Décompose le pixel
+            int a = (color & 0xFF000000);
+            int r = ((color & 0x00FF0000) >> 16);
+            int g = ((color & 0x0000FF00) >> 8);
+            int b = (color & 0x000000FF);
+
+            // Applique l’ombrage
+            r = (r * mod) / 255;
+            g = (g * mod) / 255;
+            b = (b * mod) / 255;
+
+            color = a | (r << 16) | (g << 8) | b;
 
             ft_put_pixel(x, y, array, color);
         }

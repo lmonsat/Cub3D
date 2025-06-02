@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/07 18:03:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/02 16:22:52 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int     load_textures(void *mlx, struct s_texture *textures)
         textures[i].img = mlx_xpm_file_to_image(mlx, paths[i], &textures[i].width, &textures[i].height);
         if(!textures[i].img)
         {
-            printf("erreur de cahrgement de texture\n");
+            printf("erreur de chargement de texture\n");
             return(1);
         }
         textures[i].addr = mlx_get_data_addr(textures[i].img, &textures[i].bpp, &textures[i].line_len, &textures[i].endian);
@@ -70,7 +70,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     display_textures_grid(vars->mlx, vars->win, array->textures);
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
-    mapping(array, vars); // la fonction mapping definie la position initial du joueur 
+    mapping(array, vars); // la fonction mapping definie la position initial du joueur
     mlx_key_hook(vars->win, key_handler, vars);
     mlx_hook(vars->win, 17, 1L << 0, default_close, vars);
     mlx_loop(vars->mlx);
@@ -106,6 +106,9 @@ void	check_arguments(int argc, char *argv[])
         }
     }
 }
+
+
+
 
 int	main(int argc, char *argv[])
 {
