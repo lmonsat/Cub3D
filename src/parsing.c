@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/29 14:06:05 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/02 18:30:55 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,28 +155,28 @@ static int sort_data_array(struct s_array *array, unsigned int len)
 	i = 0;
 	next = 0;
 	map_index = find_first_line(array->line);
-	array->sorted = calloc(map_index + 1, sizeof(char *));
+	array->sorted = calloc(6 + 1, sizeof(char *));
 	if (!array->sorted)
 	{
 		printf("Memory allocation failed\n");
 		exit(1);
 	}
-	while (next != -1 || array->line != NULL)
+	while (next != -1 && array->line != NULL)
 	{
 		next = index_data_array(array);
 		//printf("test next: %d\n", next);
 		if (next == -1)
 			break;
-		array->sorted[i] = array->line[next];
+		array->sorted[i] = ft_strdup(array->line[next]);
 		i++;
 	}
 	array->sorted[i] = NULL;
 	i = 0;
-	while (i < map_index)
+	/*while (i < 6)
 	{
-		printf("%s", array->sorted[i]);
+		printf("sorted: %s", array->sorted[i]);
 		i++;
-	}
+	}*/
 	return (map_index);
 }
 
@@ -281,7 +281,7 @@ void error_parse_fc_2(struct s_array *array, char *line, char *new_line)
 
 /* get_next_line les 4 première lignes afin de parser les textures,
 	parse également les position pour vérifier leurs cohérance */
-void check_position(int fd, struct s_array *array, char pos_1, char pos_2)
+void check_position(struct s_array *array, char pos_1, char pos_2)
 {
 	char *line;
 	char pos[2];
@@ -493,11 +493,37 @@ void realloc_data_array(struct s_array *array)
     }
     while(i < new_len)
     {
-        array->map[i] = array->line[start + i];
+        array->map[i] = ft_strdup(array->line[start + i]);
 		printf("array->map[%d]: %s\n", i, array->map[i]);
         i++;
     }
     array->map[new_len] = NULL;
+}
+
+int is_map_first_in_file(int fd, struct s_array *array, char *argv[])
+{
+	char *line;
+
+	fd = open_map_file(argv);
+	line = ft_strdup("\n");
+	while (line[0] == '\n')
+	{
+		free(line);
+		line = get_next_line(fd);
+		if (line[0] == ' ' || line[0] == '\t' || line[0] == '1')
+		{
+			free(line);
+			clear_line_gnl(fd);
+			close(fd);
+			printf("Map before textures\n");
+			exit(1);
+		}
+	}
+	free(line);
+	clear_line_gnl(fd);
+	close(fd);
+	fd = open_map_file(argv);
+	return (fd);
 }
 
 
@@ -509,15 +535,15 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	t_point size;
 	int map_index;
 
-    fd = open_map_file(argv);
+	fd = is_map_first_in_file(fd, array, argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);
 	close(fd);
 	realloc_data_array(array);
-	check_position(fd, array, 'N', 'O');
-	check_position(fd, array, 'S', 'O');
-	check_position(fd, array, 'W', 'E');
-	check_position(fd, array, 'E', 'A');
+	check_position(array, 'N', 'O');
+	check_position(array, 'S', 'O');
+	check_position(array, 'W', 'E');
+	check_position(array, 'E', 'A');
 	check_floor_and_ceilling(array, 'F');
 	check_floor_and_ceilling(array, 'C');
     check_characters_in_map(array);
@@ -528,6 +554,6 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	size.x = get_max_width(array->map);
 	size.y = get_max_height(array->map);
 	flood_fill(array, array->map, size, begin);
-    //vars->array = array;
     free_array(array->sorted);
+	free_array(array->line);
 }
