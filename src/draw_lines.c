@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/03 17:11:51 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 18:01:38 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void ft_draw_half_screen(struct s_array *array, int width, int height)
     }
 }
 
-
+/*
 void ft_draw_grid(struct s_array *array)
 {
 	int	w;
@@ -102,7 +102,45 @@ void ft_draw_grid(struct s_array *array)
 		}
 		x += 40;
 	}
+}*/
+
+static void print_grid(struct s_array *array, int x, int y)
+{
+	if (array->map[(int)y / 40][(int)x / 40] == '1')
+		ft_put_pixel(x, y, array, BLUE, 1);
+	else
+		ft_put_pixel(x, y, array, WHITE, 1);
 }
+
+void ft_draw_grid(struct s_array *array)
+{
+    int x;
+    int y;
+
+    x = 0;
+    while (x < array->ray.width)
+    {
+        y = 0;
+        while (y < array->ray.height)
+        {
+			print_grid(array, x, y);
+            y++;
+        }
+        x += 40;
+    }
+    y = 0;
+    while (y < array->ray.height)
+    {
+        x = 0;
+        while (x < array->ray.width)
+        {
+    		print_grid(array, x, y);
+            x++;
+        }
+        y += 40;
+    }
+}
+
 
 /*void	ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
