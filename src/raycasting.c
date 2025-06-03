@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/02 16:56:24 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:17:59 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->height = get_max_height(array->line) * 40;
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
+    //pos->tex_x = 0;
+    //pos->hit_orien = 0;
 
     //permet des mouvements avant arriere sur l' axe du joueur
     pos->dx = cosf(array->ray.rotation * PI / 180.0f);
@@ -196,6 +198,7 @@ void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, st
 
 void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int draw_end, struct s_trace_line *pos, struct s_array *array)
 {
+    char *tex_pixel = NULL;
     int tex_x = pos->tex_x[i];
     int wall_height = draw_end - draw_start;
     if (wall_height <= 0) return;
@@ -226,8 +229,8 @@ void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int 
             int tex_y = (int)(((float)(y - draw_start) / wall_height) * tex->height);
             if (tex_y >= tex->height) tex_y = tex->height - 1;
 
-            char *tex_pixel = tex->addr + (tex_y * tex->line_len + tex_x * (tex->bpp / 8));
-            int color = *(unsigned int *)tex_pixel;
+            tex_pixel = tex->addr + (tex_y * tex->line_len + tex_x * (tex->bpp / 8));
+            int color = *(int *)tex_pixel;
 
             // Décompose le pixel
             int a = (color & 0xFF000000);

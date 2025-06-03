@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/02 16:33:22 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:10:08 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void ft_draw_half_screen(struct s_array *array, int width, int height)
 
 void	render_frame(struct s_vars *vars)
 {
-	//clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
-	vars->array->ray.perp_tab = NULL;	// évite l'invalid free dans ft_init_line()
+	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
@@ -57,7 +56,7 @@ void	render_frame(struct s_vars *vars)
 	ft_draw_half_screen(vars->array, vars->array->ray.width, vars->array->ray.height);
 	draw_walls(&vars->array->ray, vars->array);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_ptr, 0, 0);
-	free(vars->array->ray.perp_tab);
-	free(vars->array->ray.hit_orien);
-	free(vars->array->ray.tex_x);
+	//free(vars->array->ray.perp_tab);
+	//free(vars->array->ray.hit_orien);
+	//free(vars->array->ray.tex_x);
 }

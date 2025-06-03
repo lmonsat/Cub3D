@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/02 16:25:37 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:23:44 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	esc_close(int keycode, struct s_vars *vars)
 		mlx_destroy_window(vars->mlx, vars->win);
 		mlx_destroy_display(vars->mlx);
 		free(vars->mlx);
-		//free_line(&vars->array->ray);
+		free_line(&vars->array->ray);
 		free_array(vars->array->line);
 		free_array(vars->array->ceiling);
 		free_array(vars->array->floor);

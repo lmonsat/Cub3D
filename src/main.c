@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/02 16:22:52 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:10:28 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,9 @@ int	main(int argc, char *argv[])
     struct s_array		array;
     struct s_game_stats	value;
 
+    array.ray.hit_orien = 0;
+    array.ray.tex_x = 0;
+    array.ray.perp_tab = NULL;
 	check_arguments(argc, argv);
     parse_map(&vars, &array, &value, argv);
     vars.stats = value;
