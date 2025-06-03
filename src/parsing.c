@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/03 16:50:14 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 00:15:17 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -556,4 +556,5 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	flood_fill(array, array->map, size, begin);
     free_array(array->sorted);
 	free_array(array->line);
+	vars->array = array;
 }

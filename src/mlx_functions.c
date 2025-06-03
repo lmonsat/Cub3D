@@ -6,11 +6,46 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/02 18:15:51 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 23:59:25 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
+
+void	free_line(struct s_trace_line *pos)
+{
+	if (pos->perp_tab)
+	{
+		free(pos->perp_tab);
+		pos->perp_tab = NULL;
+	}
+	if (pos->hit_orien)
+	{
+		free(pos->hit_orien);
+		pos->hit_orien = NULL;
+	}
+	if (pos->tex_x)
+	{
+		free(pos->tex_x);
+		pos->tex_x = NULL;
+	}
+}
+
+void	free_textures(void *mlx, struct s_texture *textures)
+{
+	int	i;
+
+	i = 0;
+	while (i < NB_TEXTURES)
+	{
+		if (textures[i].img)
+		{
+			mlx_destroy_image(mlx, textures[i].img);
+			textures[i].img = NULL;
+		}
+		i++;
+	}
+}
 
 void	esc_close(int keycode, struct s_vars *vars)
 {
@@ -26,6 +61,7 @@ void	esc_close(int keycode, struct s_vars *vars)
 			mlx_destroy_image(vars->mlx, vars->array->draw.img_map);
 			vars->array->draw.img_map = NULL;
 		}
+		free_textures(vars->mlx, vars->array->textures);
 		mlx_destroy_window(vars->mlx, vars->win);
 		mlx_destroy_window(vars->mlx, vars->win_map);
 		mlx_destroy_display(vars->mlx);
@@ -50,6 +86,7 @@ int	default_close(struct s_vars *vars)
 		mlx_destroy_image(vars->mlx, vars->array->draw.img_map);
 		vars->array->draw.img_map = NULL;
 	}
+	free_textures(vars->mlx, vars->array->textures);
 	mlx_destroy_window(vars->mlx, vars->win);
 	mlx_destroy_window(vars->mlx, vars->win_map);
 	mlx_destroy_display(vars->mlx);
@@ -77,6 +114,7 @@ static void rotation_r(struct s_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
 	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
+
 
 int	key_handler(int keycode, struct s_vars *vars)
 {

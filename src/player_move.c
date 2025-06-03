@@ -6,23 +6,38 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/03 23:48:46 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 00:34:09 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
 
-static int		check_margin(float x, float y, char **map, int margin)
+int		check_margin(float x, float y, char **map, int margin)
 {
-	int	map_x;
-	int	map_y;
+	int map_x1;
+	int map_x2;
+	int map_y1;
+	int map_y2;
 
-	map_x = (int)x / 40;
-	map_y = (int)y / 40;
-	if (map[map_y][map_x] == '1')
-		return (0);
-	//printf("test margin: %c, map_x: %d, map_y: %d\n", map[map_x][map_y], map_x, map_y);
-	return (1);
+	if (!map || !map[0]) 
+	{
+		printf("Erreur : map ou map[0] non initialisé\n");
+		exit(1);
+	}
+	printf("map[0]: %c", map[0][0]);
+	map_x1 = (int)((x + margin) / 40);
+	map_x2 = (int)((x - margin) / 40);
+	map_y1 = (int)((y + margin) / 40);
+	map_y2 = (int)((y - margin) / 40);
+	printf("mapx1: %d\n", map_x1);
+	printf("mapx1: %d\n", map_x2);
+	printf("mapx1: %d\n", map_y1);
+	printf("mapx1: %d\n", map_y2);
+	exit(1);
+	if (map[map_y1][map_x1] == '1' || map[map_y1][map_x2] == '1' ||
+		map[map_y2][map_x1] == '1' || map[map_y2][map_x2] == '1')
+		return(0);
+	return(1);
 }
 
 void	move_up(struct s_vars *vars)
@@ -109,8 +124,7 @@ void	clear_image(struct s_array *array, int width, int height)
 
 void	render_frame(struct s_vars *vars)
 {
-	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
-	vars->array->ray.perp_tab = NULL;	// évite l'invalid free dans ft_init_line()
+	//clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
@@ -119,5 +133,4 @@ void	render_frame(struct s_vars *vars)
 	draw_walls(&vars->array->ray, vars->array);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
 	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
-	free(vars->array->ray.perp_tab);
 }

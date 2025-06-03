@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/29 13:33:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 23:57:37 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <limits.h>
 # include <math.h>
 # include <stdio.h>
-# include <stdlib.h> 
+# include <stdlib.h>
 # define PI 3.141592653589
 # define B_BLUE "\033[1;36m"
 # define RESET "\033[0m"
@@ -46,6 +46,18 @@
 # define STEP (FOV / NUM_RAYS)
 # define DEG2RAD(x) ((x) * PI / 180.0f)
 # define mouv_step 4
+# define NB_TEXTURES 6
+# define T1 "./textures/wood.xpm"
+# define T5 "./textures/redbrick.xpm"
+# define T3 "./textures/greystone.xpm"
+# define T6 "./textures/bluestone.xpm"
+# define T2 "./textures/mossy.xpm"
+# define T4 "./textures/colorstone.xpm"
+# define NORTH 0
+# define SOUTH 1
+# define EAST  2
+# define WEST  3
+# define tex_width 64
 
 //structure utile pour la fonction put_pixel
 typedef struct s_draw
@@ -62,8 +74,23 @@ typedef struct s_draw
 	int		endian_map;
 } t_draw;
 
+struct			s_texture
+{
+    void    *img;
+    int     width;
+    int     height;
+	char 	*path;
+	char	*addr;
+    int     bpp;
+    int     line_len;
+    int     endian;
+};
+
 struct	s_trace_line
 {
+	int *tex_x;
+	int *hit_orien;
+	int orientation; // 0 = NORD, 1 = SUD, 2 = EST, 3 = OUEST
 	float step;
 	float x_cam;
 	float y_cam;
@@ -78,7 +105,7 @@ struct	s_trace_line
 	float dx_side; //vecteur de direction gauche droite
 	float dy_side; //vecteur de direction gauche droite
 	int width;
-	int height; 
+	int height;
 	float rotation; //for rotation of fov
 	float brutdist; //distance brut
 	float perpdist; //distance corriger pour effet fisheye
@@ -87,28 +114,9 @@ struct	s_trace_line
 	float dy_step;
 	float ldx;
 	float ldy;
+	float *wall_hit_x;
+	float *wall_hit_y;
 };
-
-/*struct s_measure
-{
-	//coordonnées du joueur par case
-	int mapx;
-	int mapy;
-
-	//distance que le rayon doit parcourir pour traverser une case
-	float deltaDistx;
-	float deltaDisty;
-
-	//variable de direction
-	int stepx;
-	int stepy;
-	float sidedistx;
-	float sidedisty;
-
-	float distance;
-	int hit;
-	int side // 0 collision en x 1 collision en y
-};*/
 
 struct					s_first
 {
@@ -146,6 +154,7 @@ struct					s_array
 	struct s_game_stats	stats;
 	struct s_first		elmt;
 	struct s_move		move;
+	struct s_texture    textures[NB_TEXTURES];
 	char				*NO_path;
 	char				*SO_path;
 	char				*EA_path;
@@ -255,6 +264,7 @@ void ft_draw_half_screen(struct s_array *array, int width, int height);
 
 /*--- ray_casting ---*/
 void draw_walls(struct s_trace_line *pos, struct s_array *array);
+//void draw_walls(struct s_trace_line *pos, struct s_array *array, struct s_texture *textures);
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void ft_init_line2(struct s_trace_line *pos, struct s_position *player, float x, float y);
 void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y);
