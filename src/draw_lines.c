@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/29 13:51:10 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 17:11:51 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,27 @@
 }*/
 void ft_put_pixel(int x, int y, struct s_array *array, int color, int is_minimap)
 {
-	char *pxl;
+    char *pxl;
 	int map_x;
 	int map_y;
 
-	if (is_minimap)
-	{
-		map_x = x;
-		map_y = y;
-		if (map_x < 0 || map_x >= array->line_len_map || map_y < 0 || map_y >= array->line_len_map)
-			return;
-		pxl = array->draw.addr_map + (map_y * array->line_len_map + map_x * (array->draw.bpp_map / 8));
-	}
-	else
-	{
-		if (x < 0 || x >= array->line_len || y < 0 || y >= array->line_len)
-			return;
-		pxl = array->draw.addr + (y * array->line_len + x * (array->draw.bpp / 8));
-	}
-	*(unsigned int *)pxl = color;
+    if (!is_minimap && (x >= 0 && x < array->ray.width && y >= 0 && y < array->ray.height))
+    {
+        pxl = array->draw.addr + (y * array->line_len + x * (array->draw.bpp / 8));
+        *(unsigned int *)pxl = color;
+    }
+    if (is_minimap)
+    {
+        map_x = x / 2;
+        map_y = y / 2;
+        if (map_x >= 0 && map_x < array->ray.width / 2 && map_y >= 0 && map_y < array->ray.height / 2)
+        {
+            pxl = array->draw.addr_map + (map_y * array->line_len_map + map_x * (array->draw.bpp_map / 8));
+            *(unsigned int *)pxl = color;
+        }
+    }
 }
+
 
 void ft_draw_half_screen(struct s_array *array, int width, int height)
 {

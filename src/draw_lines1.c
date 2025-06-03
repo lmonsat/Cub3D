@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/14 16:57:51 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 17:13:01 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
         yi = (int)roundf(pos->y_start);
         if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
             break;
-        if (array->line[yi / 40][xi / 40] == '1')
+        if (array->map[yi / 40][xi / 40] == '1')
             break;
         ft_put_pixel(xi, yi, array, YELLOW, 1);
         pos->x_start += pos->dx;
