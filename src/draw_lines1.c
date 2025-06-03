@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/03 17:13:01 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 23:48:49 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ void print_perp_tab(struct s_trace_line *pos)
 
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-
     int i; 
     int j; 
     float x; 

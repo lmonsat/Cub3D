@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/03 16:58:21 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/03 23:48:46 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int		check_margin(float x, float y, char **map, int margin)
 	map_y = (int)y / 40;
 	if (map[map_y][map_x] == '1')
 		return (0);
+	//printf("test margin: %c, map_x: %d, map_y: %d\n", map[map_x][map_y], map_x, map_y);
 	return (1);
 }
 
