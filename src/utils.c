@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/05/29 14:02:06 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 01:34:19 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,4 +163,33 @@ int get_max_height(char **array)
 	while (array[i])
 		i++;
 	return (i);
+}
+
+char	**copy_array(char **source, int size)
+{
+	int		i;
+	char	**copy;
+
+	i = 0;
+	copy = ft_calloc(size + 1, sizeof(char *));
+	if (copy == NULL)
+	{
+		printf("Memory allocation failed");
+		exit(EXIT_FAILURE);
+	}
+	while (i < size)
+	{
+		copy[i] = ft_strdup(source[i]);
+		if (copy[i] == NULL)
+		{
+			while (i > 0)
+				free(copy[--i]);
+			free(copy);
+			printf("Memory allocation failed");
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
+	copy[size] = NULL;
+	return (copy);
 }

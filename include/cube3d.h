@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/03 23:57:37 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 01:35:23 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array, struct s_game_stats *
 int 	find_first_line(char **lines);
 
 /* --- Utils ---*/
-char	**copy_array(char **source, struct s_array *array);
+char	**copy_array(char **source, int size);
 void	handle_error_mem(struct s_array *array, char **copy);
 int		open_map_file(char *argv[]);
 int		ft_strchr_count(const char *s, int c);

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/04 00:34:09 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 01:23:27 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,37 @@
 
 int		check_margin(float x, float y, char **map, int margin)
 {
-	int map_x1;
-	int map_x2;
-	int map_y1;
-	int map_y2;
+	int map_x1 = (int)(x + margin);
+	int map_x2 = (int)(x - margin);
+	int map_y1 = (int)(y + margin);
+	int map_y2 = (int)(y - margin);
+
+	printf("mapx1: %d\n", map_x1);
+	printf("mapx2: %d\n", map_x2);
+	printf("mapy1: %d\n", map_y1);
+	printf("mapy2: %d\n", map_y2);
 
 	if (!map || !map[0]) 
 	{
 		printf("Erreur : map ou map[0] non initialisé\n");
 		exit(1);
 	}
-	printf("map[0]: %c", map[0][0]);
-	map_x1 = (int)((x + margin) / 40);
-	map_x2 = (int)((x - margin) / 40);
-	map_y1 = (int)((y + margin) / 40);
-	map_y2 = (int)((y - margin) / 40);
-	printf("mapx1: %d\n", map_x1);
-	printf("mapx1: %d\n", map_x2);
-	printf("mapx1: %d\n", map_y1);
-	printf("mapx1: %d\n", map_y2);
-	exit(1);
+	//printf("map[0]: %c", map[0][0]);
+	/*map_x1 /= 40;
+	map_x2 /= 40;
+	map_y1 /= 40;
+	map_y2 /= 40;*/
+
+	printf("mapx1__2: %d\n", map_x1);
+	printf("mapx2__2: %d\n", map_x2);
+	printf("mapy1__2: %d\n", map_y1);
+	printf("mapy2__2: %d\n", map_y2);
+	
+	printf("map[map_y1][map_x1]: %c\n", map[map_y1][map_x1]);
+	printf("map[map_y1][map_x2]: %c\n", map[map_y1][map_x2]);
+	printf("map[map_y2][map_x1]: %c\n", map[map_y2][map_x1]);
+	printf("map[map_y2][map_x2]: %c\n", map[map_y2][map_x2]);
+	
 	if (map[map_y1][map_x1] == '1' || map[map_y1][map_x2] == '1' ||
 		map[map_y2][map_x1] == '1' || map[map_y2][map_x2] == '1')
 		return(0);
@@ -47,6 +58,8 @@ void	move_up(struct s_vars *vars)
 
 	next_x = vars->player.pos.x + vars->array->ray.dx * mouv_step;
 	next_y = vars->player.pos.y + vars->array->ray.dy * mouv_step;
+	printf("next_x: %f\n", vars->player.pos.x);
+	printf("next_y: %f\n", vars->player.pos.x);
 	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
 		vars->player.pos.x = next_x;
