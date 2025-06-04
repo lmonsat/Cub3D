@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/04 01:23:27 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 03:09:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int		check_margin(float x, float y, char **map, int margin)
 {
-	int map_x1 = (int)(x + margin);
-	int map_x2 = (int)(x - margin);
-	int map_y1 = (int)(y + margin);
-	int map_y2 = (int)(y - margin);
+	int map_x1 = (int)(x + margin) / 40;
+	int map_x2 = (int)(x - margin) / 40;
+	int map_y1 = (int)(y + margin) / 40;
+	int map_y2 = (int)(y - margin) / 40;
 
-	printf("mapx1: %d\n", map_x1);
+	/*printf("mapx1: %d\n", map_x1);
 	printf("mapx2: %d\n", map_x2);
 	printf("mapy1: %d\n", map_y1);
-	printf("mapy2: %d\n", map_y2);
+	printf("mapy2: %d\n", map_y2);*/
 
 	if (!map || !map[0]) 
 	{
@@ -44,7 +44,17 @@ int		check_margin(float x, float y, char **map, int margin)
 	printf("map[map_y1][map_x2]: %c\n", map[map_y1][map_x2]);
 	printf("map[map_y2][map_x1]: %c\n", map[map_y2][map_x1]);
 	printf("map[map_y2][map_x2]: %c\n", map[map_y2][map_x2]);
-	
+		int max_y = 0;
+	while (map[max_y])
+		max_y++;
+	int max_x = 0;
+	while (map[0][max_x])
+		max_x++;
+
+	// Vérification que les indices sont dans les limites
+	if (map_x1 < 0 || map_x1 >= max_x || map_x2 < 0 || map_x2 >= max_x ||
+		map_y1 < 0 || map_y1 >= max_y || map_y2 < 0 || map_y2 >= max_y)
+		return (0);
 	if (map[map_y1][map_x1] == '1' || map[map_y1][map_x2] == '1' ||
 		map[map_y2][map_x1] == '1' || map[map_y2][map_x2] == '1')
 		return(0);
@@ -56,14 +66,19 @@ void	move_up(struct s_vars *vars)
 	float	next_x;
 	float	next_y;
 
-	next_x = vars->player.pos.x + vars->array->ray.dx * mouv_step;
-	next_y = vars->player.pos.y + vars->array->ray.dy * mouv_step;
-	printf("next_x: %f\n", vars->player.pos.x);
-	printf("next_y: %f\n", vars->player.pos.x);
+	next_x = vars->player.pos.x_pixel + vars->array->ray.dx * mouv_step;
+	next_y = vars->player.pos.y_pixel + vars->array->ray.dy * mouv_step;
+
+	//printf("vars->player.pos.x_pixel: %f\n", vars->player.pos.x_pixel);
+	//printf("vars->player.pos.y_pixel: %f\n", vars->player.pos.y_pixel);
+
+	//printf("vars->array->ray.dx: %f\n", vars->array->ray.dx);
+	//printf("vars->array->ray.dy: %f\n", vars->array->ray.dy);
+
 	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x = next_x;
-		vars->player.pos.y = next_y;
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
@@ -74,12 +89,12 @@ void	move_down(struct s_vars *vars)
 	float	next_x;
 	float	next_y;
 
-	next_x = vars->player.pos.x - vars->array->ray.dx * mouv_step;
-	next_y = vars->player.pos.y - vars->array->ray.dy * mouv_step;
+	next_x = vars->player.pos.x_pixel - vars->array->ray.dx * mouv_step;
+	next_y = vars->player.pos.y_pixel - vars->array->ray.dy * mouv_step;
 	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x = next_x;
-		vars->player.pos.y = next_y;
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
@@ -90,12 +105,12 @@ void	move_right(struct s_vars *vars)
 	float	next_x;
 	float	next_y;
 
-	next_x = vars->player.pos.x + vars->array->ray.dx_side * mouv_step;
-	next_y = vars->player.pos.y + vars->array->ray.dy_side * mouv_step;
+	next_x = vars->player.pos.x_pixel + vars->array->ray.dx_side * mouv_step;
+	next_y = vars->player.pos.y_pixel + vars->array->ray.dy_side * mouv_step;
 	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x = next_x;
-		vars->player.pos.y = next_y;
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
@@ -106,12 +121,12 @@ void	move_left(struct s_vars *vars)
 	float	next_x;
 	float	next_y;
 
-	next_x = vars->player.pos.x - vars->array->ray.dx_side * mouv_step;
-	next_y = vars->player.pos.y - vars->array->ray.dy_side * mouv_step;
+	next_x = vars->player.pos.x_pixel - vars->array->ray.dx_side * mouv_step;
+	next_y = vars->player.pos.y_pixel - vars->array->ray.dy_side * mouv_step;
 	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
-		vars->player.pos.x = next_x;
-		vars->player.pos.y = next_y;
+		vars->player.pos.x_pixel = next_x;
+		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);

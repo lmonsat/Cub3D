@@ -22,10 +22,14 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     //permet des mouvements avant arriere sur l' axe du joueur
     pos->dx = cosf(array->ray.rotation * PI / 180.0f);
     pos->dy = sinf(array->ray.rotation * PI / 180.0f);
+    array->ray.dx = pos->dx;  // Copie dans la structure ray
+    array->ray.dy = pos->dy;  // Copie dans la structure ray
 
     //permet des mouvement gauche droite sur l' axe du joueur
     pos->dx_side = cosf((array->ray.rotation + 90.0f) * PI / 180.0f);
     pos->dy_side = sinf((array->ray.rotation + 90.0f) * PI / 180.0f);
+    array->ray.dx_side = pos->dx_side;  // Copie dans la structure ray
+    array->ray.dy_side = pos->dy_side;  // Copie dans la structure ray
 
     //defini la distance entre le joueur et le plan caméra
     pos->x_pass = player->x_pixel + cam_dist * pos->dx;

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:52:46 by drenquin          #+#    #+#             */
-/*   Updated: 2025/05/29 14:08:46 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/04 02:08:37 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
 		vars->player.pos.x = (int)j;
         vars->player.pos.y = (int)i;
         //loading_player(vars);
-		printf("test player pos_x: %d\n", (int)vars->player.pos.x);
+		//printf("test player pos_x: %d\n", (int)vars->player.pos.x);
     }
 }
 
