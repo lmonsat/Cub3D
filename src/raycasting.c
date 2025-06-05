@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/03 23:56:04 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/05 17:32:25 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->height = get_max_height(array->map) * 40;
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
+
+    // Vérification que rotation est initialisée
+    if (array->ray.rotation == 0)
+    {
+        // Initialisation par défaut si non initialisée
+        array->ray.rotation = 0.0f;
+    }
 
     //permet des mouvements avant arriere sur l' axe du joueur
     pos->dx = cosf(array->ray.rotation * PI / 180.0f);
@@ -92,7 +99,7 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
                 break;
         if (array->map[yi / 40][xi / 40] == '1')
                 break;
-        ft_put_pixel(xi, yi, array, RED, 0);
+        //ft_put_pixel(xi, yi, array, RED, 0);
         rx += pos->ldx;
         ry += pos->ldy;
     }

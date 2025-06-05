@@ -79,6 +79,15 @@ void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
         vars->player.pos.y = (int)i;
         //loading_player(vars);
 		//printf("test player pos_x: %d\n", (int)vars->player.pos.x);
+		// Initialisation de la rotation en fonction de la direction
+        if (array->map[i][j] == 'N')
+            array->ray.rotation = 270.0f;  // Regarde vers le haut
+        else if (array->map[i][j] == 'S')
+            array->ray.rotation = 90.0f;   // Regarde vers le bas
+        else if (array->map[i][j] == 'E')
+            array->ray.rotation = 0.0f;    // Regarde vers la droite
+        else if (array->map[i][j] == 'W')
+            array->ray.rotation = 180.0f;  // Regarde vers la gauche
     }
 }
 
