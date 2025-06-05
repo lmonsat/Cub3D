@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/03 23:59:25 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/05 20:04:04 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	esc_close(int keycode, struct s_vars *vars)
 		mlx_destroy_window(vars->mlx, vars->win_map);
 		mlx_destroy_display(vars->mlx);
 		free(vars->mlx);
+		ft_cleanup_trace_line(&vars->array->ray);
 		free_array(vars->array->map);
 		free_array(vars->array->ceiling);
 		free_array(vars->array->floor);
@@ -91,6 +92,7 @@ int	default_close(struct s_vars *vars)
 	mlx_destroy_window(vars->mlx, vars->win_map);
 	mlx_destroy_display(vars->mlx);
 	free(vars->mlx);
+	ft_cleanup_trace_line(&vars->array->ray);
 	free_array(vars->array->map);
 	free_array(vars->array->ceiling);
 	free_array(vars->array->floor);

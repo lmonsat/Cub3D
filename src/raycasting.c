@@ -6,11 +6,30 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/05 17:32:25 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/05 19:58:38 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
+
+void ft_cleanup_trace_line(struct s_trace_line *pos)
+{
+    if (pos->perp_tab)
+    {
+        free(pos->perp_tab);
+        pos->perp_tab = NULL;
+    }
+    if (pos->hit_orien)
+    {
+        free(pos->hit_orien);
+        pos->hit_orien = NULL;
+    }
+    if (pos->tex_x)
+    {
+        free(pos->tex_x);
+        pos->tex_x = NULL;
+    }
+}
 
 void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
@@ -45,18 +64,15 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
     pos->step = fmaxf(fabsf(pos->dx_side), fabsf(pos->dy_side));
     pos->dx_step = pos->dx_side / pos->step;
     pos->dy_step = pos->dy_side / pos->step;
-	if (pos->perp_tab)
-    	free(pos->perp_tab);	// free pour chaque frame de généré l'ancien perp_tab
-	pos->perp_tab = ft_calloc(sizeof(float), NUM_RAYS);	// utilisation de calloc, pour l'initialisation a zéro
-	if (pos->perp_tab == NULL)
-		exit(1);
-    if (pos->hit_orien)
-        free(pos->hit_orien);
+
+    ft_cleanup_trace_line(pos);
+    // Allocation des nouveaux tableaux
+    pos->perp_tab = ft_calloc(sizeof(float), NUM_RAYS);
+    if (pos->perp_tab == NULL)
+        exit(1);
     pos->hit_orien = ft_calloc(sizeof(int), NUM_RAYS);
     if (pos->hit_orien == NULL)
         exit(1);
-    if (pos->tex_x)
-        free(pos->tex_x);
     pos->tex_x = ft_calloc(sizeof(int), NUM_RAYS);
     if (pos->tex_x == NULL)
         exit(1);
