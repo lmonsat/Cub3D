@@ -75,10 +75,8 @@ void    mapping_case(struct s_array *array, struct s_vars *vars, int i, int j)
     {
         vars->player.pos.x_pixel = j * 40;
         vars->player.pos.y_pixel = i * 40;
-		vars->player.pos.x = (int)j;
-        vars->player.pos.y = (int)i;
-        //loading_player(vars);
-		//printf("test player pos_x: %d\n", (int)vars->player.pos.x);
+		vars->player.pos.x = j;
+        vars->player.pos.y = i;
 		// Initialisation de la rotation en fonction de la direction
         if (array->map[i][j] == 'N')
             array->ray.rotation = 270.0f;  // Regarde vers le haut

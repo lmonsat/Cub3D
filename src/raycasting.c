@@ -130,7 +130,7 @@ void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius,
         for (x = -radius; x <= radius; x++)
         {
             if (x * x + y * y <= radius * radius) // Vérifie si le point est dans le cercle
-                ft_put_pixel(centerX + x, centerY + y, array, color, 1);
+                ft_put_pixel1(centerX + x, centerY + y, array, color);
         }
     }
 }
@@ -270,7 +270,7 @@ void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int 
 
             color = a | (r << 16) | (g << 8) | b;
 
-            ft_put_pixel(x, y, array, color, 0);
+            ft_put_pixel(x, y, array, color);
         }
     }
 }

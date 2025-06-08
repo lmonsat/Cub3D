@@ -53,7 +53,7 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
             break;
         if (array->map[yi / 40][xi / 40] == '1')
             break;
-        ft_put_pixel(xi, yi, array, YELLOW, 1);
+        ft_put_pixel1(xi, yi, array, YELLOW);
         pos->x_start += pos->dx;
         pos->y_start += pos->dy;
         i++;
@@ -133,48 +133,24 @@ void distance1(struct s_array *array, struct s_position *player, int i)
 
     array->ray.perpdist = array->ray.brutdist * cos(player_angle - ray_angle);
 }
-void print_perp_tab(struct s_trace_line *pos)
-{
-    printf("Contenu de pos->perp_tab (160 rayons de gauche à droite) :\n");
-    for (int i = 0; i < NUM_RAYS; i++)
-    {
-        printf("Rayon %3d : %d\n", i, pos->tex_x[i]);
-    }
-}
-void afficher_orientations(int *hit_orien, int nb_rays)
-{
-    for (int i = 0; i < nb_rays; i++)
-    {
-        switch (hit_orien[i])
-        {
-            case 0: printf("Rayon %d: NORD\n", i); break;
-            case 1: printf("Rayon %d: SUD\n", i); break;
-            case 2: printf("Rayon %d: EST\n", i); break;
-            case 3: printf("Rayon %d: OUEST\n", i); break;
-            default: printf("Rayon %d: orientation inconnue (%d)\n", i, hit_orien[i]); break;
-        }
-    }
-}
 
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-    int i; 
-    int j; 
+    int i;  
     float x; 
     float y;
 
     ft_init_line(pos, array, player);
     x = pos->x_pass;
     y = pos->y_pass;
-    i = 0;
-    while (i < NUM_RAYS / 2)
+    i = -1;
+    while (++i < NUM_RAYS / 2)
     {
         x -= pos->dx_step;
         y -= pos->dy_step;
-        i++;
     }
-    i = 0;
-    while (i < NUM_RAYS)
+    i = -1;
+    while (++i < NUM_RAYS)
     {
         x += pos->dx_step;
         y += pos->dy_step;
@@ -183,7 +159,5 @@ void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *pla
         distance(array, player, i);
         pos->perp_tab[(NUM_RAYS - 1) - i] = pos->perpdist;
         pos->hit_orien[(NUM_RAYS - 1) - i] = pos->orientation;
-        i++;
     }
-    //print_perp_tab(pos);
 }

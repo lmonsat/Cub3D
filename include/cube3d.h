@@ -170,6 +170,8 @@ struct					s_array
 	int					line_len_map;
 	int					is_exitable;
 	int					is_newline;
+	int					floor_color;
+	int					ceiling_color;
 };
 
 struct					s_vars
@@ -254,7 +256,9 @@ void	requested_player_position_right(struct s_vars *vars);
 void	requested_player_position_left(struct s_vars *vars);
 
 /* --- draw_lines --- */
-void ft_put_pixel(int x, int y, struct s_array *array, int color, int is_minimap);
+//void ft_put_pixel(int x, int y, struct s_array *array, int color, int is_minimap);
+void ft_put_pixel(int x, int y, struct s_array *array, int color);
+void ft_put_pixel1(int x, int y, struct s_array *array, int color);
 void ft_draw_grid(struct s_array *array);
 void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
 void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s_position *player);

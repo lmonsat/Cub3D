@@ -48,9 +48,20 @@ int     load_textures(void *mlx, struct s_texture *textures)
     }
     return(0);
 }
+void	init_array_colors(struct s_array *array)
+{
+	array->ceiling_color = (ft_atoi(array->ceiling[0]) << 16) |
+	                       (ft_atoi(array->ceiling[1]) << 8) |
+	                       (ft_atoi(array->ceiling[2]));
+
+	array->floor_color = (ft_atoi(array->floor[0]) << 16) |
+	                     (ft_atoi(array->floor[1]) << 8) |
+	                     (ft_atoi(array->floor[2]));
+}
 
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
+    init_array_colors(array);
     array->ray.width = get_max_width(array->map) * 40;
     array->ray.height = get_max_height(array->map) * 40;
     vars->mlx = mlx_init();
