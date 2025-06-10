@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/04 01:42:26 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 00:46:02 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void clear_line_gnl(int fd)
 	}
 }
 
+/* Permet de vérifier qu'il n'y a pas de caractère incohérent dans la map */
 void	check_characters_in_map(struct s_array *array)
 {
 	int	i;
@@ -53,7 +54,7 @@ void	check_characters_in_map(struct s_array *array)
 		i++;
 	}
 }
-
+/* Check si la position du joueur est marqué sur la map et si elle est unique */
 void	check_player_start_pos(struct s_array *array, struct s_game_stats *value)
 {
 	int	i;
@@ -114,38 +115,45 @@ int find_first_line(char **lines)
     return (map_index);
 }
 
+/* Vérifie si l'on a bien la bonne ligne, step ici permet de s'assurer du bon ordre */
+static int is_line_valid_for_step(char *line, int step)
+{
+    if (line[0] == '\n' || line[0] == '\0')
+        return (0);
+    if (step == 0 && line[0] == 'N' && line[1] == 'O')
+        return (1);
+    if (step == 1 && line[0] == 'S' && line[1] == 'O')
+        return (1);
+    if (step == 2 && line[0] == 'W' && line[1] == 'E')
+        return (1);
+    if (step == 3 && line[0] == 'E' && line[1] == 'A')
+        return (1);
+    if (step == 4 && line[0] == 'F')
+        return (1);
+    if (step == 5 && line[0] == 'C')
+        return (1);
+    return (0);
+}
 
+/* Permet d'aller chercher le bon index dans array->line afin de suivre,
+	l'ordre logique de la map */
 static int index_data_array(struct s_array *array)
 {
     int i;
     static int step = 0;
 
-	i = 0;
+    i = 0;
     while (array->line[i] != NULL)
     {
-        if (array->line[i][0] == '\n' || array->line[i][0] == '\0')
-        {
-            i++;
-            continue ;
-        }
-        if (step == 0 && array->line[i][0] == 'N' && array->line[i][1] == 'O')
-            return (step++, i++);
-        if (step == 1 && array->line[i][0] == 'S' && array->line[i][1] == 'O')
-            return (step++, i++);
-        if (step == 2 && array->line[i][0] == 'W' && array->line[i][1] == 'E')
-            return (step++, i++);
-        if (step == 3 && array->line[i][0] == 'E' && array->line[i][1] == 'A')
-            return (step++, i++);
-        if (step == 4 && array->line[i][0] == 'F')
-            return (step++, i++);
-        if (step == 5 && array->line[i][0] == 'C')
+        if (is_line_valid_for_step(array->line[i], step))
             return (step++, i++);
         i++;
     }
     return (-1);
 }
 
-
+/* Permet de trier de manière logique le fichier de la map
+	en suivant cette ordre : NO, WE, SO, EA, F, C */
 static int sort_data_array(struct s_array *array, unsigned int len)
 {
 	int i;
@@ -172,11 +180,6 @@ static int sort_data_array(struct s_array *array, unsigned int len)
 	}
 	array->sorted[i] = NULL;
 	i = 0;
-	/*while (i < 6)
-	{
-		printf("sorted: %s", array->sorted[i]);
-		i++;
-	}*/
 	return (map_index);
 }
 
@@ -309,6 +312,7 @@ void check_position(struct s_array *array, char pos_1, char pos_2)
 	copy_path(array, line, pos, i);
 }
 
+/* Permet de rechercher une ligne spécifique dans array->sorted */
 static char *fc_get_line(struct s_array *array, char type)
 {
 	int i;
@@ -341,6 +345,7 @@ int array_len(char **array)
 	return (i);
 }
 
+/* Mesure la valeur max d'un element d'un char ** */
 int array_max_value(char **array)
 {
 	int i;
@@ -357,6 +362,8 @@ int array_max_value(char **array)
 	return (0);
 }
 
+/* Découpe les différentes valeurs rgb de F et C et les attribut a des variables, 
+	dans la structure */
 static void fc_split_rgb(struct s_array *array, char *new_line, char *line, char type)
 {
 	int i;
@@ -400,7 +407,6 @@ void check_floor_and_ceilling(struct s_array *array, char type)
 	{
 		if (line[i] == ',')
 			i++;
-
 		if (!ft_isdigit(line[i]))
 		{
 			printf("%c: format incorrect: %s\n", type, strerror(errno));
@@ -435,6 +441,15 @@ int fill(char **tab, t_point size, char target, int row, int col)
     return (0);
 }
 
+static void free_flood_fill(struct s_array *array)
+{
+	free_array(array->map);
+	free_array(array->ceiling);
+	free_array(array->floor);
+	free_path(array);
+	exit(1);
+}
+
 void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 {
     char target;
@@ -446,11 +461,7 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
         !tab[begin.y] || !tab[begin.y][begin.x])
     {
         printf("Map building incorrect: Invalid starting position\n");
-        free_array(array->map);
-        free_array(array->ceiling);
-        free_array(array->floor);
-        free_path(array);
-        exit(1);
+		free_flood_fill(array);
     }
 
     tab[begin.y][begin.x] = '0';
@@ -459,11 +470,7 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
     if (fill(tab, size, target, begin.y, begin.x))
     {
         printf("Map building incorrect: Map is not closed\n");
-        free_array(array->map);
-        free_array(array->ceiling);
-        free_array(array->floor);
-        free_path(array);
-        exit(1);
+        free_flood_fill(array);
     }
 
     // Affichage de la carte pour debug
@@ -473,6 +480,8 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
     }
 }
 
+/* Permet d'extraire et de copier le map jouable depuis le char** stockant toutes
+	les informations du fichier (allocation dynamique) */
 void realloc_data_array(struct s_array *array)
 {
     int start;
@@ -500,6 +509,7 @@ void realloc_data_array(struct s_array *array)
     array->map[new_len] = NULL;
 }
 
+/* Si la map du joueur se retoruve en premier dans le fichier exit & free */
 int is_map_first_in_file(int fd, struct s_array *array, char *argv[])
 {
 	char *line;
@@ -526,7 +536,30 @@ int is_map_first_in_file(int fd, struct s_array *array, char *argv[])
 	return (fd);
 }
 
+void parse_textures(struct s_array *array)
+{
+	check_position(array, 'N', 'O');
+	check_position(array, 'S', 'O');
+	check_position(array, 'W', 'E');
+	check_position(array, 'E', 'A');
+	check_floor_and_ceilling(array, 'F');
+	check_floor_and_ceilling(array, 'C');
+}
 
+/* Initialisation des variables utilisé par le flood fill */
+char **init_flood_fill(struct s_array *array, struct s_vars *vars, t_point *begin, t_point *size)
+{
+	char **flooded_map;
+
+	begin->x = (int)vars->player.pos.x;
+	begin->y = (int)vars->player.pos.y;
+	size->x = get_max_width(array->map);
+	size->y = get_max_height(array->map);
+	flooded_map = copy_array(array->map, array_len(array->map));
+	return (flooded_map);
+}
+
+/* Parsing du fichier entier MAP */
 void	parse_map(struct s_vars *vars, struct s_array *array,
     struct s_game_stats *value, char *argv[])
 {
@@ -535,26 +568,18 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	t_point size;
 	int map_index;
 	char **flooded_map;
-
+	
 	fd = is_map_first_in_file(fd, array, argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);
 	close(fd);
 	realloc_data_array(array);
-	check_position(array, 'N', 'O');
-	check_position(array, 'S', 'O');
-	check_position(array, 'W', 'E');
-	check_position(array, 'E', 'A');
-	check_floor_and_ceilling(array, 'F');
-	check_floor_and_ceilling(array, 'C');
+	parse_textures(array);
     check_characters_in_map(array);
 	check_player_start_pos(array, value);
 	mapping(array, vars); // la fonction mapping definie la position initial du joueur
-	begin.x = (int)vars->player.pos.x;
-	begin.y = (int)vars->player.pos.y;
-	size.x = get_max_width(array->map);
-	size.y = get_max_height(array->map);
-	flooded_map = copy_array(array->map, 14);
+	flooded_map = init_flood_fill(array, vars, &begin, &size);
+	printf("test begin.x %d\n", begin.x);
 	flood_fill(array, flooded_map, size, begin);
     free_array(array->sorted);
 	free_array(array->line);
