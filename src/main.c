@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 20:06:37 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:14:46 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,53 @@ void display_textures_grid(void *mlx, void *win, struct s_texture *textures)
     }
     return(0);
 }*/
-//gerer les free en cas d erreur de chargement de textures
-int     load_textures(void *mlx, struct s_texture *textures, struct s_array *array)
+
+void free_close(struct s_vars *vars, struct s_array *array)
 {
+    if (vars->mlx && vars->array->draw.img_game)
+    {
+        mlx_destroy_image(vars->mlx, vars->array->draw.img_game);
+        vars->array->draw.img_game = NULL;
+    }
+    if (vars->mlx && vars->array->draw.img_map)
+    {
+        mlx_destroy_image(vars->mlx, vars->array->draw.img_map);
+        vars->array->draw.img_map = NULL;
+    }
+    mlx_destroy_window(vars->mlx, vars->win);
+    mlx_destroy_window(vars->mlx, vars->win_map);
+    mlx_destroy_display(vars->mlx);
+    free(vars->mlx);
+    ft_cleanup_trace_line(&vars->array->ray);
+    free_array(vars->array->map);
+    free_array(vars->array->ceiling);
+    free_array(vars->array->floor);
+    free_path(vars->array);
+}
+//gerer les free en cas d erreur de chargement de textures
+int     load_textures(struct s_vars *vars, struct s_texture *textures, struct s_array *array)
+{
+    char *paths[4];
+    int i;
+
     printf("le path est %s", array->NO_path);
     printf("le path est %s", array->EA_path);
     printf("le path est %s", array->WE_path);
     printf("le path est %s", array->SO_path);
 
-    char *paths[4] = {array->NO_path, array->EA_path, array->WE_path, array->SO_path};
-    int i;
-
     i = 0;
+    paths[0] = array->NO_path;
+    paths[1] = array->EA_path;
+    paths[2] = array->WE_path;
+    paths[3] = array->SO_path;
     while (i < 4)
     {
-        textures[i].img = mlx_xpm_file_to_image(mlx, paths[i], &textures[i].width, &textures[i].height);
+        textures[i].img = mlx_xpm_file_to_image(vars->mlx, paths[i], &textures[i].width, &textures[i].height);
         if(!textures[i].img)
         {
-            printf("erreur de chargement de texture\n");
-            return(1);
+            printf("Error while loading textures\n");
+            free_close(vars, array);
+            exit(1);
         }
         textures[i].addr = mlx_get_data_addr(textures[i].img, &textures[i].bpp, &textures[i].line_len, &textures[i].endian);
         i++;
@@ -99,7 +127,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     array->draw.img_map = mlx_new_image(vars->mlx, array->ray.width / 2, array->ray.height / 2);
     array->draw.addr = mlx_get_data_addr(array->draw.img_game, &array->draw.bpp, &array->line_len, &array->draw.endian);
     array->draw.addr_map = mlx_get_data_addr(array->draw.img_map, &array->draw.bpp_map, &array->line_len_map, &array->draw.endian_map);
-    if(load_textures(vars->mlx, array->textures, array))
+    if(load_textures(vars, array->textures, array))
         return ;
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;
@@ -155,6 +183,7 @@ int	main(int argc, char *argv[])
     parse_map(&vars, &array, &value, argv);
     vars.stats = value;
     vars.array = &array;
+    ft_memset(array.textures, 0, sizeof(array.textures));
     ft_game_loop(&vars, &array);
     free_1_array(&array);
 	free_array(array.ceiling);

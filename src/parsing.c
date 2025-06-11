@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 16:37:19 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:35:09 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ void	check_characters_in_map(struct s_array *array)
 			{
 				perror("Error\n Map contains unneeded characters");
 				free_1_array(array);
+				free_array(array->sorted);
+				free_array(array->ceiling);
+				free_array(array->floor);
+				free_path(array);
 				exit(EXIT_FAILURE);
 			}
 			j++;
@@ -75,6 +79,10 @@ void	check_player_start_pos(struct s_array *array, struct s_game_stats *value)
 	{
 		free_1_array(array);
 		perror("Error\n More or less than 1 player start position");
+		free_array(array->sorted);
+		free_array(array->ceiling);
+		free_array(array->floor);
+		free_path(array);
 		exit(EXIT_FAILURE);
 	}
 }

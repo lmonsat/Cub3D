@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 16:02:24 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:12:04 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,10 @@ struct					s_array
 	//struct s_first		elmt;
 	struct s_move		move;
 	struct s_texture    textures[NB_TEXTURES];
-	const char				*NO_path;
-	const char				*SO_path;
-	const char				*EA_path;
-	const char				*WE_path;
+	char				*NO_path;
+	char				*SO_path;
+	char				*EA_path;
+	char				*WE_path;
 	char				**floor;
 	char				**ceiling;
 	struct s_position   position;
