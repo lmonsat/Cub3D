@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_lines.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/05 17:07:45 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 13:56:12 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void ft_put_pixel1(int x, int y, struct s_array *array, int color)
     }
 }
 
-//fonctionelle mais un peut lent
+//dessine le floor et le ceiling en fonction de ce qui est demander
+//dans map.cub
 void ft_draw_half_screen(struct s_array *array, int width, int height)
 {
 	int		x;
@@ -55,7 +56,7 @@ void ft_draw_half_screen(struct s_array *array, int width, int height)
 		}
 		y++;
 	}
-	while (y < array->ray.height) // Dessin sol
+	while (y < array->ray.height)
 	{
 		x = 0;
 		while (x < array->ray.width)
@@ -104,4 +105,3 @@ void ft_draw_grid(struct s_array *array)
         y += 40;
     }
 }
-

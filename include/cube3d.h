@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/05 20:06:54 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 16:02:24 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,14 @@ struct	s_trace_line
 	float ldy;
 	float *wall_hit_x;
 	float *wall_hit_y;
+	float fov_angle;
+	float player_angle;
 };
 
-struct					s_first
+/*struct					s_first
 {
 
-};
+};*/
 
 struct					s_move
 {
@@ -152,13 +154,13 @@ struct					s_array
 {
 	struct s_draw		draw;
 	struct s_game_stats	stats;
-	struct s_first		elmt;
+	//struct s_first		elmt;
 	struct s_move		move;
 	struct s_texture    textures[NB_TEXTURES];
-	char				*NO_path;
-	char				*SO_path;
-	char				*EA_path;
-	char				*WE_path;
+	const char				*NO_path;
+	const char				*SO_path;
+	const char				*EA_path;
+	const char				*WE_path;
 	char				**floor;
 	char				**ceiling;
 	struct s_position   position;

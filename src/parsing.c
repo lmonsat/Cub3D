@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 00:46:02 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 16:37:19 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_valid_char(char c)
 void clear_line_gnl(int fd)
 {
 	char *line;
-	
+
 	line = "value";
 	while (line)
 	{
@@ -79,7 +79,7 @@ void	check_player_start_pos(struct s_array *array, struct s_game_stats *value)
 	}
 }
 
-/* Définis la taille max pour array->line 
+/* Définis la taille max pour array->line
 	(prend en compte les textures et F C dans sa taille)*/
 static unsigned int dynamic_map_lenght(int fd, char *line)
 {
@@ -222,7 +222,7 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	//clear_line_gnl(fd);
 	close(fd);
 }
-/* Extrait le chemin des textures en fonction de la position donnée, 
+/* Extrait le chemin des textures en fonction de la position donnée,
 	les assigne aux variables de la structure */
 void copy_path(struct s_array *array, char *line, char pos[2], int start)
 {
@@ -232,25 +232,25 @@ void copy_path(struct s_array *array, char *line, char pos[2], int start)
 	if (pos[0] == 'N' && pos[1] == 'O')
 	{
 		len = ft_strlen(line);
-		array->NO_path = ft_substr(line, start, len);
+		array->NO_path = ft_substr(line, start, len - 4);
 		//printf("path: %s\n", array->NO_path);
 	}
 	else if (pos[0] == 'S' && pos[1] == 'O')
 	{
 		len = ft_strlen(line);
-		array->SO_path = ft_substr(line, start, len);
+		array->SO_path = ft_substr(line, start, len - 4);
 		//printf("path: %s\n", array->SO_path);
 	}
 	else if (pos[0] == 'W' && pos[1] == 'E')
 	{
 		len = ft_strlen(line);
-		array->WE_path = ft_substr(line, start, len);
+		array->WE_path = ft_substr(line, start, len - 4);
 		//printf("path: %s\n", array->WE_path);
 	}
 	else if (pos[0] == 'E' && pos[1] == 'A')
 	{
 		len = ft_strlen(line);
-		array->EA_path = ft_substr(line, start, len);
+		array->EA_path = ft_substr(line, start, len - 4);
 		//printf("path: %s\n", array->EA_path);
 	}
 }
@@ -316,7 +316,7 @@ void check_position(struct s_array *array, char pos_1, char pos_2)
 static char *fc_get_line(struct s_array *array, char type)
 {
 	int i;
-	
+
 	i = 0;
 	while (array->sorted[i])
 	{
@@ -362,7 +362,7 @@ int array_max_value(char **array)
 	return (0);
 }
 
-/* Découpe les différentes valeurs rgb de F et C et les attribut a des variables, 
+/* Découpe les différentes valeurs rgb de F et C et les attribut a des variables,
 	dans la structure */
 static void fc_split_rgb(struct s_array *array, char *new_line, char *line, char type)
 {
@@ -421,7 +421,7 @@ int fill(char **tab, t_point size, char target, int row, int col)
 {
     // Vérification des limites de la carte
     if (row < 0 || col < 0 || row >= size.y || col >= size.x || !tab[row] || !tab[row][col])
-        return (1); 
+        return (1);
 
     if (tab[row][col] == ' ' || tab[row][col] == '\n' || tab[row][col] == '\0')
         return (1);
@@ -466,7 +466,7 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
 
     tab[begin.y][begin.x] = '0';
     target = tab[begin.y][begin.x];
-    
+
     if (fill(tab, size, target, begin.y, begin.x))
     {
         printf("Map building incorrect: Map is not closed\n");
@@ -488,12 +488,12 @@ void realloc_data_array(struct s_array *array)
     int total_len;
     int new_len;
     int i;
-    
+
     i = 0;
     start = find_first_line(array->line);
     total_len = array_len(array->line);
     new_len = total_len - start;
-    
+
     array->map = calloc(new_len + 1, sizeof(char *));
     if (!array->map)
     {
@@ -568,7 +568,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	t_point size;
 	int map_index;
 	char **flooded_map;
-	
+
 	fd = is_map_first_in_file(fd, array, argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/04 00:07:41 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 16:32:37 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void display_textures_grid(void *mlx, void *win, struct s_texture *textures)
     }
 }
 
-int     load_textures(void *mlx, struct s_texture *textures)
+/*int     load_textures(void *mlx, struct s_texture *textures)
 {
     char *paths[NB_TEXTURES] = {T1, T2, T3, T4, T5, T6};
     int i;
@@ -47,7 +47,33 @@ int     load_textures(void *mlx, struct s_texture *textures)
         i++;
     }
     return(0);
+}*/
+
+int     load_textures(void *mlx, struct s_texture *textures, struct s_array *array)
+{
+    printf("le path est %s", array->NO_path);
+    printf("le path est %s", array->EA_path);
+    printf("le path est %s", array->WE_path);
+    printf("le path est %s", array->SO_path);
+
+    char *paths[4] = {array->NO_path, array->EA_path, array->WE_path, array->SO_path};
+    int i;
+
+    i = 0;
+    while (i < 4)
+    {
+        textures[i].img = mlx_xpm_file_to_image(mlx, paths[i], &textures[i].width, &textures[i].height);
+        if(!textures[i].img)
+        {
+            printf("erreur de chargement de texture\n");
+            return(1);
+        }
+        textures[i].addr = mlx_get_data_addr(textures[i].img, &textures[i].bpp, &textures[i].line_len, &textures[i].endian);
+        i++;
+    }
+    return(0);
 }
+
 void	init_array_colors(struct s_array *array)
 {
 	array->ceiling_color = (ft_atoi(array->ceiling[0]) << 16) |
@@ -73,7 +99,7 @@ void	ft_game_loop(struct s_vars *vars, struct s_array *array)
     array->draw.img_map = mlx_new_image(vars->mlx, array->ray.width / 2, array->ray.height / 2);
     array->draw.addr = mlx_get_data_addr(array->draw.img_game, &array->draw.bpp, &array->line_len, &array->draw.endian);
     array->draw.addr_map = mlx_get_data_addr(array->draw.img_map, &array->draw.bpp_map, &array->line_len_map, &array->draw.endian_map);
-    if(load_textures(vars->mlx, array->textures))
+    if(load_textures(vars->mlx, array->textures, array))
         return ;
     vars->stats.mov_count = 0;
     array->ray.rotation = 0;

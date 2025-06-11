@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/05 19:58:38 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 14:32:32 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
         // Initialisation par défaut si non initialisée
         array->ray.rotation = 0.0f;
     }
+
+    array->ray.fov_angle = 2.0f * atanf((float)NUM_RAYS / cam_dist);
+    array->ray.player_angle = array->ray.rotation * PI / 180.0f;
 
     //permet des mouvements avant arriere sur l' axe du joueur
     pos->dx = cosf(array->ray.rotation * PI / 180.0f);

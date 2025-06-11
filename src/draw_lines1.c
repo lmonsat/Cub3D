@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_lines1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/04 00:02:17 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/11 14:37:07 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
    distance_central(array, player);
 }
 
-void distance(struct s_array *array, struct s_position *player, int i)
+/*void distance(struct s_array *array, struct s_position *player, int i)
 {
     float fov_angle;
     float ray_angle;
@@ -103,10 +103,8 @@ void distance(struct s_array *array, struct s_position *player, int i)
         (array->ray.orientation == NORTH && raydiry > 0))
         tex_x = tex_width - tex_x - 1;
     array->ray.tex_x[(NUM_RAYS - 1) - i] = tex_x;
-}
-
-
-void distance1(struct s_array *array, struct s_position *player, int i)
+}*/
+/*void distance1(struct s_array *array, struct s_position *player, int i)
 {
     float fov_angle;
     float ray_angle;
@@ -132,12 +130,12 @@ void distance1(struct s_array *array, struct s_position *player, int i)
     ft_dda_draw_ray(player, raydirx, raydiry, array);
 
     array->ray.perpdist = array->ray.brutdist * cos(player_angle - ray_angle);
-}
+}*/
 
 void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
 {
-    int i;  
-    float x; 
+    int i;
+    float x;
     float y;
 
     ft_init_line(pos, array, player);
