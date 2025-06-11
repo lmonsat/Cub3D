@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 16:32:37 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:06:37 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void display_textures_grid(void *mlx, void *win, struct s_texture *textures)
     }
     return(0);
 }*/
-
+//gerer les free en cas d erreur de chargement de textures
 int     load_textures(void *mlx, struct s_texture *textures, struct s_array *array)
 {
     printf("le path est %s", array->NO_path);
