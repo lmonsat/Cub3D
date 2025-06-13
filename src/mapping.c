@@ -12,7 +12,7 @@
 
 #include "../include/cube3d.h"
 
-void	rock(struct s_vars *vars, int x, int y)
+/*void	rock(struct s_vars *vars, int x, int y)
 {
 	void	*img;
 	int		img_width;
@@ -47,7 +47,7 @@ void	loading_player(struct s_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, img, vars->player.pos.x_pixel,
 		vars->player.pos.y_pixel);
 	mlx_destroy_image(vars->mlx, img);
-}
+}*/
 
 void	ground(struct s_vars *vars, int x, int y)
 {

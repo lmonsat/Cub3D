@@ -35,6 +35,8 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
 {
     pos->width = get_max_width(array->map) * 40;
     pos->height = get_max_height(array->map) * 40;
+    printf("width: %d\n",pos->width);
+    printf("height: %d\n", pos->height);
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
 
@@ -118,7 +120,7 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
                 break;
         if (array->map[yi / 40][xi / 40] == '1')
                 break;
-        //ft_put_pixel(xi, yi, array, RED, 0);
+        //ft_put_pixel(xi, yi, array, RED);
         rx += pos->ldx;
         ry += pos->ldy;
     }

@@ -69,14 +69,34 @@ void ft_draw_half_screen(struct s_array *array, int width, int height)
 }
 
 
-static void print_grid(struct s_array *array, int x, int y)
+void print_map(struct s_array *array)
 {
+    int i = 0;
+
+    if (!array || !array->map)
+    {
+        printf("array or array->map is NULL\n");
+        return;
+    }
+
+    while (array->map[i])
+    {
+        printf("map[%d]: %s\n", i, array->map[i]);
+        i++;
+    }
+}
+
+/*static void print_grid(struct s_array *array, int x, int y)
+{
+
+    //printf("x vaut :%d et y vaut :%d\n", x/40, y/40);
 	if (array->map[(int)y / 40][(int)x / 40] == '1')
 		ft_put_pixel1(x, y, array, BLUE);
 	else
-		ft_put_pixel1(x, y, array, WHITE);
+		ft_put_pixel1(x, y, array, YELLOW);
 }
 
+//cree un invalide read via print_grid
 void ft_draw_grid(struct s_array *array)
 {
     int x;
@@ -104,4 +124,48 @@ void ft_draw_grid(struct s_array *array)
         }
         y += 40;
     }
+}*/
+
+static void print_grid(struct s_array *array, int x, int y)
+{
+	int map_y = y / 40;
+	int map_x = x / 40;
+
+	// Sécurité : éviter les invalid reads
+	if (!array->map || !array->map[map_y] || map_x >= (int)ft_strlen(array->map[map_y]))
+		return;
+
+	if (array->map[map_y][map_x] == '1')
+		ft_put_pixel1(x, y, array, BLUE);
+	if (array->map[map_y][map_x] == '0')
+		ft_put_pixel1(x, y, array, PINK);
 }
+void ft_draw_grid(struct s_array *array)
+{
+	int x, y;
+
+	x = 0;
+	while (x < array->ray.width)
+	{
+		y = 0;
+		while (y < array->ray.height)
+		{
+			print_grid(array, x, y);
+			y++;
+		}
+		x += 40;
+	}
+	y = 0;
+	while (y < array->ray.height)
+	{
+		x = 0;
+		while (x < array->ray.width)
+		{
+			print_grid(array, x, y);
+			x++;
+		}
+		y += 40;
+	}
+}
+
+

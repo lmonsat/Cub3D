@@ -158,12 +158,45 @@ void	clear_image(struct s_array *array, int width, int height)
 	}
 }
 
+/*void ft_draw_minimap(struct s_array *array)
+{
+	int row = 0;
+	int col;
+
+	while (array->map[row])
+	{
+		col = 0;
+		while (array->map[row][col])
+		{
+			int start_x = col * 40;
+			int start_y = row * 40;
+			int x, y;
+
+			int color = (array->map[row][col] == '1') ? BLUE : YELLOW;
+
+			y = 0;
+			while (y < 40)
+			{
+				x = 0;
+				while (x < 40)
+				{
+					ft_put_pixel1(start_x + x, start_y + y, array, color);
+					x++;
+				}
+				y++;
+			}
+			col++;
+		}
+		row++;
+	}
+}*/
 
 void	render_frame(struct s_vars *vars)
 {
 	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
+	//ft_draw_minimap(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
 	fov(&vars->array->ray, vars->array, &vars->player.pos); //fonction necessaire au rendu 3d car elle cree l 'array de float
 	ft_draw_half_screen(vars->array, vars->array->ray.width, vars->array->ray.height);

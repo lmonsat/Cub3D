@@ -77,11 +77,6 @@ int     load_textures(struct s_vars *vars, struct s_texture *textures, struct s_
     char *paths[4];
     int i;
 
-    printf("le path est %s", array->NO_path);
-    printf("le path est %s", array->EA_path);
-    printf("le path est %s", array->WE_path);
-    printf("le path est %s", array->SO_path);
-
     i = 0;
     paths[0] = array->NO_path;
     paths[1] = array->EA_path;
