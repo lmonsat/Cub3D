@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/11 13:56:12 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/13 13:38:07 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ static void print_grid(struct s_array *array, int x, int y)
 	if (array->map[map_y][map_x] == '1')
 		ft_put_pixel1(x, y, array, BLUE);
 	if (array->map[map_y][map_x] == '0')
-		ft_put_pixel1(x, y, array, PINK);
+		ft_put_pixel1(x, y, array, YELLOW);
 }
 void ft_draw_grid(struct s_array *array)
 {
@@ -167,5 +167,3 @@ void ft_draw_grid(struct s_array *array)
 		y += 40;
 	}
 }
-
-

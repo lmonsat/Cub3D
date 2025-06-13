@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 14:32:32 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/13 15:44:48 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
 {
     pos->width = get_max_width(array->map) * 40;
     pos->height = get_max_height(array->map) * 40;
-    printf("width: %d\n",pos->width);
-    printf("height: %d\n", pos->height);
     pos->x_start = player->x_pixel;
     pos->y_start = player->y_pixel;
 
@@ -108,6 +106,8 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
     int xi;
     int yi;
     int i;
+    int map_x;
+    int map_y;
 
     i = 0;
     rx = player->x_pixel;
@@ -116,8 +116,12 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
     {
         xi = (int)roundf(rx);
         yi = (int)roundf(ry);
+        map_x = xi / 40;
+        map_y = yi / 40;
         if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
                 break;
+        if (!array->map || !array->map[map_y] || map_x >= (int)ft_strlen(array->map[map_y]))
+		        break;
         if (array->map[yi / 40][xi / 40] == '1')
                 break;
         //ft_put_pixel(xi, yi, array, RED);

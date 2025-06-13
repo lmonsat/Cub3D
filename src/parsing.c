@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 21:35:09 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/13 18:23:03 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	//line = find_first_line(fd, &len);
 	line = get_next_line(fd);
 	//printf("len: %u\n", len);
-	array->line = calloc(len + 1, sizeof(char *));
+	array->line = ft_calloc(len + 1, sizeof(char *));
 	if (!array->line)
 	{
 		printf("Memory allocation failed\n");
@@ -566,6 +566,208 @@ char **init_flood_fill(struct s_array *array, struct s_vars *vars, t_point *begi
 	flooded_map = copy_array(array->map, array_len(array->map));
 	return (flooded_map);
 }
+/*void check_walls(struct s_array *array)
+{
+	int		i;
+	char	*line;
+	int		start;
+	int		end;
+
+	i = 0;
+	while (array->map[i])
+	{
+		line = array->map[i];
+		start = 0;
+		while (line[start] == ' ')
+			start++;
+		end = ft_strlen(line) - 1;
+		while (end > start && (line[end] == ' ' || line[end] == '\n' || line[end] == '\t'))
+			end--;
+
+		if (i == 0 || array->map[i + 1] == NULL)
+		{
+			// Première et dernière ligne : tout doit être des '1'
+			for (int j = start; j <= end; j++)
+			{
+				if (line[j] != '1')
+				{
+					printf("Error: map border not closed at line %d\n", i);
+					free_1_array(array);
+					free_array(array->sorted);
+					free_array(array->ceiling);
+					free_array(array->floor);
+					free_path(array);
+					exit(EXIT_FAILURE);
+				}
+			}
+		}
+		else
+		{
+			// Lignes du milieu : vérifier premier et dernier caractère significatif
+			if (line[start] != '1' || line[end] != '1')
+			{
+				printf("Error: map not closed on sides at line %d\n", i);
+				free_1_array(array);
+				free_array(array->sorted);
+				free_array(array->ceiling);
+				free_array(array->floor);
+				free_path(array);
+				exit(EXIT_FAILURE);
+			}
+		}
+		i++;
+	}
+}*/
+/*void check_walls(struct s_array *array)
+{
+	int i = 0;
+
+	while (array->map[i])
+	{
+		char *line = array->map[i];
+		int start = 0;
+		int end = ft_strlen(line) - 1;
+
+		// Skip leading spaces
+		while (line[start] == ' ')
+			start++;
+		// Skip trailing spaces/newlines
+		while (end > start && (line[end] == ' ' || line[end] == '\n' || line[end] == '\t'))
+			end--;
+
+		if (i == 0 || array->map[i + 1] == NULL)
+		{
+			// First or last line: all non-space characters must be '1'
+			for (int j = start; j <= end; j++)
+			{
+				if (line[j] != '1' && line[j] != ' ')
+				{
+					printf("Error: map border not closed at line %d\n", i);
+					free_1_array(array);
+					free_array(array->sorted);
+					free_array(array->ceiling);
+					free_array(array->floor);
+					free_path(array);
+					exit(EXIT_FAILURE);
+				}
+			}
+		}
+		else
+		{
+			// Middle lines: first and last non-space must be '1'
+			while (line[start] == ' ')
+				start++;
+			while (end > start && line[end] == ' ')
+				end--;
+
+			if (line[start] != '1' || line[end] != '1')
+			{
+				printf("Error: map not closed on sides at line %d\n", i);
+				free_1_array(array);
+				free_array(array->sorted);
+				free_array(array->ceiling);
+				free_array(array->floor);
+				free_path(array);
+				exit(EXIT_FAILURE);
+			}
+		}
+		i++;
+	}
+}*/
+
+int get_min_start(char **map)
+{
+	int min = -1;
+	for (int i = 0; map[i]; i++)
+	{
+		int j = 0;
+		while (map[i][j] && isspace((unsigned char)map[i][j]))
+			j++;
+		if (map[i][j] == '\0') continue;
+		if (min == -1 || j < min)
+			min = j;
+	}
+	return min;
+}
+
+int get_max_end(char **map)
+{
+	int max = -1;
+	for (int i = 0; map[i]; i++)
+	{
+		int len = strlen(map[i]);
+		while (len > 0 && isspace((unsigned char)map[i][len - 1]))
+			len--;
+		if (len == 0) continue;
+		if (len - 1 > max)
+			max = len - 1;
+	}
+	return max;
+}
+
+void check_walls(struct s_array *array)
+{
+	int i = 0;
+	int min_start = get_min_start(array->map);
+	int max_end = get_max_end(array->map);
+
+	while (array->map[i])
+	{
+		char *line = array->map[i];
+		int start = 0;
+		int end = strlen(line) - 1;
+
+		// Skip leading/trailing spaces
+		while (line[start] && isspace((unsigned char)line[start]))
+			start++;
+		while (end > start && isspace((unsigned char)line[end]))
+			end--;
+
+		if (i == 0 || array->map[i + 1] == NULL)
+		{
+			// Vérifie que la ligne couvre la zone utile
+			if (start > min_start || end < max_end)
+			{
+				printf("Error: map top/bottom border too short at line %d\n", i);
+				free_1_array(array);
+				free_array(array->sorted);
+				free_array(array->ceiling);
+				free_array(array->floor);
+				free_path(array);
+				exit(EXIT_FAILURE);
+			}
+			for (int j = min_start; j <= max_end; j++)
+			{
+				if (line[j] != '1')
+				{
+					printf("Error: map border not closed with '1' at line %d\n", i);
+					free_1_array(array);
+					free_array(array->sorted);
+					free_array(array->ceiling);
+					free_array(array->floor);
+					free_path(array);
+					exit(EXIT_FAILURE);
+				}
+			}
+		}
+		else
+		{
+			// Vérifie les côtés gauche et droit
+			if (line[min_start] != '1' || line[max_end] != '1')
+			{
+				printf("Error: map not closed on sides at line %d\n", i);
+				free_1_array(array);
+				free_array(array->sorted);
+				free_array(array->ceiling);
+				free_array(array->floor);
+				free_path(array);
+				exit(EXIT_FAILURE);
+			}
+		}
+		i++;
+	}
+}
+
 
 /* Parsing du fichier entier MAP */
 void	parse_map(struct s_vars *vars, struct s_array *array,
@@ -584,6 +786,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	realloc_data_array(array);
 	parse_textures(array);
     check_characters_in_map(array);
+	check_walls(array);
 	check_player_start_pos(array, value);
 	mapping(array, vars); // la fonction mapping definie la position initial du joueur
 	flooded_map = init_flood_fill(array, vars, &begin, &size);

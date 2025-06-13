@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/05 18:35:49 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/13 14:27:06 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		check_margin(float x, float y, char **map, int margin)
 {
-	if (!map || !map[0]) 
+	if (!map || !map[0])
 	{
 		printf("Erreur : map ou map[0] non initialisé\n");
 		exit(1);
@@ -158,7 +158,7 @@ void	clear_image(struct s_array *array, int width, int height)
 	}
 }
 
-/*void ft_draw_minimap(struct s_array *array)
+void ft_draw_minimap(struct s_array *array)
 {
 	int row = 0;
 	int col;
@@ -189,7 +189,7 @@ void	clear_image(struct s_array *array, int width, int height)
 		}
 		row++;
 	}
-}*/
+}
 
 void	render_frame(struct s_vars *vars)
 {
