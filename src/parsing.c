@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/13 18:23:03 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/15 00:01:33 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,11 +449,14 @@ int fill(char **tab, t_point size, char target, int row, int col)
     return (0);
 }
 
-static void free_flood_fill(struct s_array *array)
+static void free_flood_fill(struct s_array *array, char **tab)
 {
 	free_array(array->map);
 	free_array(array->ceiling);
 	free_array(array->floor);
+	free_array(array->sorted);
+	free_array(array->line);
+	free_array_bis(tab);
 	free_path(array);
 	exit(1);
 }
@@ -463,13 +466,13 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
     char target;
     int i;
 
-    i = 0;
+	i = 0;
     // Vérification des limites avant d'accéder à la carte
     if (begin.y < 0 || begin.y >= size.y || begin.x < 0 || begin.x >= size.x ||
         !tab[begin.y] || !tab[begin.y][begin.x])
     {
         printf("Map building incorrect: Invalid starting position\n");
-		free_flood_fill(array);
+		free_flood_fill(array, tab);
     }
 
     tab[begin.y][begin.x] = '0';
@@ -478,7 +481,7 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
     if (fill(tab, size, target, begin.y, begin.x))
     {
         printf("Map building incorrect: Map is not closed\n");
-        free_flood_fill(array);
+        free_flood_fill(array, tab);
     }
 
     // Affichage de la carte pour debug
@@ -566,208 +569,64 @@ char **init_flood_fill(struct s_array *array, struct s_vars *vars, t_point *begi
 	flooded_map = copy_array(array->map, array_len(array->map));
 	return (flooded_map);
 }
-/*void check_walls(struct s_array *array)
+
+void free_check_walls(struct s_array *array)
 {
-	int		i;
-	char	*line;
-	int		start;
-	int		end;
-
-	i = 0;
-	while (array->map[i])
-	{
-		line = array->map[i];
-		start = 0;
-		while (line[start] == ' ')
-			start++;
-		end = ft_strlen(line) - 1;
-		while (end > start && (line[end] == ' ' || line[end] == '\n' || line[end] == '\t'))
-			end--;
-
-		if (i == 0 || array->map[i + 1] == NULL)
-		{
-			// Première et dernière ligne : tout doit être des '1'
-			for (int j = start; j <= end; j++)
-			{
-				if (line[j] != '1')
-				{
-					printf("Error: map border not closed at line %d\n", i);
-					free_1_array(array);
-					free_array(array->sorted);
-					free_array(array->ceiling);
-					free_array(array->floor);
-					free_path(array);
-					exit(EXIT_FAILURE);
-				}
-			}
-		}
-		else
-		{
-			// Lignes du milieu : vérifier premier et dernier caractère significatif
-			if (line[start] != '1' || line[end] != '1')
-			{
-				printf("Error: map not closed on sides at line %d\n", i);
-				free_1_array(array);
-				free_array(array->sorted);
-				free_array(array->ceiling);
-				free_array(array->floor);
-				free_path(array);
-				exit(EXIT_FAILURE);
-			}
-		}
-		i++;
-	}
-}*/
-/*void check_walls(struct s_array *array)
-{
-	int i = 0;
-
-	while (array->map[i])
-	{
-		char *line = array->map[i];
-		int start = 0;
-		int end = ft_strlen(line) - 1;
-
-		// Skip leading spaces
-		while (line[start] == ' ')
-			start++;
-		// Skip trailing spaces/newlines
-		while (end > start && (line[end] == ' ' || line[end] == '\n' || line[end] == '\t'))
-			end--;
-
-		if (i == 0 || array->map[i + 1] == NULL)
-		{
-			// First or last line: all non-space characters must be '1'
-			for (int j = start; j <= end; j++)
-			{
-				if (line[j] != '1' && line[j] != ' ')
-				{
-					printf("Error: map border not closed at line %d\n", i);
-					free_1_array(array);
-					free_array(array->sorted);
-					free_array(array->ceiling);
-					free_array(array->floor);
-					free_path(array);
-					exit(EXIT_FAILURE);
-				}
-			}
-		}
-		else
-		{
-			// Middle lines: first and last non-space must be '1'
-			while (line[start] == ' ')
-				start++;
-			while (end > start && line[end] == ' ')
-				end--;
-
-			if (line[start] != '1' || line[end] != '1')
-			{
-				printf("Error: map not closed on sides at line %d\n", i);
-				free_1_array(array);
-				free_array(array->sorted);
-				free_array(array->ceiling);
-				free_array(array->floor);
-				free_path(array);
-				exit(EXIT_FAILURE);
-			}
-		}
-		i++;
-	}
-}*/
-
-int get_min_start(char **map)
-{
-	int min = -1;
-	for (int i = 0; map[i]; i++)
-	{
-		int j = 0;
-		while (map[i][j] && isspace((unsigned char)map[i][j]))
-			j++;
-		if (map[i][j] == '\0') continue;
-		if (min == -1 || j < min)
-			min = j;
-	}
-	return min;
+	free_1_array(array);
+	free_array(array->sorted);
+	free_array(array->ceiling);
+	free_array(array->floor);
+	free_path(array);
+	exit(EXIT_FAILURE);
 }
 
-int get_max_end(char **map)
+void check_walls_condition(struct s_array *array, int *i, int start, int end)
 {
-	int max = -1;
-	for (int i = 0; map[i]; i++)
+	int 	j;
+
+	j = 0;
+	if ((*i) == 0 || array->map[(*i) + 1] == NULL)
 	{
-		int len = strlen(map[i]);
-		while (len > 0 && isspace((unsigned char)map[i][len - 1]))
-			len--;
-		if (len == 0) continue;
-		if (len - 1 > max)
-			max = len - 1;
+		j = start;
+		while (j <= end)
+		{
+			if (array->map[(*i)][j] != '1')
+			{
+				printf("Error: map border not closed at line %d\n", (*i));
+				free_check_walls(array);
+			}
+			j++;
+		}
 	}
-	return max;
+	else
+	{
+		if (array->map[(*i)][start] != '1' || array->map[(*i)][end] != '1')
+		{
+			printf("Error: map not closed on sides at line %d\n", (*i));
+			free_check_walls(array);
+		}
+	}	
 }
 
 void check_walls(struct s_array *array)
 {
-	int i = 0;
-	int min_start = get_min_start(array->map);
-	int max_end = get_max_end(array->map);
+	int		start;
+	int		end;
+	int i;
 
+	i = 0;
 	while (array->map[i])
 	{
-		char *line = array->map[i];
-		int start = 0;
-		int end = strlen(line) - 1;
-
-		// Skip leading/trailing spaces
-		while (line[start] && isspace((unsigned char)line[start]))
+		start = 0;
+		while (array->map[i][start] == ' ')
 			start++;
-		while (end > start && isspace((unsigned char)line[end]))
+		end = ft_strlen(array->map[i]) - 1;
+		while (end > start && (array->map[i][end] == ' ' || array->map[i][end] == '\n' || array->map[i][end] == '\t'))
 			end--;
-
-		if (i == 0 || array->map[i + 1] == NULL)
-		{
-			// Vérifie que la ligne couvre la zone utile
-			if (start > min_start || end < max_end)
-			{
-				printf("Error: map top/bottom border too short at line %d\n", i);
-				free_1_array(array);
-				free_array(array->sorted);
-				free_array(array->ceiling);
-				free_array(array->floor);
-				free_path(array);
-				exit(EXIT_FAILURE);
-			}
-			for (int j = min_start; j <= max_end; j++)
-			{
-				if (line[j] != '1')
-				{
-					printf("Error: map border not closed with '1' at line %d\n", i);
-					free_1_array(array);
-					free_array(array->sorted);
-					free_array(array->ceiling);
-					free_array(array->floor);
-					free_path(array);
-					exit(EXIT_FAILURE);
-				}
-			}
-		}
-		else
-		{
-			// Vérifie les côtés gauche et droit
-			if (line[min_start] != '1' || line[max_end] != '1')
-			{
-				printf("Error: map not closed on sides at line %d\n", i);
-				free_1_array(array);
-				free_array(array->sorted);
-				free_array(array->ceiling);
-				free_array(array->floor);
-				free_path(array);
-				exit(EXIT_FAILURE);
-			}
-		}
+		check_walls_condition(array, &i, start, end);
 		i++;
 	}
 }
-
 
 /* Parsing du fichier entier MAP */
 void	parse_map(struct s_vars *vars, struct s_array *array,

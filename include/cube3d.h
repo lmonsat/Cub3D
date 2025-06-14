@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/14 22:23:57 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/15 00:02:06 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,6 @@
 # define EAST  2
 # define WEST  3
 # define tex_width 64
-
-
-typedef struct s_margin_data
-{
-	int	map_x1;
-	int	map_x2;
-	int	map_y1;
-	int	map_y2;
-	int	max_x;
-	int	max_y;
-}	t_margin_data;
 
 //structure utile pour la fonction put_pixel
 typedef struct s_draw
@@ -228,6 +217,7 @@ void	parse_map(struct s_vars *vars, struct s_array *array, struct s_game_stats *
 int 	find_first_line(char **lines);
 
 /* --- Utils ---*/
+//char	**copy_array(char **source, int size);
 char	**copy_array(char **source, int size);
 void	handle_error_mem(struct s_array *array, char **copy);
 int		open_map_file(char *argv[]);
@@ -236,6 +226,7 @@ void	free_visited(struct s_array *array);
 void	free_visited_vars(struct s_vars *vars);
 void	free_in_lines(struct s_array *array);
 void	free_array(char **array);
+void	free_array_bis(char **array);
 void	free_1_array(struct s_array *array);
 void	free_arrays(struct s_array *array);
 void	free_tabs(struct s_vars *vars);

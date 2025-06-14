@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/04 01:34:19 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/15 00:01:54 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,21 @@ int get_max_height(char **array)
 	while (array[i])
 		i++;
 	return (i);
+}
+
+void free_array_bis(char **array)
+{
+	int i;
+
+	i = 1;
+	if(!array)
+		return ;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }
 
 char	**copy_array(char **source, int size)
