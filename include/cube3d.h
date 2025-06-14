@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/15 00:02:06 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/15 00:06:27 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,16 @@ struct			s_texture
     int     line_len;
     int     endian;
 };
+
+typedef struct s_margin_data
+{
+	int	map_x1;
+	int	map_x2;
+	int	map_y1;
+	int	map_y2;
+	int	max_x;
+	int	max_y;
+}t_margin_data;
 
 struct	s_trace_line
 {
