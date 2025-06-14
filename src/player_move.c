@@ -6,46 +6,51 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 00:52:11 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/13 14:27:06 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/14 23:09:09 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
 
-int		check_margin(float x, float y, char **map, int margin)
+void	ft_init_margin(t_margin_data *d, char **map)
 {
+	d->max_y = 0;
+	d->max_x = 0;
+	while (map[d->max_y])
+		d->max_y++;
+	while (map[0][d->max_x])
+		d->max_x++;
+}
+
+void	ft_init_margin1(t_margin_data *d, float x, float y, int margin)
+{
+	d->map_x1 = (int)(x + margin) / 40;
+	d->map_x2 = (int)(x - margin) / 40;
+	d->map_y1 = (int)(y + margin) / 40;
+	d->map_y2 = (int)(y - margin) / 40;
+}
+
+int	check_margin(float x, float y, char **map, int margin)
+{
+	t_margin_data	d;
+
 	if (!map || !map[0])
 	{
 		printf("Erreur : map ou map[0] non initialisé\n");
 		exit(1);
 	}
-
-	int max_y = 0;
-	while (map[max_y])
-		max_y++;
-	int max_x = 0;
-	while (map[0][max_x])
-		max_x++;
-
-	int map_x1 = (int)(x + margin) / 40;
-	int map_x2 = (int)(x - margin) / 40;
-	int map_y1 = (int)(y + margin) / 40;
-	int map_y2 = (int)(y - margin) / 40;
-
-	// Vérification que les indices sont dans les limites
-	if (map_x1 < 0 || map_x1 >= max_x || map_x2 < 0 || map_x2 >= max_x ||
-		map_y1 < 0 || map_y1 >= max_y || map_y2 < 0 || map_y2 >= max_y)
+	ft_init_margin(&d, map);
+	ft_init_margin1(&d, x, y, margin);
+	if (d.map_x1 < 0 || d.map_x1 >= d.max_x || d.map_x2 < 0
+		|| d.map_x2 >= d.max_x || d.map_y1 < 0 || d.map_y1 >= d.max_y
+		|| d.map_y2 < 0 || d.map_y2 >= d.max_y)
 		return (0);
-
-	// Vérification que les pointeurs sont valides
-	if (!map[map_y1] || !map[map_y2])
+	if (!map[d.map_y1] || !map[d.map_y2])
 		return (0);
-
-	// Vérification des collisions avec les murs
-	if (map[map_y1][map_x1] == '1' || map[map_y1][map_x2] == '1' ||
-		map[map_y2][map_x1] == '1' || map[map_y2][map_x2] == '1')
-		return(0);
-	return(1);
+	if (map[d.map_y1][d.map_x1] == '1' || map[d.map_y1][d.map_x2] == '1'
+		|| map[d.map_y2][d.map_x1] == '1' || map[d.map_y2][d.map_x2] == '1')
+		return (0);
+	return (1);
 }
 
 void	move_up(struct s_vars *vars)
@@ -54,22 +59,16 @@ void	move_up(struct s_vars *vars)
 	float	next_y;
 
 	if (!vars || !vars->array)
-		return;
-
-	// Réinitialisation complète des valeurs de direction
+		return ;
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
-
 	next_x = vars->player.pos.x_pixel + vars->array->ray.dx * mouv_step;
 	next_y = vars->player.pos.y_pixel + vars->array->ray.dy * mouv_step;
-
 	if (check_margin(next_x, next_y, vars->array->map, 2))
 	{
 		vars->player.pos.x_pixel = next_x;
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
 void	move_down(struct s_vars *vars)
@@ -78,11 +77,8 @@ void	move_down(struct s_vars *vars)
 	float	next_y;
 
 	if (!vars || !vars->array)
-		return;
-
-	// Réinitialisation complète des valeurs de direction
+		return ;
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
-
 	next_x = vars->player.pos.x_pixel - vars->array->ray.dx * mouv_step;
 	next_y = vars->player.pos.y_pixel - vars->array->ray.dy * mouv_step;
 	if (check_margin(next_x, next_y, vars->array->map, 2))
@@ -91,8 +87,6 @@ void	move_down(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
 void	move_right(struct s_vars *vars)
@@ -101,11 +95,8 @@ void	move_right(struct s_vars *vars)
 	float	next_y;
 
 	if (!vars || !vars->array)
-		return;
-
-	// Réinitialisation complète des valeurs de direction
+		return ;
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
-
 	next_x = vars->player.pos.x_pixel + vars->array->ray.dx_side * mouv_step;
 	next_y = vars->player.pos.y_pixel + vars->array->ray.dy_side * mouv_step;
 	if (check_margin(next_x, next_y, vars->array->map, 2))
@@ -114,8 +105,6 @@ void	move_right(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
 void	move_left(struct s_vars *vars)
@@ -124,11 +113,8 @@ void	move_left(struct s_vars *vars)
 	float	next_y;
 
 	if (!vars || !vars->array)
-		return;
-
-	// Réinitialisation complète des valeurs de direction
+		return ;
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
-
 	next_x = vars->player.pos.x_pixel - vars->array->ray.dx_side * mouv_step;
 	next_y = vars->player.pos.y_pixel - vars->array->ray.dy_side * mouv_step;
 	if (check_margin(next_x, next_y, vars->array->map, 2))
@@ -137,13 +123,12 @@ void	move_left(struct s_vars *vars)
 		vars->player.pos.y_pixel = next_y;
 	}
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
 }
 
 void	clear_image(struct s_array *array, int width, int height)
 {
-	int	x, y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < height)
@@ -158,49 +143,18 @@ void	clear_image(struct s_array *array, int width, int height)
 	}
 }
 
-void ft_draw_minimap(struct s_array *array)
-{
-	int row = 0;
-	int col;
-
-	while (array->map[row])
-	{
-		col = 0;
-		while (array->map[row][col])
-		{
-			int start_x = col * 40;
-			int start_y = row * 40;
-			int x, y;
-
-			int color = (array->map[row][col] == '1') ? BLUE : YELLOW;
-
-			y = 0;
-			while (y < 40)
-			{
-				x = 0;
-				while (x < 40)
-				{
-					ft_put_pixel1(start_x + x, start_y + y, array, color);
-					x++;
-				}
-				y++;
-			}
-			col++;
-		}
-		row++;
-	}
-}
-
 void	render_frame(struct s_vars *vars)
 {
-	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height); // Efface tout avant de redessiner
+	clear_image(vars->array, vars->array->ray.width, vars->array->ray.height);
 	ft_init_line(&vars->array->ray, vars->array, &vars->player.pos);
 	ft_draw_grid(vars->array);
-	//ft_draw_minimap(vars->array);
 	ft_draw_line(&vars->array->ray, vars->array, &vars->player.pos);
-	fov(&vars->array->ray, vars->array, &vars->player.pos); //fonction necessaire au rendu 3d car elle cree l 'array de float
-	ft_draw_half_screen(vars->array, vars->array->ray.width, vars->array->ray.height);
+	fov(&vars->array->ray, vars->array, &vars->player.pos);
+	ft_draw_half_screen(vars->array, vars->array->ray.width,
+		vars->array->ray.height);
 	draw_walls(&vars->array->ray, vars->array);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0,
+		0);
+	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map,
+		0, 0);
 }

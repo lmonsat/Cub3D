@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/11 21:12:04 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/14 22:23:57 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@
 # define EAST  2
 # define WEST  3
 # define tex_width 64
+
+
+typedef struct s_margin_data
+{
+	int	map_x1;
+	int	map_x2;
+	int	map_y1;
+	int	map_y2;
+	int	max_x;
+	int	max_y;
+}	t_margin_data;
 
 //structure utile pour la fonction put_pixel
 typedef struct s_draw

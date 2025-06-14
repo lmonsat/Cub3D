@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/05 20:04:04 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/14 21:51:23 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,22 +101,25 @@ int	default_close(struct s_vars *vars)
 	return (0);
 }
 
-static void rotation_l(struct s_vars *vars)
+static void	rotation_l(struct s_vars *vars)
 {
 	vars->array->ray.rotation -= 5;
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0,
+		0);
+	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map,
+		0, 0);
 }
 
-static void rotation_r(struct s_vars *vars)
+static void	rotation_r(struct s_vars *vars)
 {
 	vars->array->ray.rotation += 5;
 	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0, 0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0,
+		0);
+	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map,
+		0, 0);
 }
-
 
 int	key_handler(int keycode, struct s_vars *vars)
 {
@@ -128,9 +131,9 @@ int	key_handler(int keycode, struct s_vars *vars)
 		move_right(vars);
 	else if (keycode == KEY_Q)
 		move_left(vars);
-	else if(keycode == KEY_ARROW_LEFT)
+	else if (keycode == KEY_ARROW_LEFT)
 		rotation_l(vars);
-	else if(keycode == KEY_ARROW_RIGHT)
+	else if (keycode == KEY_ARROW_RIGHT)
 		rotation_r(vars);
 	else if (keycode == ESC)
 	{

@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/13 15:44:48 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/14 23:43:46 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,56 +29,6 @@ void ft_cleanup_trace_line(struct s_trace_line *pos)
         free(pos->tex_x);
         pos->tex_x = NULL;
     }
-}
-
-void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player)
-{
-    pos->width = get_max_width(array->map) * 40;
-    pos->height = get_max_height(array->map) * 40;
-    pos->x_start = player->x_pixel;
-    pos->y_start = player->y_pixel;
-
-    // Vérification que rotation est initialisée
-    if (array->ray.rotation == 0)
-    {
-        // Initialisation par défaut si non initialisée
-        array->ray.rotation = 0.0f;
-    }
-
-    array->ray.fov_angle = 2.0f * atanf((float)NUM_RAYS / cam_dist);
-    array->ray.player_angle = array->ray.rotation * PI / 180.0f;
-
-    //permet des mouvements avant arriere sur l' axe du joueur
-    pos->dx = cosf(array->ray.rotation * PI / 180.0f);
-    pos->dy = sinf(array->ray.rotation * PI / 180.0f);
-    array->ray.dx = pos->dx;  // Copie dans la structure ray
-    array->ray.dy = pos->dy;  // Copie dans la structure ray
-
-    //permet des mouvement gauche droite sur l' axe du joueur
-    pos->dx_side = cosf((array->ray.rotation + 90.0f) * PI / 180.0f);
-    pos->dy_side = sinf((array->ray.rotation + 90.0f) * PI / 180.0f);
-    array->ray.dx_side = pos->dx_side;  // Copie dans la structure ray
-    array->ray.dy_side = pos->dy_side;  // Copie dans la structure ray
-
-    //defini la distance entre le joueur et le plan caméra
-    pos->x_pass = player->x_pixel + cam_dist * pos->dx;
-    pos->y_pass = player->y_pixel + cam_dist * pos->dy;
-
-    pos->step = fmaxf(fabsf(pos->dx_side), fabsf(pos->dy_side));
-    pos->dx_step = pos->dx_side / pos->step;
-    pos->dy_step = pos->dy_side / pos->step;
-
-    ft_cleanup_trace_line(pos);
-    // Allocation des nouveaux tableaux
-    pos->perp_tab = ft_calloc(sizeof(float), NUM_RAYS);
-    if (pos->perp_tab == NULL)
-        exit(1);
-    pos->hit_orien = ft_calloc(sizeof(int), NUM_RAYS);
-    if (pos->hit_orien == NULL)
-        exit(1);
-    pos->tex_x = ft_calloc(sizeof(int), NUM_RAYS);
-    if (pos->tex_x == NULL)
-        exit(1);
 }
 
 void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y)
@@ -124,7 +74,6 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
 		        break;
         if (array->map[yi / 40][xi / 40] == '1')
                 break;
-        //ft_put_pixel(xi, yi, array, RED);
         rx += pos->ldx;
         ry += pos->ldy;
     }
