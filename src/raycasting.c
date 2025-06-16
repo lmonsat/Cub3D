@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/14 23:43:46 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:47:38 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,12 @@ void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *pl
     float ry;
     int xi;
     int yi;
-    int i;
     int map_x;
     int map_y;
 
-    i = 0;
     rx = player->x_pixel;
     ry = player->y_pixel;
-    while (i < 1000)
+    while (1)
     {
         xi = (int)roundf(rx);
         yi = (int)roundf(ry);
@@ -93,94 +91,7 @@ void ft_draw_circle(struct s_array *array, int centerX, int centerY, int radius,
     }
 }
 
-void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array)
-{
-    // Position du joueur convertie en cases
-    float posX = player->x_pixel / 40.0f;
-    float posY = player->y_pixel / 40.0f;
-
-    int mapX = (int)posX;
-    int mapY = (int)posY;
-
-    // Calculs des delta distances
-    float deltaDistX = (rayDirX == 0) ? 1e30 : fabsf(1.0f / rayDirX);
-    float deltaDistY = (rayDirY == 0) ? 1e30 : fabsf(1.0f / rayDirY);
-
-    int stepX, stepY;
-    float sideDistX, sideDistY;
-
-    // Calcul step et sideDist en X
-    if (rayDirX < 0)
-    {
-        stepX = -1;
-        sideDistX = (posX - mapX) * deltaDistX;
-    }
-    else
-    {
-        stepX = 1;
-        sideDistX = (mapX + 1.0f - posX) * deltaDistX;
-    }
-
-    // Calcul step et sideDist en Y
-    if (rayDirY < 0)
-    {
-        stepY = -1;
-        sideDistY = (posY - mapY) * deltaDistY;
-    }
-    else
-    {
-        stepY = 1;
-        sideDistY = (mapY + 1.0f - posY) * deltaDistY;
-    }
-
-    int hit = 0;
-    int side = 0;
-    // 0 = X side, 1 = Y side
-
-    // Boucle DDA
-    while (!hit)
-    {
-        if (sideDistX < sideDistY)
-        {
-            sideDistX += deltaDistX;
-            mapX += stepX;
-            side = 0;
-        }
-        else
-        {
-            sideDistY += deltaDistY;
-            mapY += stepY;
-            side = 1;
-        }
-        // Vérifie les limites
-        if (mapX < 0 || mapY < 0 || mapX >= array->ray.width / 40 || mapY >= array->ray.width / 40)
-            break;
-
-        if (array->map[mapY][mapX] == '1')
-        {
-            hit = 1;
-        }
-    }
-    //float perpWallDist;
-    if(side == 0) // Ray a frappé un mur vertical (Est/Ouest)
-    {
-        array->ray.brutdist = (sideDistX - deltaDistX);
-        if (rayDirX > 0)
-            array->ray.orientation = EAST;
-        else
-            array->ray.orientation = WEST;
-    }
-    else // Ray a frappé un mur horizontal (Nord/Sud)
-    {
-        array->ray.brutdist = (sideDistY - deltaDistY);
-        if (rayDirY > 0)
-            array->ray.orientation = SOUTH;
-        else
-            array->ray.orientation = NORTH;
-    }
-}
-
-void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int draw_end, struct s_trace_line *pos, struct s_array *array)
+/*void draw_vertical_band(int i, int x_start, int band_width, int draw_start, int draw_end, struct s_trace_line *pos, struct s_array *array)
 {
     int tex_x = pos->tex_x[i];
     int wall_height = draw_end - draw_start;
@@ -257,4 +168,4 @@ void draw_walls(struct s_trace_line *pos, struct s_array *array)
         draw_vertical_band(i, x_offset, band_width, draw_start, draw_end, pos, array);
         x_offset += band_width;
     }
-}
+}*/

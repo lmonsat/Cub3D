@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/15 00:06:27 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 16:57:19 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,67 @@
 # define EAST  2
 # define WEST  3
 # define tex_width 64
+
+typedef struct s_draw_band_info
+{
+	int     i;
+	int     x_start;
+	int     band_width;
+	int     draw_start;
+	int     draw_end;
+}   t_draw_band_info;
+
+typedef struct s_draw_vars
+{
+	int     tex_x;
+	int     wall_height;
+	int     orientation;
+	struct s_texture *tex;
+	float   dist;
+	float   shade_factor;
+	int     mod;
+	int     x;
+	int     y;
+	int     tex_y;
+	char    *tex_pixel;
+	int     color;
+	int     a;
+	int     r;
+	int     g;
+	int     b;
+}   t_draw_vars;
+
+typedef struct s_wall_render
+{
+	float fov_angle;
+	int plane;
+	int base_band;
+	int remainder;
+	int x_offset;
+	int i;
+	int band_width;
+	float dist;
+	int line_height;
+	int draw_start;
+	int draw_end;
+	t_draw_band_info band;
+}	t_wall_render;
+
+typedef struct s_dda
+{
+	float posx;
+	float posy;
+	int mapx;
+	int mapy;
+	float deltadistx;
+	float deltadisty;
+	int stepx;
+	int stepy;
+	float sidedistx;
+	float sidedisty;
+	int hit;
+	int side;
+}t_dda;
 
 //structure utile pour la fonction put_pixel
 typedef struct s_draw
@@ -130,11 +191,6 @@ struct	s_trace_line
 	float player_angle;
 };
 
-/*struct					s_first
-{
-
-};*/
-
 struct					s_move
 {
 	int					dr[4];
@@ -164,7 +220,6 @@ struct					s_array
 {
 	struct s_draw		draw;
 	struct s_game_stats	stats;
-	//struct s_first		elmt;
 	struct s_move		move;
 	struct s_texture    textures[NB_TEXTURES];
 	char				*NO_path;
@@ -288,4 +343,7 @@ void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_posi
 void ft_init_line2(struct s_trace_line *pos, struct s_position *player, float x, float y);
 void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y);
 void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
+
+/*---gameplay---*/
+void	distance(struct s_array *array, struct s_position *player, int i);
 #endif
