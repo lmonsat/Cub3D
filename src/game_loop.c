@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:33:25 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/16 23:02:08 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 23:16:13 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ static void	load_textures(struct s_vars *vars, struct s_texture *textures,
 	int		i;
 
 	i = 0;
-	paths[0] = array->NO_path;
-	paths[1] = array->EA_path;
-	paths[2] = array->WE_path;
-	paths[3] = array->SO_path;
+	paths[0] = array->no_path;
+	paths[1] = array->ea_path;
+	paths[2] = array->we_path;
+	paths[3] = array->so_path;
 	while (i < 4)
 	{
 		textures[i].img = mlx_xpm_file_to_image(vars->mlx, paths[i],

@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 23:22:07 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/14 23:43:56 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 23:16:38 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_line_dimensions(struct s_trace_line *pos, struct s_array *array,
 	pos->y_start = player->y_pixel;
 	if (array->ray.rotation == 0)
 		array->ray.rotation = 0.0f;
-	array->ray.fov_angle = 2.0f * atanf((float)NUM_RAYS / cam_dist);
+	array->ray.fov_angle = 2.0f * atanf((float)NUM_RAYS / CAM_DIST);
 	array->ray.player_angle = array->ray.rotation * PI / 180.0f;
 }
 
@@ -36,8 +36,8 @@ void	init_line_directions_and_camera(struct s_trace_line *pos,
 	pos->dy_side = sinf((array->ray.rotation + 90.0f) * PI / 180.0f);
 	array->ray.dx_side = pos->dx_side;
 	array->ray.dy_side = pos->dy_side;
-	pos->x_pass = player->x_pixel + cam_dist * pos->dx;
-	pos->y_pass = player->y_pixel + cam_dist * pos->dy;
+	pos->x_pass = player->x_pixel + CAM_DIST * pos->dx;
+	pos->y_pass = player->y_pixel + CAM_DIST * pos->dy;
 }
 
 void	init_line_step(struct s_trace_line *pos)

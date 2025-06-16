@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_texture.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:03:56 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:17:50 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 23:11:18 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@ void	copy_path(struct s_array *array, char *line, char pos[2], int start)
 	if (pos[0] == 'N' && pos[1] == 'O')
 	{
 		len = ft_strlen(line);
-		array->NO_path = ft_substr(line, start, len - 4);
+		array->no_path = ft_substr(line, start, len - 4);
 	}
 	else if (pos[0] == 'S' && pos[1] == 'O')
 	{
 		len = ft_strlen(line);
-		array->SO_path = ft_substr(line, start, len - 4);
+		array->so_path = ft_substr(line, start, len - 4);
 	}
 	else if (pos[0] == 'W' && pos[1] == 'E')
 	{
 		len = ft_strlen(line);
-		array->WE_path = ft_substr(line, start, len - 4);
+		array->we_path = ft_substr(line, start, len - 4);
 	}
 	else if (pos[0] == 'E' && pos[1] == 'A')
 	{
 		len = ft_strlen(line);
-		array->EA_path = ft_substr(line, start, len - 4);
+		array->ea_path = ft_substr(line, start, len - 4);
 	}
 }
 

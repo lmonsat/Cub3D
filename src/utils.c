@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:41:52 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 23:09:32 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	free_path(struct s_array *array)
 {
-	free(array->NO_path);
-	free(array->SO_path);
-	free(array->WE_path);
-	free(array->EA_path);
+	free(array->no_path);
+	free(array->so_path);
+	free(array->we_path);
+	free(array->ea_path);
 }
 
 int	open_map_file(char *argv[])

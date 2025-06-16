@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 23:03:23 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 23:16:31 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "mlx_linux/mlx.h"
 # include "mlx_linux/mlx_int.h"
 # include <errno.h>
-# include <fcntl.h> // open, O_CREAT, O_RDONLY
+# include <fcntl.h>
 # include <limits.h>
 # include <math.h>
 # include <stdio.h>
@@ -42,10 +42,8 @@
 # define GRAY 0xA9A9A9
 # define FOV 60.0f
 # define NUM_RAYS 1360
-# define cam_dist 1360
-# define STEP (FOV / NUM_RAYS)
-# define DEG2RAD(x) ((x)*PI / 180.0f)
-# define mouv_step 4
+# define CAM_DIST 1360
+# define MOUV_STEP 4
 # define NB_TEXTURES 6
 # define T1 "./textures/wood.xpm"
 # define T5 "./textures/redbrick.xpm"
@@ -57,7 +55,7 @@
 # define SOUTH 1
 # define EAST 2
 # define WEST 3
-# define tex_width 64
+# define TEX_WIDTH 64
 
 typedef struct s_loop
 {
@@ -130,7 +128,6 @@ typedef struct s_dda
 	int					side;
 }						t_dda;
 
-// structure utile pour la fonction put_pixel
 typedef struct s_draw
 {
 	void				*img_game;
@@ -232,10 +229,10 @@ struct					s_array
 	struct s_game_stats	stats;
 	struct s_move		move;
 	struct s_texture	textures[NB_TEXTURES];
-	char				*NO_path;
-	char				*SO_path;
-	char				*EA_path;
-	char				*WE_path;
+	char				*no_path;
+	char				*so_path;
+	char				*ea_path;
+	char				*we_path;
 	char				**floor;
 	char				**ceiling;
 	struct s_position	position;
@@ -316,7 +313,6 @@ int						find_first_line(char **lines);
 int						array_max_value(char **array);
 
 /* --- Utils ---*/
-// char	**copy_array(char **source, int size);
 char					**copy_array(char **source, int size);
 void					handle_error_mem(struct s_array *array, char **copy);
 int						open_map_file(char *argv[]);
