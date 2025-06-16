@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:39:30 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 23:03:23 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,25 +287,33 @@ enum					e_keycode
 void					esc_close(int keycode, struct s_vars *vars);
 int						default_close(struct s_vars *vars);
 int						key_handler(int keycode, struct s_vars *vars);
+void					init_graphics(struct s_vars *vars,
+							struct s_array *array);
+void					init_array_colors(struct s_array *array);
 
 /* --- Parsing --- */
 void					parse_map(struct s_vars *vars, struct s_array *array,
 							struct s_game_stats *value, char *argv[]);
-void alloc_data_array(int fd, struct s_array *array, char *argv[]);
+void					alloc_data_array(int fd, struct s_array *array,
+							char *argv[]);
 int						find_first_line(char **lines);
-void check_floor_and_ceilling(struct s_array *array, char type);
-void check_position(struct s_array *array, char pos_1, char pos_2);
-void	check_characters_in_map(struct s_array *array);
-void	check_player_start_pos(struct s_array *array,
-		struct s_game_stats *value);
-void	check_walls(struct s_array *array);
-void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin);
-char **init_flood_fill(struct s_array *array, struct s_vars *vars, t_point *begin, t_point *size);
-int	is_valid_char(char c);
-void clear_line_gnl(int fd);
-int array_len(char **array);
-int find_first_line(char **lines);
-int array_max_value(char **array);
+void					check_floor_and_ceilling(struct s_array *array,
+							char type);
+void					check_position(struct s_array *array, char pos_1,
+							char pos_2);
+void					check_characters_in_map(struct s_array *array);
+void					check_player_start_pos(struct s_array *array,
+							struct s_game_stats *value);
+void					check_walls(struct s_array *array);
+void					flood_fill(struct s_array *array, char **tab,
+							t_point size, t_point begin);
+char					**init_flood_fill(struct s_array *array,
+							struct s_vars *vars, t_point *begin, t_point *size);
+int						is_valid_char(char c);
+void					clear_line_gnl(int fd);
+int						array_len(char **array);
+int						find_first_line(char **lines);
+int						array_max_value(char **array);
 
 /* --- Utils ---*/
 // char	**copy_array(char **source, int size);

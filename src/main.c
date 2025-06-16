@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 19:44:22 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 23:01:09 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ int	main(int argc, char *argv[])
 	vars.stats = value;
 	vars.array = &array;
 	ft_memset(array.textures, 0, sizeof(array.textures));
+	init_array_colors(&array);
+	init_graphics(&vars, &array);
+	render_frame(&vars);
 	ft_game_loop(&vars, &array);
 	free_array(array.ceiling);
 	free_array(array.floor);

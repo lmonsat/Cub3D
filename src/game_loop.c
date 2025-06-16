@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:33:25 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/16 19:32:40 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 23:02:08 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	free_close(struct s_vars *vars, struct s_array *array)
 }
 
 // gerer les free en cas d erreur de chargement de textures
-static int	load_textures(struct s_vars *vars, struct s_texture *textures,
+static void	load_textures(struct s_vars *vars, struct s_texture *textures,
 		struct s_array *array)
 {
 	char	*paths[4];
@@ -61,10 +61,9 @@ static int	load_textures(struct s_vars *vars, struct s_texture *textures,
 				&textures[i].line_len, &textures[i].endian);
 		i++;
 	}
-	return (0);
 }
 
-static void	init_array_colors(struct s_array *array)
+void	init_array_colors(struct s_array *array)
 {
 	int	red;
 	int	green;
@@ -80,13 +79,16 @@ static void	init_array_colors(struct s_array *array)
 	array->floor_color = (red << 16) | (green << 8) | blue;
 }
 
-static int	init_graphics(struct s_vars *vars, struct s_array *array)
+void	init_graphics(struct s_vars *vars, struct s_array *array)
 {
 	array->ray.width = get_max_width(array->map) * 40;
 	array->ray.height = get_max_height(array->map) * 40;
 	vars->mlx = mlx_init();
 	if (vars->mlx == NULL)
-		return (1);
+	{
+		printf("MLX Error\n");
+		exit(1);
+	}
 	vars->win = mlx_new_window(vars->mlx, array->ray.width, array->ray.height,
 			"Cube3D");
 	vars->win_map = mlx_new_window(vars->mlx, array->ray.width / 2,
@@ -100,16 +102,11 @@ static int	init_graphics(struct s_vars *vars, struct s_array *array)
 	array->draw.addr_map = mlx_get_data_addr(array->draw.img_map,
 			&array->draw.bpp_map, &array->line_len_map,
 			&array->draw.endian_map);
-	if (load_textures(vars, array->textures, array))
-		return (1);
-	return (0);
+	load_textures(vars, array->textures, array);
 }
 
 void	ft_game_loop(struct s_vars *vars, struct s_array *array)
 {
-	init_array_colors(array);
-	if (init_graphics(vars, array))
-		return ;
 	vars->stats.mov_count = 0;
 	array->ray.rotation = 0;
 	mapping(array, vars);
