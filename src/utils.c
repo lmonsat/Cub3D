@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/17 01:23:52 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 01:25:45 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	free_path(struct s_array *array)
 {
-	if(array->no_path)
+	if (array->no_path)
 		free(array->no_path);
-	if(array->so_path)
+	if (array->so_path)
 		free(array->so_path);
-	if(array->we_path)
+	if (array->we_path)
 		free(array->we_path);
-	if(array->ea_path)
+	if (array->ea_path)
 		free(array->ea_path);
 }
 

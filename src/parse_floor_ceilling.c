@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 20:10:20 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/17 01:11:07 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 01:25:14 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	error_parse_fc(struct s_array *array, char *line, char type)
 	free_array(array->line);
 	free_array(array->map);
 	free_path(array);
-	if(array->floor)
+	if (array->floor)
 		free_array(array->floor);
 	exit(1);
 }

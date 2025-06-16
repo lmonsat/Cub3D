@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:33:25 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/17 01:21:41 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 01:26:04 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	free_close(struct s_vars *vars, struct s_array *array)
 	free_array(vars->array->map);
 	free_array(vars->array->ceiling);
 	free_array(vars->array->floor);
-	//free_path(vars->array);
+	// free_path(vars->array);
 }
 
 // gerer les free en cas d erreur de chargement de textures
