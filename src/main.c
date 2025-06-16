@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:25 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 19:32:24 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 19:44:22 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	display_textures_grid(void *mlx, void *win, struct s_texture *textures)
 		i++;
 	}
 }
-
-
 
 void	check_arguments(int argc, char *argv[])
 {

@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:33 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 18:52:56 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:02:42 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,43 +54,24 @@ void	ft_init_line2(struct s_trace_line *pos, struct s_position *player,
 void	loop(struct s_trace_line *pos, struct s_array *array,
 		struct s_position *player)
 {
-	float	rx;
-	float	ry;
-	int		xi;
-	int		yi;
-	int		map_x;
-	int		map_y;
+	t_loop	l;
 
-	rx = player->x_pixel;
-	ry = player->y_pixel;
+	l.rx = player->x_pixel;
+	l.ry = player->y_pixel;
 	while (1)
 	{
-		xi = (int)roundf(rx);
-		yi = (int)roundf(ry);
-		map_x = xi / 40;
-		map_y = yi / 40;
-		if (xi < 0 || xi >= pos->width || yi < 0 || yi >= pos->height)
+		l.xi = (int)roundf(l.rx);
+		l.yi = (int)roundf(l.ry);
+		l.map_x = l.xi / 40;
+		l.map_y = l.yi / 40;
+		if (l.xi < 0 || l.xi >= pos->width || l.yi < 0 || l.yi >= pos->height)
 			break ;
-		if (!array->map || !array->map[map_y]
-			|| map_x >= (int)ft_strlen(array->map[map_y]))
+		if (!array->map || !array->map[l.map_y]
+			|| l.map_x >= (int)ft_strlen(array->map[l.map_y]))
 			break ;
-		if (array->map[yi / 40][xi / 40] == '1')
+		if (array->map[l.yi / 40][l.xi / 40] == '1')
 			break ;
-		rx += pos->ldx;
-		ry += pos->ldy;
-	}
-}
-
-void	ft_draw_circle(struct s_array *array, int centerX, int centerY,
-		int radius, int color)
-{
-	int x, y;
-	for (y = -radius; y <= radius; y++)
-	{
-		for (x = -radius; x <= radius; x++)
-		{
-			if (x * x + y * y <= radius * radius)
-				ft_put_pixel1(centerX + x, centerY + y, array, color);
-		}
+		l.rx += pos->ldx;
+		l.ry += pos->ldy;
 	}
 }

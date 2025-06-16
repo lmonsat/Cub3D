@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 19:34:19 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:35:32 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@
 # define PURPLE 0x800080
 # define BROWN 0x8B4513
 # define GRAY 0xA9A9A9
-# define FOV 60.0f     // Champ de vision en degrés
-# define NUM_RAYS 1360 // Nombre de rayons à lancer
-# define cam_dist 1360 // distance entre le joueur et le plan camera
+# define FOV 60.0f
+# define NUM_RAYS 1360
+# define cam_dist 1360
 # define STEP (FOV / NUM_RAYS)
 # define DEG2RAD(x) ((x)*PI / 180.0f)
 # define mouv_step 4
@@ -58,6 +58,16 @@
 # define EAST 2
 # define WEST 3
 # define tex_width 64
+
+typedef struct s_loop
+{
+	float				rx;
+	float				ry;
+	int					xi;
+	int					yi;
+	int					map_x;
+	int					map_y;
+}						t_loop;
 
 typedef struct s_draw_band_info
 {
@@ -161,25 +171,25 @@ struct					s_trace_line
 {
 	int					*tex_x;
 	int					*hit_orien;
-	int orientation; // 0 = NORD, 1 = SUD, 2 = EST, 3 = OUEST
+	int					orientation;
 	float				step;
 	float				x_cam;
 	float				y_cam;
-	float x_start; // depart x (joueur)
-	float y_start; // depart y (joueur)
-	float x_end;   // fin du ray (mur)
-	float y_end;   // fin du ray (mur)
-	float x_pass;  // point de passage x
-	float y_pass;  // point de passage y
-	float dx;      // x_end - x_start vecteur de direction avant arriere
-	float dy;      // y_end - y_start vecteur de direction avant arriere
-	float dx_side; // vecteur de direction gauche droite
-	float dy_side; // vecteur de direction gauche droite
+	float				x_start;
+	float				y_start;
+	float				x_end;
+	float				y_end;
+	float				x_pass;
+	float				y_pass;
+	float				dx;
+	float				dy;
+	float				dx_side;
+	float				dy_side;
 	int					width;
 	int					height;
-	float rotation; // for rotation of fov
-	float brutdist; // distance brut
-	float perpdist; // distance corriger pour effet fisheye
+	float				rotation;
+	float				brutdist;
+	float				perpdist;
 	float				*perp_tab;
 	float				dx_step;
 	float				dy_step;
@@ -254,10 +264,10 @@ struct					s_vars
 
 typedef struct s_point
 {
-	int           x;
-	int           y;
-	char	**tab;
-}               t_point;
+	int					x;
+	int					y;
+	char				**tab;
+}						t_point;
 
 enum					e_keycode
 {
@@ -317,9 +327,6 @@ void					rotation_l(struct s_vars *vars);
 void					rotation_r(struct s_vars *vars);
 
 /* --- player_move --- */
-void					clear_image(struct s_array *array, int width,
-							int height);
-void					render_frame(struct s_vars *vars);
 void					move_up(struct s_vars *vars);
 void					move_down(struct s_vars *vars);
 void					move_right(struct s_vars *vars);
@@ -371,5 +378,19 @@ void					distance(struct s_array *array,
 void					ft_game_loop(struct s_vars *vars,
 							struct s_array *array);
 /*---margin---*/
-int	check_margin(float x, float y, char **map, int margin);
+int						check_margin(float x, float y, char **map, int margin);
+/*---render_frame---*/
+void					clear_image(struct s_array *array, int width,
+							int height);
+void					render_frame(struct s_vars *vars);
+/*---band_utils---*/
+void					ft_init_var(t_draw_vars *var, t_draw_band_info band,
+							struct s_trace_line *pos, struct s_array *array);
+void					ft_init_render(t_wall_render *r, struct s_array *array);
+/*---utils1.c---*/
+char					**copy_array(char **source, int size);
+int						get_max_width(char **array);
+int						get_max_height(char **array);
+void					free_tabs(struct s_vars *vars);
+void					free_array(char **array);
 #endif
