@@ -11,7 +11,10 @@ LDFLAGS = -L./include/mlx_linux -lmlx_Linux
 LDLIBS = -I./include/mlx_linux -lXext -lX11 -lm -lz
 
 # SRC and OBJ files
-SRC = main.c parsing.c utils.c raycasting.c gameplay.c get_next_line.c get_next_line_utils.c mlx_functions.c mapping.c  requested_player_move.c player_move.c draw_lines.c draw_lines1.c init_line.c vertical_band.c game_loop.c margin.c move.c render_frame.c band_utils.c utils1.c utils2.c
+SRC = main.c parsing.c utils.c raycasting.c gameplay.c get_next_line.c get_next_line_utils.c mlx_functions.c mapping.c \
+		 requested_player_move.c player_move.c draw_lines.c draw_lines1.c init_line.c vertical_band.c game_loop.c margin.c move.c \
+		 parsing_utils.c parse_map.c parse_texture.c flood_fill.c alloc_array.c parse_floor_ceilling.c utils1.c render_frame.c \
+		 band_utils.c
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC))
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

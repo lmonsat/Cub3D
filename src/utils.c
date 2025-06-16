@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:35 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:29:19 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:41:52 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,6 @@ int	open_map_file(char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	return (fd);
-}
-
-void	handle_error_mem(struct s_array *array, char **copy)
-{
-	free_1_array(array);
-	free(copy);
-	perror("Error\n Memory allocation failed");
-	exit(EXIT_FAILURE);
 }
 
 int	ft_strchr_count(const char *s, int c)
