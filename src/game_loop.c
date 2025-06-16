@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:33:25 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/16 23:16:13 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/17 01:21:41 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	free_close(struct s_vars *vars, struct s_array *array)
 	free_array(vars->array->map);
 	free_array(vars->array->ceiling);
 	free_array(vars->array->floor);
-	free_path(vars->array);
+	//free_path(vars->array);
 }
 
 // gerer les free en cas d erreur de chargement de textures
@@ -49,6 +49,11 @@ static void	load_textures(struct s_vars *vars, struct s_texture *textures,
 	paths[3] = array->so_path;
 	while (i < 4)
 	{
+		/*printf("path %s", paths[i]);
+		if (!paths[i])
+		{
+			exit(1);
+		}*/
 		textures[i].img = mlx_xpm_file_to_image(vars->mlx, paths[i],
 				&textures[i].width, &textures[i].height);
 		if (!textures[i].img)

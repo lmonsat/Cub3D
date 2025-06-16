@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:09:18 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:45:55 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 23:39:13 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@ void	check_walls(struct s_array *array)
 	}
 }
 
+static void free_psp(struct s_array *array)
+{
+    free_array(array->line);
+    free_array(array->map);
+    free_array(array->sorted);
+    free_array(array->floor);
+    free_array(array->ceiling);
+    free_path(array);
+    exit(1);
+}
+
 /* Check si la position du joueur est marqué sur la map et,
 		si elle est unique */
 void	check_player_start_pos(struct s_array *array,
@@ -81,6 +92,11 @@ void	check_player_start_pos(struct s_array *array,
 
 	value->nb_start_pos = 0;
 	i = 0;
+    if (!array->map[i])
+    {
+        printf("Error: Map is missing\n");
+        free_psp(array);
+    }
 	while (1)
 	{
 		value->nb_start_pos += ft_strchr_count(array->map[i], 'W');
@@ -94,12 +110,7 @@ void	check_player_start_pos(struct s_array *array,
 	if (value->nb_start_pos != 1)
 	{
 		perror("Error\n More or less than 1 player start position");
-		free_array(array->line);
-		free_array(array->sorted);
-		free_array(array->ceiling);
-		free_array(array->floor);
-		free_path(array);
-		exit(EXIT_FAILURE);
+		free_psp(array);
 	}
 }
 

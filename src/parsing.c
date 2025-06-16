@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:19:13 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 01:11:01 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	parse_textures(struct s_array *array)
 	check_floor_and_ceilling(array, 'C');
 }
 
-/* Permet d'extraire et de copier le map jouable depuis 
+/* Permet d'extraire et de copier le map jouable depuis
 	le char** stockant toutes les informations,
 	du fichier (allocation dynamique) */
 void	realloc_data_array(struct s_array *array)
@@ -51,13 +51,32 @@ void	realloc_data_array(struct s_array *array)
 	array->map[new_len] = NULL;
 }
 
+static int	is_map_empty(int fd, char *argv[], struct s_array *array)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	if (!line)
+	{
+		printf("Map file empty\n");
+		free(line);
+		exit(1);
+	}
+	free(line);
+	clear_line_gnl(fd);
+	close(fd);
+	fd = open_map_file(argv);
+	return (fd);
+}
+
 /* Si la map du joueur se retoruve en premier dans,
-	 le fichier exit & free */
+		le fichier exit & free */
 int	is_map_first_in_file(int fd, struct s_array *array, char *argv[])
 {
 	char	*line;
 
 	fd = open_map_file(argv);
+	fd = is_map_empty(fd, argv, array);
 	line = ft_strdup("\n");
 	while (line[0] == '\n')
 	{
@@ -89,6 +108,8 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	int		map_index;
 	char	**flooded_map;
 
+	array->floor = NULL;
+	array->ceiling = NULL;
 	fd = is_map_first_in_file(fd, array, argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);
@@ -101,7 +122,6 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	mapping(array, vars);
 	flooded_map = init_flood_fill(array, vars, &begin, &size);
 	size.tab = flooded_map;
-	printf("test begin.x %d\n", begin.x);
 	flood_fill(array, size.tab, size, begin);
 	free_array(array->sorted);
 	free_array(array->line);

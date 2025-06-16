@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 20:10:20 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 22:24:02 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 01:11:07 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ static void	error_parse_fc_2(struct s_array *array, char *line, char *new_line)
 static void	error_parse_fc(struct s_array *array, char *line, char type)
 {
 	printf("%c: format incorrect: %s\n", type, strerror(errno));
+	free_array(array->sorted);
+	free_array(array->line);
+	free_array(array->map);
+	free_path(array);
+	if(array->floor)
+		free_array(array->floor);
 	exit(1);
 }
 
@@ -77,7 +83,7 @@ void	check_floor_and_ceilling(struct s_array *array, char type)
 
 	i = 0;
 	line = fc_get_line(array, type);
-	if (line[i] != type)
+	if (!line || line[i] != type)
 		error_parse_fc(array, line, type);
 	if (ft_strchr_count(line, ',') != 2)
 		error_parse_fc(array, line, type);
