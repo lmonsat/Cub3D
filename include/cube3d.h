@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 17:50:07 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 19:21:33 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,9 +254,10 @@ struct					s_vars
 
 typedef struct s_point
 {
-	int					x;
-	int					y;
-}						t_point;
+	int           x;
+	int           y;
+	char	**tab;
+}               t_point;
 
 enum					e_keycode
 {

@@ -6,7 +6,7 @@
 /*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/15 00:01:33 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 19:22:16 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,13 +200,10 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 
 	i = 0;
 	len = dynamic_map_lenght(fd, line);
-	//printf("test len: %d\n", len);
 	clear_line_gnl(fd);
 	close(fd);
 	fd = open_map_file(argv);
-	//line = find_first_line(fd, &len);
 	line = get_next_line(fd);
-	//printf("len: %u\n", len);
 	array->line = ft_calloc(len + 1, sizeof(char *));
 	if (!array->line)
 	{
@@ -227,7 +224,6 @@ void alloc_data_array(int fd, struct s_array *array, char *argv[])
 	{
 		printf("%s", array->line[i++]);
 	}
-	//clear_line_gnl(fd);
 	close(fd);
 }
 /* Extrait le chemin des textures en fonction de la position donnée,
@@ -241,51 +237,40 @@ void copy_path(struct s_array *array, char *line, char pos[2], int start)
 	{
 		len = ft_strlen(line);
 		array->NO_path = ft_substr(line, start, len - 4);
-		//printf("path: %s\n", array->NO_path);
 	}
 	else if (pos[0] == 'S' && pos[1] == 'O')
 	{
 		len = ft_strlen(line);
 		array->SO_path = ft_substr(line, start, len - 4);
-		//printf("path: %s\n", array->SO_path);
 	}
 	else if (pos[0] == 'W' && pos[1] == 'E')
 	{
 		len = ft_strlen(line);
 		array->WE_path = ft_substr(line, start, len - 4);
-		//printf("path: %s\n", array->WE_path);
 	}
 	else if (pos[0] == 'E' && pos[1] == 'A')
 	{
 		len = ft_strlen(line);
 		array->EA_path = ft_substr(line, start, len - 4);
-		//printf("path: %s\n", array->EA_path);
 	}
 }
 
 void error_parse_textures(struct s_array *array, char *line, char pos[2])
 {
 	printf("%s: path format incorrect: %s\n", pos, strerror(errno));
-	//free_1_array(array);
 	free_array(array->sorted);
-	//free(line);
 	exit(1);
 }
 
 void error_parse_fc(struct s_array *array, char *line, char type)
 {
 	printf("%c: format incorrect: %s\n", type, strerror(errno));
-	//free_1_array(array);
-	free_array(array->sorted);
-	//free(line);
 	exit(1);
 }
 
 void error_parse_fc_2(struct s_array *array, char *line, char *new_line)
 {
-	//free_1_array(array);
 	free_array(array->sorted);
-	//free(line);
 	free(new_line);
 	exit(1);
 }
@@ -337,7 +322,6 @@ static char *fc_get_line(struct s_array *array, char type)
 
 	while (array->sorted[i] && !ft_strcmp(array->sorted[i], "\n"))
 		i++;
-
 	return (array->sorted[i]);
 }
 
@@ -389,7 +373,6 @@ static void fc_split_rgb(struct s_array *array, char *new_line, char *line, char
 		if (array_max_value(array->ceiling))
 			error_parse_fc(array, line, type);
 	}
-	//free(line);
 	free(new_line);
 }
 
@@ -403,7 +386,6 @@ void check_floor_and_ceilling(struct s_array *array, char type)
 
 	i = 0;
 	line = fc_get_line(array, type);
-	//printf("line[%d]: %c\n", i, line[i]);
 	if (line[i] != type)
 		error_parse_fc(array, line, type);
 	if (ft_strchr_count(line, ',') != 2)
@@ -425,27 +407,25 @@ void check_floor_and_ceilling(struct s_array *array, char type)
 	fc_split_rgb(array, new_line, line, type);
 }
 
-int fill(char **tab, t_point size, char target, int row, int col)
+int fill(t_point *size, char target, int row, int col)
 {
-    // Vérification des limites de la carte
-    if (row < 0 || col < 0 || row >= size.y || col >= size.x || !tab[row] || !tab[row][col])
-        return (1);
 
-    if (tab[row][col] == ' ' || tab[row][col] == '\n' || tab[row][col] == '\0')
-        return (1);
-
-    if (tab[row][col] != target)
+	if (row < 0 || col < 0 || row >= size->y || !size->tab[row] || col >= (int)ft_strlen(size->tab[row]))
+	{
+		return (1);
+	}
+    if (size->tab[row][col] == ' ' || size->tab[row][col] == '\n' || size->tab[row][col] == '\0')
+    {
+		return (1);
+	}
+    if (size->tab[row][col] != target)
         return (0);
-
-    tab[row][col] = 'F';
-
-    // Vérification des limites avant chaque appel récursif
-    if ((row > 0 && fill(tab, size, target, row - 1, col)) ||
-        (row < size.y - 1 && fill(tab, size, target, row + 1, col)) ||
-        (col > 0 && fill(tab, size, target, row, col - 1)) ||
-        (col < size.x - 1 && fill(tab, size, target, row, col + 1)))
+    size->tab[row][col] = 'F';
+    if ((row > 0 && fill(size, target, row - 1, col)) ||
+        (row < size->y - 1 && fill(size, target, row + 1, col)) ||
+        (col > 0 && fill(size, target, row, col - 1)) ||
+        (col < size->x - 1 && fill(size, target, row, col + 1)))
         return (1);
-
     return (0);
 }
 
@@ -456,7 +436,7 @@ static void free_flood_fill(struct s_array *array, char **tab)
 	free_array(array->floor);
 	free_array(array->sorted);
 	free_array(array->line);
-	free_array_bis(tab);
+	free_array(tab);
 	free_path(array);
 	exit(1);
 }
@@ -467,24 +447,19 @@ void flood_fill(struct s_array *array, char **tab, t_point size, t_point begin)
     int i;
 
 	i = 0;
-    // Vérification des limites avant d'accéder à la carte
     if (begin.y < 0 || begin.y >= size.y || begin.x < 0 || begin.x >= size.x ||
         !tab[begin.y] || !tab[begin.y][begin.x])
     {
         printf("Map building incorrect: Invalid starting position\n");
 		free_flood_fill(array, tab);
     }
-
     tab[begin.y][begin.x] = '0';
     target = tab[begin.y][begin.x];
-
-    if (fill(tab, size, target, begin.y, begin.x))
+    if (fill(&size, target, begin.y, begin.x))
     {
         printf("Map building incorrect: Map is not closed\n");
         free_flood_fill(array, tab);
     }
-
-    // Affichage de la carte pour debug
     while (i < size.y && array->map[i])
     {
         printf("%s", array->map[i++]);
@@ -504,7 +479,6 @@ void realloc_data_array(struct s_array *array)
     start = find_first_line(array->line);
     total_len = array_len(array->line);
     new_len = total_len - start;
-
     array->map = calloc(new_len + 1, sizeof(char *));
     if (!array->map)
     {
@@ -566,6 +540,7 @@ char **init_flood_fill(struct s_array *array, struct s_vars *vars, t_point *begi
 	begin->y = (int)vars->player.pos.y;
 	size->x = get_max_width(array->map);
 	size->y = get_max_height(array->map);
+
 	flooded_map = copy_array(array->map, array_len(array->map));
 	return (flooded_map);
 }
@@ -647,12 +622,13 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
     check_characters_in_map(array);
 	check_walls(array);
 	check_player_start_pos(array, value);
-	mapping(array, vars); // la fonction mapping definie la position initial du joueur
+	mapping(array, vars);
 	flooded_map = init_flood_fill(array, vars, &begin, &size);
+	size.tab = flooded_map;
 	printf("test begin.x %d\n", begin.x);
-	flood_fill(array, flooded_map, size, begin);
+	flood_fill(array, size.tab, size, begin);
     free_array(array->sorted);
 	free_array(array->line);
-	free_array(flooded_map);
+	free_array(size.tab);
 	vars->array = array;
 }
