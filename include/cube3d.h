@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 19:21:33 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/16 19:34:19 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,4 +370,6 @@ void					distance(struct s_array *array,
 /*---game_loop---*/
 void					ft_game_loop(struct s_vars *vars,
 							struct s_array *array);
+/*---margin---*/
+int	check_margin(float x, float y, char **map, int margin);
 #endif

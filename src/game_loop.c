@@ -6,11 +6,63 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:33:25 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/16 17:39:18 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 19:32:40 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cube3d.h"
+
+static void	free_close(struct s_vars *vars, struct s_array *array)
+{
+	if (vars->mlx && vars->array->draw.img_game)
+	{
+		mlx_destroy_image(vars->mlx, vars->array->draw.img_game);
+		vars->array->draw.img_game = NULL;
+	}
+	if (vars->mlx && vars->array->draw.img_map)
+	{
+		mlx_destroy_image(vars->mlx, vars->array->draw.img_map);
+		vars->array->draw.img_map = NULL;
+	}
+	mlx_destroy_window(vars->mlx, vars->win);
+	mlx_destroy_window(vars->mlx, vars->win_map);
+	mlx_destroy_display(vars->mlx);
+	free(vars->mlx);
+	ft_cleanup_trace_line(&vars->array->ray);
+	free_array(vars->array->map);
+	free_array(vars->array->ceiling);
+	free_array(vars->array->floor);
+	free_path(vars->array);
+}
+
+// gerer les free en cas d erreur de chargement de textures
+static int	load_textures(struct s_vars *vars, struct s_texture *textures,
+		struct s_array *array)
+{
+	char	*paths[4];
+	int		i;
+
+	i = 0;
+	paths[0] = array->NO_path;
+	paths[1] = array->EA_path;
+	paths[2] = array->WE_path;
+	paths[3] = array->SO_path;
+	while (i < 4)
+	{
+		textures[i].img = mlx_xpm_file_to_image(vars->mlx, paths[i],
+				&textures[i].width, &textures[i].height);
+		if (!textures[i].img)
+		{
+			printf("Error while loading textures\n");
+			free_close(vars, array);
+			exit(1);
+		}
+		textures[i].addr = mlx_get_data_addr(textures[i].img, &textures[i].bpp,
+				&textures[i].line_len, &textures[i].endian);
+		i++;
+	}
+	return (0);
+}
 
 static void	init_array_colors(struct s_array *array)
 {
