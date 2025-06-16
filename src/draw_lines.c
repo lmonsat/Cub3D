@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 19:28:45 by drenquin          #+#    #+#             */
-/*   Updated: 2025/06/14 20:11:00 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:25:38 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,6 @@ void	ft_draw_half_screen(struct s_array *array, int width, int height)
 			x++;
 		}
 		y++;
-	}
-}
-
-// a retirer
-void	print_map(struct s_array *array)
-{
-	int	i;
-
-	i = 0;
-	if (!array || !array->map)
-	{
-		printf("array or array->map is NULL\n");
-		return ;
-	}
-	while (array->map[i])
-	{
-		printf("map[%d]: %s\n", i, array->map[i]);
-		i++;
 	}
 }
 

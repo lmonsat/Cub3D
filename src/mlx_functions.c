@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:00:23 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/14 21:51:23 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:50:22 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,26 +99,6 @@ int	default_close(struct s_vars *vars)
 	free_path(vars->array);
 	exit(0);
 	return (0);
-}
-
-static void	rotation_l(struct s_vars *vars)
-{
-	vars->array->ray.rotation -= 5;
-	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0,
-		0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map,
-		0, 0);
-}
-
-static void	rotation_r(struct s_vars *vars)
-{
-	vars->array->ray.rotation += 5;
-	render_frame(vars);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->array->draw.img_game, 0,
-		0);
-	mlx_put_image_to_window(vars->mlx, vars->win_map, vars->array->draw.img_map,
-		0, 0);
 }
 
 int	key_handler(int keycode, struct s_vars *vars)

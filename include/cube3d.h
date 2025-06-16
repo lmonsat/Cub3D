@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 16:57:19 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:50:07 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@
 # define PURPLE 0x800080
 # define BROWN 0x8B4513
 # define GRAY 0xA9A9A9
-# define FOV 60.0f         // Champ de vision en degrés
-# define NUM_RAYS 1360      // Nombre de rayons à lancer
-# define cam_dist 1360		//distance entre le joueur et le plan camera
+# define FOV 60.0f     // Champ de vision en degrés
+# define NUM_RAYS 1360 // Nombre de rayons à lancer
+# define cam_dist 1360 // distance entre le joueur et le plan camera
 # define STEP (FOV / NUM_RAYS)
-# define DEG2RAD(x) ((x) * PI / 180.0f)
+# define DEG2RAD(x) ((x)*PI / 180.0f)
 # define mouv_step 4
 # define NB_TEXTURES 6
 # define T1 "./textures/wood.xpm"
@@ -55,140 +55,140 @@
 # define T4 "./textures/colorstone.xpm"
 # define NORTH 0
 # define SOUTH 1
-# define EAST  2
-# define WEST  3
+# define EAST 2
+# define WEST 3
 # define tex_width 64
 
 typedef struct s_draw_band_info
 {
-	int     i;
-	int     x_start;
-	int     band_width;
-	int     draw_start;
-	int     draw_end;
-}   t_draw_band_info;
+	int					i;
+	int					x_start;
+	int					band_width;
+	int					draw_start;
+	int					draw_end;
+}						t_draw_band_info;
 
 typedef struct s_draw_vars
 {
-	int     tex_x;
-	int     wall_height;
-	int     orientation;
-	struct s_texture *tex;
-	float   dist;
-	float   shade_factor;
-	int     mod;
-	int     x;
-	int     y;
-	int     tex_y;
-	char    *tex_pixel;
-	int     color;
-	int     a;
-	int     r;
-	int     g;
-	int     b;
-}   t_draw_vars;
+	int					tex_x;
+	int					wall_height;
+	int					orientation;
+	struct s_texture	*tex;
+	float				dist;
+	float				shade_factor;
+	int					mod;
+	int					x;
+	int					y;
+	int					tex_y;
+	char				*tex_pixel;
+	int					color;
+	int					a;
+	int					r;
+	int					g;
+	int					b;
+}						t_draw_vars;
 
 typedef struct s_wall_render
 {
-	float fov_angle;
-	int plane;
-	int base_band;
-	int remainder;
-	int x_offset;
-	int i;
-	int band_width;
-	float dist;
-	int line_height;
-	int draw_start;
-	int draw_end;
-	t_draw_band_info band;
-}	t_wall_render;
+	float				fov_angle;
+	int					plane;
+	int					base_band;
+	int					remainder;
+	int					x_offset;
+	int					i;
+	int					band_width;
+	float				dist;
+	int					line_height;
+	int					draw_start;
+	int					draw_end;
+	t_draw_band_info	band;
+}						t_wall_render;
 
 typedef struct s_dda
 {
-	float posx;
-	float posy;
-	int mapx;
-	int mapy;
-	float deltadistx;
-	float deltadisty;
-	int stepx;
-	int stepy;
-	float sidedistx;
-	float sidedisty;
-	int hit;
-	int side;
-}t_dda;
+	float				posx;
+	float				posy;
+	int					mapx;
+	int					mapy;
+	float				deltadistx;
+	float				deltadisty;
+	int					stepx;
+	int					stepy;
+	float				sidedistx;
+	float				sidedisty;
+	int					hit;
+	int					side;
+}						t_dda;
 
-//structure utile pour la fonction put_pixel
+// structure utile pour la fonction put_pixel
 typedef struct s_draw
 {
-	void	*img_game;
-	void	*img_map;
-	char	*addr;
-	char	*addr_map;
-	int		bpp;
-	int		bpp_map;
-	int		line_len;
-	int		line_len_map;
-	int		endian;
-	int		endian_map;
-} t_draw;
+	void				*img_game;
+	void				*img_map;
+	char				*addr;
+	char				*addr_map;
+	int					bpp;
+	int					bpp_map;
+	int					line_len;
+	int					line_len_map;
+	int					endian;
+	int					endian_map;
+}						t_draw;
 
-struct			s_texture
+struct					s_texture
 {
-    void    *img;
-    int     width;
-    int     height;
-	char 	*path;
-	char	*addr;
-    int     bpp;
-    int     line_len;
-    int     endian;
+	void				*img;
+	int					width;
+	int					height;
+	char				*path;
+	char				*addr;
+	int					bpp;
+	int					line_len;
+	int					endian;
 };
 
 typedef struct s_margin_data
 {
-	int	map_x1;
-	int	map_x2;
-	int	map_y1;
-	int	map_y2;
-	int	max_x;
-	int	max_y;
-}t_margin_data;
+	int					map_x1;
+	int					map_x2;
+	int					map_y1;
+	int					map_y2;
+	int					max_x;
+	int					max_y;
+}						t_margin_data;
 
-struct	s_trace_line
+struct					s_trace_line
 {
-	int *tex_x;
-	int *hit_orien;
+	int					*tex_x;
+	int					*hit_orien;
 	int orientation; // 0 = NORD, 1 = SUD, 2 = EST, 3 = OUEST
-	float step;
-	float x_cam;
-	float y_cam;
-	float x_start; //depart x (joueur)
-	float y_start; //depart y (joueur)
-	float x_end;   //fin du ray (mur)
-	float y_end;	// fin du ray (mur)
-	float x_pass;   //point de passage x
-	float y_pass;   //point de passage y
-	float dx; //x_end - x_start vecteur de direction avant arriere
-	float dy; //y_end - y_start vecteur de direction avant arriere
-	float dx_side; //vecteur de direction gauche droite
-	float dy_side; //vecteur de direction gauche droite
-	int width;
-	int height;
-	float rotation; //for rotation of fov
-	float brutdist; //distance brut
-	float perpdist; //distance corriger pour effet fisheye
-	float *perp_tab;
-	float dx_step;
-	float dy_step;
-	float ldx;
-	float ldy;
-	float *wall_hit_x;
-	float *wall_hit_y;
-	float fov_angle;
-	float player_angle;
+	float				step;
+	float				x_cam;
+	float				y_cam;
+	float x_start; // depart x (joueur)
+	float y_start; // depart y (joueur)
+	float x_end;   // fin du ray (mur)
+	float y_end;   // fin du ray (mur)
+	float x_pass;  // point de passage x
+	float y_pass;  // point de passage y
+	float dx;      // x_end - x_start vecteur de direction avant arriere
+	float dy;      // y_end - y_start vecteur de direction avant arriere
+	float dx_side; // vecteur de direction gauche droite
+	float dy_side; // vecteur de direction gauche droite
+	int					width;
+	int					height;
+	float rotation; // for rotation of fov
+	float brutdist; // distance brut
+	float perpdist; // distance corriger pour effet fisheye
+	float				*perp_tab;
+	float				dx_step;
+	float				dy_step;
+	float				ldx;
+	float				ldy;
+	float				*wall_hit_x;
+	float				*wall_hit_y;
+	float				fov_angle;
+	float				player_angle;
 };
 
 struct					s_move
@@ -205,10 +205,10 @@ struct					s_game_stats
 
 struct					s_position
 {
-	float					x;
-	float					y;
-	float					x_pixel;
-	float					y_pixel;
+	float				x;
+	float				y;
+	float				x_pixel;
+	float				y_pixel;
 };
 
 struct					s_player
@@ -221,15 +221,15 @@ struct					s_array
 	struct s_draw		draw;
 	struct s_game_stats	stats;
 	struct s_move		move;
-	struct s_texture    textures[NB_TEXTURES];
+	struct s_texture	textures[NB_TEXTURES];
 	char				*NO_path;
 	char				*SO_path;
 	char				*EA_path;
 	char				*WE_path;
 	char				**floor;
 	char				**ceiling;
-	struct s_position   position;
-	struct s_trace_line ray;
+	struct s_position	position;
+	struct s_trace_line	ray;
 	char				**line;
 	char				**sorted;
 	char				**map;
@@ -252,11 +252,11 @@ struct					s_vars
 	void				*win_map;
 };
 
-typedef struct  s_point
+typedef struct s_point
 {
-int           x;
-int           y;
-}               t_point;
+	int					x;
+	int					y;
+}						t_point;
 
 enum					e_keycode
 {
@@ -273,77 +273,100 @@ enum					e_keycode
 };
 
 /* --- MLX --- */
-void    esc_close(int keycode, struct s_vars *vars);
-int default_close(struct s_vars *vars);
-int key_handler(int keycode, struct s_vars *vars);
+void					esc_close(int keycode, struct s_vars *vars);
+int						default_close(struct s_vars *vars);
+int						key_handler(int keycode, struct s_vars *vars);
 
 /* --- Parsing --- */
-void	parse_map(struct s_vars *vars, struct s_array *array, struct s_game_stats *value, char *argv[]);
-int 	find_first_line(char **lines);
+void					parse_map(struct s_vars *vars, struct s_array *array,
+							struct s_game_stats *value, char *argv[]);
+int						find_first_line(char **lines);
 
 /* --- Utils ---*/
-//char	**copy_array(char **source, int size);
-char	**copy_array(char **source, int size);
-void	handle_error_mem(struct s_array *array, char **copy);
-int		open_map_file(char *argv[]);
-int		ft_strchr_count(const char *s, int c);
-void	free_visited(struct s_array *array);
-void	free_visited_vars(struct s_vars *vars);
-void	free_in_lines(struct s_array *array);
-void	free_array(char **array);
-void	free_array_bis(char **array);
-void	free_1_array(struct s_array *array);
-void	free_arrays(struct s_array *array);
-void	free_tabs(struct s_vars *vars);
-void free_path(struct s_array *array);
-int get_max_width(char **array);
-int get_max_height(char **array);
-void ft_cleanup_trace_line(struct s_trace_line *pos);
+// char	**copy_array(char **source, int size);
+char					**copy_array(char **source, int size);
+void					handle_error_mem(struct s_array *array, char **copy);
+int						open_map_file(char *argv[]);
+int						ft_strchr_count(const char *s, int c);
+void					free_visited(struct s_array *array);
+void					free_visited_vars(struct s_vars *vars);
+void					free_in_lines(struct s_array *array);
+void					free_array(char **array);
+void					free_array_bis(char **array);
+void					free_1_array(struct s_array *array);
+void					free_arrays(struct s_array *array);
+void					free_tabs(struct s_vars *vars);
+void					free_path(struct s_array *array);
+int						get_max_width(char **array);
+int						get_max_height(char **array);
+void					ft_cleanup_trace_line(struct s_trace_line *pos);
 
 /* --- Backtracking --- */
-void	backtracking(struct s_array *array, struct s_vars *vars);
-int	can_reach(struct s_array *array, int row, int col);
+void					backtracking(struct s_array *array,
+							struct s_vars *vars);
+int						can_reach(struct s_array *array, int row, int col);
 
 /* --- mapping --- */
-void	mapping(struct s_array *array, struct s_vars *vars);
-void	mapping_ground(struct s_array *array, struct s_vars *vars);
-void	ground(struct s_vars *vars, int x, int y);
-void	loading_player(struct s_vars *vars);
+void					mapping(struct s_array *array, struct s_vars *vars);
+void					mapping_ground(struct s_array *array,
+							struct s_vars *vars);
+void					ground(struct s_vars *vars, int x, int y);
+void					loading_player(struct s_vars *vars);
+void					rotation_l(struct s_vars *vars);
+void					rotation_r(struct s_vars *vars);
 
 /* --- player_move --- */
-void	clear_image(struct s_array *array, int width, int height);
-void	render_frame(struct s_vars *vars);
-void	move_up(struct s_vars *vars);
-void	move_down(struct s_vars *vars);
-void	move_right(struct s_vars *vars);
-void	move_left(struct s_vars *vars);
+void					clear_image(struct s_array *array, int width,
+							int height);
+void					render_frame(struct s_vars *vars);
+void					move_up(struct s_vars *vars);
+void					move_down(struct s_vars *vars);
+void					move_right(struct s_vars *vars);
+void					move_left(struct s_vars *vars);
 
 /* --- requested_player_move --- */
-void	requested_player_position_up(struct s_vars *vars);
-void	requested_player_position_down(struct s_vars *vars);
-void	requested_player_position_right(struct s_vars *vars);
-void	requested_player_position_left(struct s_vars *vars);
+void					requested_player_position_up(struct s_vars *vars);
+void					requested_player_position_down(struct s_vars *vars);
+void					requested_player_position_right(struct s_vars *vars);
+void					requested_player_position_left(struct s_vars *vars);
 
 /* --- draw_lines --- */
-//void ft_put_pixel(int x, int y, struct s_array *array, int color, int is_minimap);
-void ft_put_pixel(int x, int y, struct s_array *array, int color);
-void ft_put_pixel1(int x, int y, struct s_array *array, int color);
-void ft_draw_grid(struct s_array *array);
-void ft_draw_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-void ft_perpendiculare(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-void fov(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-void rotate_player(struct s_trace_line *pos, float angle_deg);
-void ft_dda_draw_ray(struct s_position *player, float rayDirX, float rayDirY, struct s_array *array);
-void ft_draw_half_screen(struct s_array *array, int width, int height);
+void					ft_put_pixel(int x, int y, struct s_array *array,
+							int color);
+void					ft_put_pixel1(int x, int y, struct s_array *array,
+							int color);
+void					ft_draw_grid(struct s_array *array);
+void					ft_draw_line(struct s_trace_line *pos,
+							struct s_array *array, struct s_position *player);
+void					ft_perpendiculare(struct s_trace_line *pos,
+							struct s_array *array, struct s_position *player);
+void					fov(struct s_trace_line *pos, struct s_array *array,
+							struct s_position *player);
+void					rotate_player(struct s_trace_line *pos,
+							float angle_deg);
+void					ft_dda_draw_ray(struct s_position *player,
+							float rayDirX, float rayDirY,
+							struct s_array *array);
+void					ft_draw_half_screen(struct s_array *array, int width,
+							int height);
 
 /*--- ray_casting ---*/
-void draw_walls(struct s_trace_line *pos, struct s_array *array);
-//void draw_walls(struct s_trace_line *pos, struct s_array *array, struct s_texture *textures);
-void ft_init_line(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
-void ft_init_line2(struct s_trace_line *pos, struct s_position *player, float x, float y);
-void ft_init_line1(struct s_trace_line *pos, struct s_position *player, float x, float y);
-void loop(struct s_trace_line *pos, struct s_array *array, struct s_position *player);
+void					draw_walls(struct s_trace_line *pos,
+							struct s_array *array);
+void					ft_init_line(struct s_trace_line *pos,
+							struct s_array *array, struct s_position *player);
+void					ft_init_line2(struct s_trace_line *pos,
+							struct s_position *player, float x, float y);
+void					ft_init_line1(struct s_trace_line *pos,
+							struct s_position *player, float x, float y);
+void					loop(struct s_trace_line *pos, struct s_array *array,
+							struct s_position *player);
 
 /*---gameplay---*/
-void	distance(struct s_array *array, struct s_position *player, int i);
+void					distance(struct s_array *array,
+							struct s_position *player, int i);
+
+/*---game_loop---*/
+void					ft_game_loop(struct s_vars *vars,
+							struct s_array *array);
 #endif
