@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameplay.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:22 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/17 13:29:00 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:33:53 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	check_characters_in_map(struct s_array *array)
 			if (!is_valid_char(array->map[i][j]))
 			{
 				perror("Error\n Map contains unneeded characters");
+				if (array->map)
+					free_array(array->map);
 				free_array(array->line);
 				free_array(array->sorted);
 				free_array(array->ceiling);

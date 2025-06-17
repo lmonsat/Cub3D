@@ -1,10 +1,10 @@
 NO ./textures/wood.xpm
-WE ./textures/redbrick.xpm
 SO ./textures/greystone.xpm
+WE ./textures/redbrick.xpm
 EA ./textures/colorstone.xpm
 
-F 220,100,0
-C 225,30,-6
+F 150,100,0
+C 225,30,60
 
               1111111
            1110000000111
@@ -42,3 +42,5 @@ C 225,30,-6
            1110000000111
               1101111
                 1
+
+

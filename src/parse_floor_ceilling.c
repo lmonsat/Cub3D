@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_floor_ceilling.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 20:10:20 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/17 14:42:53 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:24:47 by lmonsat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 static void	error_parse_fc_2(struct s_array *array, char *line, char *new_line)
 {
-	free_array(array->sorted);
 	free(new_line);
+	free_array(array->sorted);
+	free_array(array->line);
+	free_array(array->map);
+	free_path(array);
+	if (array->floor)
+		free_array(array->floor);
 	exit(1);
 }
 
