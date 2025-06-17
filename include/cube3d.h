@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:01:21 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 23:16:31 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:31:01 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,6 @@ void					check_floor_and_ceilling(struct s_array *array,
 							char type);
 void					check_position(struct s_array *array, char pos_1,
 							char pos_2);
-void					check_characters_in_map(struct s_array *array);
 void					check_player_start_pos(struct s_array *array,
 							struct s_game_stats *value);
 void					check_walls(struct s_array *array);
@@ -389,6 +388,7 @@ void					loop(struct s_trace_line *pos, struct s_array *array,
 							struct s_position *player);
 
 /*---gameplay---*/
+void					check_characters_in_map(struct s_array *array);
 void					distance(struct s_array *array,
 							struct s_position *player, int i);
 

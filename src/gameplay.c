@@ -6,7 +6,7 @@
 /*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:22 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/16 23:06:58 by drenquin         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:29:00 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,32 @@ void	distance(struct s_array *array, struct s_position *player, int i)
 		|| (array->ray.orientation == NORTH && raydiry > 0))
 		tex_x = TEX_WIDTH - tex_x - 1;
 	array->ray.tex_x[(NUM_RAYS - 1) - i] = tex_x;
+}
+
+/* Permet de vérifier qu'il n'y a pas de caractère incohérent dans la map */
+void	check_characters_in_map(struct s_array *array)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (array->map[i] != NULL)
+	{
+		j = 0;
+		while (array->map[i][j] != '\0')
+		{
+			if (!is_valid_char(array->map[i][j]))
+			{
+				perror("Error\n Map contains unneeded characters");
+				free_array(array->line);
+				free_array(array->sorted);
+				free_array(array->ceiling);
+				free_array(array->floor);
+				free_path(array);
+				exit(EXIT_FAILURE);
+			}
+			j++;
+		}
+		i++;
+	}
 }

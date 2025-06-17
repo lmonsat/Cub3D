@@ -4,7 +4,7 @@ SO ./textures/greystone.xpm
 EA ./textures/colorstone.xpm
 
 F 220,100,0
-C 225,30,0
+C 225,30,-6
 
               1111111
            1110000000111

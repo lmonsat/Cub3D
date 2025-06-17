@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:56:29 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/17 01:25:53 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:12:06 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	realloc_data_array(struct s_array *array)
 	start = find_first_line(array->line);
 	total_len = array_len(array->line);
 	new_len = total_len - start;
-	array->map = calloc(new_len + 1, sizeof(char *));
+	array->map = ft_calloc(new_len + 1, sizeof(char *));
 	if (!array->map)
 	{
 		printf("Memory allocation failed\n");

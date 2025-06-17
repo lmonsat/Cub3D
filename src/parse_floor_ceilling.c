@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_floor_ceilling.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmonsat <lmonsat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drenquin <drenquin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 20:10:20 by lmonsat           #+#    #+#             */
-/*   Updated: 2025/06/17 01:25:14 by lmonsat          ###   ########.fr       */
+/*   Updated: 2025/06/17 14:42:53 by drenquin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	error_parse_fc(struct s_array *array, char *line, char type)
 	free_path(array);
 	if (array->floor)
 		free_array(array->floor);
+	if (array->ceiling)
+		free_array(array->ceiling);
 	exit(1);
 }
 
@@ -61,16 +63,17 @@ static void	fc_split_rgb(struct s_array *array, char *new_line, char *line,
 	if (type == 'F')
 	{
 		array->floor = ft_split(new_line, ',');
+		free(new_line);
 		if (array_max_value(array->floor))
 			error_parse_fc(array, line, type);
 	}
 	else if (type == 'C')
 	{
 		array->ceiling = ft_split(new_line, ',');
+		free(new_line);
 		if (array_max_value(array->ceiling))
 			error_parse_fc(array, line, type);
 	}
-	free(new_line);
 }
 
 /* Parse les lignes floor et ceiling, et extrait les valeurs RGB en allouant,
