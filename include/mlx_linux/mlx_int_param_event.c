@@ -59,7 +59,7 @@ int	mlx_int_param_generic(t_xvar *xvar, XEvent *ev, t_win_list *win)
   win->hooks[ev->type].hook(win->hooks[ev->type].param);
 }
 
-int	(*(mlx_int_param_event[]))() =
+int	(*(mlx_int_param_event[]))(t_xvar *xvar, XEvent *ev, t_win_list *win) =
 {
   mlx_int_param_undef,   /* 0 */
   mlx_int_param_undef,

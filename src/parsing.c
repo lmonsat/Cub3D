@@ -51,7 +51,7 @@ void	realloc_data_array(struct s_array *array)
 	array->map[new_len] = NULL;
 }
 
-static int	is_map_empty(int fd, char *argv[], struct s_array *array)
+static int	is_map_empty(int fd, char *argv[])
 {
 	char	*line;
 
@@ -71,12 +71,12 @@ static int	is_map_empty(int fd, char *argv[], struct s_array *array)
 
 /* Si la map du joueur se retoruve en premier dans,
 		le fichier exit & free */
-int	is_map_first_in_file(int fd, struct s_array *array, char *argv[])
+int	is_map_first_in_file(int fd, char *argv[])
 {
 	char	*line;
 
 	fd = open_map_file(argv);
-	fd = is_map_empty(fd, argv, array);
+	fd = is_map_empty(fd, argv);
 	line = ft_strdup("\n");
 	while (line[0] == '\n')
 	{
@@ -105,12 +105,12 @@ void	parse_map(struct s_vars *vars, struct s_array *array,
 	int		fd;
 	t_point	begin;
 	t_point	size;
-	int		map_index;
 	char	**flooded_map;
 
+	fd = -1;
 	array->floor = NULL;
 	array->ceiling = NULL;
-	fd = is_map_first_in_file(fd, array, argv);
+	fd = is_map_first_in_file(fd, argv);
 	alloc_data_array(fd, array, argv);
 	clear_line_gnl(fd);
 	close(fd);

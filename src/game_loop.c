@@ -12,7 +12,7 @@
 
 #include "../include/cube3d.h"
 
-static void	free_close(struct s_vars *vars, struct s_array *array)
+static void	free_close(struct s_vars *vars)
 {
 	if (vars->mlx && vars->array->draw.img_game)
 	{
@@ -53,7 +53,7 @@ static void	load_textures(struct s_vars *vars, struct s_texture *textures,
 		if (!textures[i].img)
 		{
 			printf("Error while loading textures\n");
-			free_close(vars, array);
+			free_close(vars);
 			exit(1);
 		}
 		textures[i].addr = mlx_get_data_addr(textures[i].img, &textures[i].bpp,

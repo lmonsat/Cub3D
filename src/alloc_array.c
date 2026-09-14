@@ -71,7 +71,7 @@ static int	index_data_array(struct s_array *array)
 
 /* Permet de trier de manière logique le fichier de la map
 	en suivant cette ordre : NO, WE, SO, EA, F, C */
-static int	sort_data_array(struct s_array *array, unsigned int len, int fd)
+static int	sort_data_array(struct s_array *array, int fd)
 {
 	int	i;
 	int	next;
@@ -103,7 +103,7 @@ static int	sort_data_array(struct s_array *array, unsigned int len, int fd)
 /* Allocation dynamique a zéro de l'entièreté du fichier map */
 void	alloc_data_array(int fd, struct s_array *array, char *argv[])
 {
-	char			*line;
+	char			*line = 0;
 	unsigned int	len;
 	int				i;
 
@@ -127,5 +127,5 @@ void	alloc_data_array(int fd, struct s_array *array, char *argv[])
 			break ;
 		array->line[i++] = line;
 	}
-	sort_data_array(array, len, fd);
+	sort_data_array(array, fd);
 }

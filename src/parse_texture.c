@@ -65,7 +65,7 @@ static void	init_pointer_error(struct s_array *array, char pos[2])
 		array->ea_path = NULL;
 }
 
-static void	error_parse_textures(struct s_array *array, char *line, char pos[2])
+static void	error_parse_textures(struct s_array *array, char pos[2])
 {
 	printf("%s: path format incorrect: %s\n", pos, strerror(errno));
 	free_array(array->line);
@@ -90,14 +90,14 @@ void	check_position(struct s_array *array, char pos_1, char pos_2)
 	pos[1] = pos_2;
 	line = array->sorted[j++];
 	if (!line)
-		error_parse_textures(array, line, pos);
-	if (line && (line[0] != pos[0] || line[1] != pos[1]))
-		error_parse_textures(array, line, pos);
+		error_parse_textures(array, pos);
+	if ((line) && (line[0] != pos[0] || line[1] != pos[1]))
+		error_parse_textures(array, pos);
 	while ((line && line[i]) && line[i] != '.')
 		i++;
-	if (line && line[i] == '\n' || line[i] == '\0')
-		error_parse_textures(array, line, pos);
+	if ((line) && (line[i] == '\n' || line[i] == '\0'))
+		error_parse_textures(array, pos);
 	if ((line && line[i] && line[i + 1]) && line[i + 1] != '/')
-		error_parse_textures(array, line, pos);
+		error_parse_textures(array, pos);
 	copy_path(array, line, pos, i);
 }

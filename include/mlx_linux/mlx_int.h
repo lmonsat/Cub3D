@@ -107,7 +107,7 @@ typedef struct	s_xvar
 	Colormap	cmap;
 	int			private_cmap;
 	t_win_list	*win_list;
-	int			(*loop_hook)();
+	int			(*loop_hook)(void *);
 	void		*loop_param;
 	int			use_xshm;
 	int			pshm_format;

@@ -1,7 +1,7 @@
 # Variables
 NAME = cube3d
 CC = cc
-CFLAGS = -I./include/mlx_linux -g #-Wall -Wextra -Werror
+CFLAGS = -I./include/mlx_linux -g -Wall -Wextra -Werror -std=gnu17 
 SRC_DIR = src
 OBJ_DIR = obj
 INCLUDE = include
